@@ -3688,7 +3688,7 @@ class EverblocklightTools
             'front',
             'modulefront',
         ];
-        if (!in_array($context->controller->controller_type, $controllerTypes)) {
+        if (!in_array($context->controller->controller_type ?? null, $controllerTypes, true)) {
             return $txt;
         }
         $templateVars = [

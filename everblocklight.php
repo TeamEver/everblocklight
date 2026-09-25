@@ -130,7 +130,8 @@ class Everblocklight extends Module
             'modulefront',
         ];
         $context = Context::getContext();
-        if (!in_array($context->controller->controller_type, $controllerTypes) && !in_array($method, $this->bypassedControllers)) {
+        $controllerType = $context->controller->controller_type ?? null;
+        if (!in_array($controllerType, $controllerTypes, true) && !in_array($method, $this->bypassedControllers)) {
             return;
         }
         if (Hook::isDisplayHookName(lcfirst(str_replace('hook', '', $method)))) {
