@@ -4,6 +4,7 @@ Version allégée du module PrestaShop **Ever Block** (Team Ever, v9.0.6, licenc
 
 - Nom technique : `everblocklight`
 - Compatibilité déclarée : PrestaShop 8.0+ (`ps_versions_compliancy`), PHP 8.1+ (`composer.json`)
+- Auteur : Griiv
 - Licence : AFL 3.0 (voir `LICENSE.md`), code dérivé de [Ever Block](https://www.team-ever.com/)
 
 ## Fonctionnalités conservées
@@ -25,7 +26,7 @@ Version allégée du module PrestaShop **Ever Block** (Team Ever, v9.0.6, licenc
   - **Contenu** : `[alert]`, `[video]`, `[everblocklight id]` (inclusion d’un autre bloc), `[cms]`, `[evercms]`, `[widget]`, `{hook h='...'}`, `[shop_logo]`, `[llorem]`, `[everimg]`
   - **Produits** : `[product]`, `[product_image]`, `[category]`, `[manufacturer]`, `[brands]`, `[subcategories]`, `[productfeature]`, `[productfeaturevalue]`, `[last-products]`, `[recently_viewed]`, `[promo-products]`, `[best-sales]`, `[categorybestsales]`, `[brandbestsales]`, `[featurebestsales]`, `[featurevaluebestsales]`, `[products_by_tag]`, `[low_stock]`, `[random_product]`, `[linkedproducts]`, `[accessories]`, `[crosselling]`
   - **Panier / client** : `[evercart]`, `[cart_total]`, `[cart_quantity]`, `[everaddtocart]`, `[newsletter_form]`, `[entity_firstname]`, `[entity_lastname]`, `[entity_gender]`…
-  - **Formulaires** : formulaire de contact (`[evercontactform_open]` … `[evercontact type="…"]` … `[evercontactform_close]`), `[nativecontact]`, formulaire d'étape supplémentaire du tunnel de commande (`[everorderform_open]` … `[everorderform_close]`, bloc à placer sur le hook `displayEverblocklightExtraOrderStep`)
+  - **Formulaires** : formulaire de contact (`[evercontactform_open]` … `[evercontact type="…"]` … `[evercontactform_close]`), `[nativecontact]`
   - **Intégrations externes** : `[everinstagram]`, `[googlereviews]`, `[wordpress-posts]`, `[storelocator]`, `[evermap]`, `[everstore]`, `[qcdacf]`, `[displayQcdSvg]`
 - Les shortcodes sont rendus dans toute la page front (`actionOutputHTMLBefore`) et dans les e-mails (`actionEmailAddAfterContent`).
 
@@ -35,7 +36,7 @@ La liste détaillée des paramètres est disponible dans l'admin : *Ever Block L
 Dans le contenu d'un bloc : `<a href="#" data-everclickmodal="ID_DU_BLOC">…</a>` ou `<a href="#" data-evercms="ID_CMS">…</a>`.
 
 ### Configuration
-- Réglages : titre et position de l'étape supplémentaire du tunnel, chargement du CSS front, script d'obfuscation, TinyMCE, nombre de paragraphes/phrases pour `[llorem]`.
+- Réglages : chargement du CSS front, script d'obfuscation, TinyMCE, nombre de paragraphes/phrases pour `[llorem]`.
 - Meta (Instagram), WordPress (API REST), Google (Places / avis, Maps / store locator, icône de marqueur), horaires exceptionnels par magasin.
 - Outils : CSS / JS personnalisés, liens CSS / JS externes, scripts d'en-tête, vidage du cache du module.
 - Tâches cron sécurisées (URL avec jeton) : `refreshtokens`, `fetchinstagramimages`, `fetchwordpressposts`.
@@ -52,6 +53,7 @@ Actions : `refreshtokens`, `fetchinstagramimages`, `fetchwordpressposts`, `check
 - Contenus produit : onglets, flags (dont « épuisé » et caractéristiques), modales fichiers produit, onglet global, import xlsx
 - Intégrations Pretty Blocks et QCD Page Builder, jeux (roue de la fortune, etc.)
 - Outils d'administration : mise à jour automatique depuis GitHub, traduction Google, sauvegarde / restauration, génération de produits factices, purge des logs, suppression des langues, migration d'URL, recherche / remplacement en base, import / export xlsx
+- Étape supplémentaire du tunnel de commande (formulaire `[everorderform]`, affichage sur confirmation de commande, factures, bons de livraison et admin commande)
 - Mot de passe de maintenance, connexion en tant que client, « hack » Google Shopping
 - Nettoyage automatique des fichiers PHP hors liste blanche (`allowed_files.php`)
 

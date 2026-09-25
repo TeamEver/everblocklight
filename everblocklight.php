@@ -66,7 +66,6 @@ if (!function_exists('everblocklightRegisterLegacyAlias')) {
 everblocklightRegisterLegacyAlias(\Everblocklight\Tools\Entity\Block::class, 'EverBlockLightClass', 'src/Entity/Block.php');
 everblocklightRegisterLegacyAlias(\Everblocklight\Tools\Entity\Shortcode::class, 'EverblocklightShortcode', 'src/Entity/Shortcode.php');
 
-use Everblocklight\Tools\Checkout\EverblocklightCheckoutStep;
 use Everblocklight\Tools\Service\AdminConfigurationManager;
 use Everblocklight\Tools\Service\EverblocklightCache;
 use Everblocklight\Tools\Service\EverblocklightTools;
@@ -97,7 +96,7 @@ class Everblocklight extends Module
         $this->name = 'everblocklight';
         $this->tab = 'front_office_features';
         $this->version = '1.0.0';
-        $this->author = 'Team Ever';
+        $this->author = 'Griiv';
         $this->need_instance = 0;
         $this->bootstrap = true;
         parent::__construct();
@@ -280,7 +279,6 @@ class Everblocklight extends Module
     private function getCustomHooks(): array
     {
         return [
-            ['displayEverblocklightExtraOrderStep', 'Extra order step', 'This hook is triggered on extra order step'],
             ['actionGetEverBlockLightBefore', 'Before block is rendered', 'This hook triggers before block is rendered'],
             ['actionEverBlockLightChangeShortcodeBefore', 'Before block shortcodes are rendered', 'This hook triggers before every block shortcode is rendered'],
             ['actionEverBlockLightChangeShortcodeAfter', 'After block shortcodes are rendered', 'This hook triggers after every block shortcode is rendered'],
@@ -310,11 +308,6 @@ class Everblocklight extends Module
             'actionEmailAddAfterContent',
             'actionCmsPageFormBuilderModifier',
             'actionObjectCmsUpdateAfter',
-            'actionCheckoutRender',
-            'displayOrderConfirmation',
-            'displayAdminOrder',
-            'displayPDFInvoice',
-            'displayPDFDeliverySlip',
             'actionObjectEverBlockLightClassUpdateAfter',
             'actionObjectEverBlockLightClassDeleteAfter',
         ];
@@ -994,8 +987,6 @@ class Everblocklight extends Module
             $headerScripts = '';
         }
         $configData = [
-            'EVERBLOCKLIGHT_OPTIONS_POSITION' => Configuration::get('EVERBLOCKLIGHT_OPTIONS_POSITION'),
-            'EVERBLOCKLIGHT_OPTIONS_TITLE' => $this->getConfigInMultipleLangs('EVERBLOCKLIGHT_OPTIONS_TITLE'),
             'EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN' => Configuration::get('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN'),
             'EVERBLOCKLIGHT_INSTA_LINK' => Configuration::get('EVERBLOCKLIGHT_INSTA_LINK'),
             'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION' => Configuration::get('EVERBLOCKLIGHT_INSTA_SHOW_CAPTION'),
@@ -1217,26 +1208,9 @@ class Everblocklight extends Module
             $compressedCss,
             $compressedCssCode
         );
-        Configuration::updateValue(
-            'EVERBLOCKLIGHT_OPTIONS_POSITION',
-            Tools::getValue('EVERBLOCKLIGHT_OPTIONS_POSITION')
-        );
-        $formTitle = [];
-        foreach (Language::getLanguages(false) as $lang) {
-            $formTitle[$lang['id_lang']] = (
-                Tools::getValue('EVERBLOCKLIGHT_OPTIONS_TITLE_' . $lang['id_lang'])
-            ) ? Tools::getValue(
-                'EVERBLOCKLIGHT_OPTIONS_TITLE_' . $lang['id_lang']
-            ) : '';
-        }
         $headerScripts = Tools::getValue('EVERBLOCKLIGHT_HEADER_SCRIPTS');
         $filePath = _PS_MODULE_DIR_ . $this->name . '/views/js/header-scripts-' . $this->context->shop->id . '.js';
         file_put_contents($filePath, $headerScripts);
-        Configuration::updateValue(
-            'EVERBLOCKLIGHT_OPTIONS_TITLE',
-            $formTitle,
-            true
-        );
         Configuration::updateValue(
             'EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN',
             Tools::getValue('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN')
@@ -1600,186 +1574,6 @@ class Everblocklight extends Module
         }
     }
 
-    public function hookActionCheckoutRender($params)
-    {
-        $stepTitle = $this->getConfigInMultipleLangs('EVERBLOCKLIGHT_OPTIONS_TITLE');
-        if (!$stepTitle[$this->context->language->id]
-            || empty($stepTitle[$this->context->language->id])
-        ) {
-            return;
-        }
-        $translator = Context::getContext()->getTranslator();
-
-        /** @var CheckoutProcess $process */
-        $process = $params['checkoutProcess'];
-        $steps = $process->getSteps();
-
-        $everStep = new EverblocklightCheckoutStep(
-            $this->context,
-            $translator,
-            $this
-        );
-        $everStep->setCheckoutProcess($process);
-        switch ((int) Configuration::get('EVERBLOCKLIGHT_OPTIONS_POSITION')) {
-            case 1:
-                $newSteps = [
-                    $steps[0],
-                    $everStep,
-                    $steps[1],
-                    $steps[2],
-                    $steps[3]
-                ];
-                break;
-
-            case 2:
-                $newSteps = [
-                    $steps[0],
-                    $steps[1],
-                    $everStep,
-                    $steps[2],
-                    $steps[3]
-                ];
-                break;
-
-            case 3:
-                $newSteps = [
-                    $steps[0],
-                    $steps[1],
-                    $steps[2],
-                    $everStep,
-                    $steps[3]
-                ];
-                break;
-
-            default:
-                $newSteps = [
-                    $steps[0],
-                    $everStep,
-                    $steps[1],
-                    $steps[2],
-                    $steps[3]
-                ];
-                break;
-        }
-        $process->setSteps($newSteps);
-    }
-
-    public function hookDisplayOrderDetail($params)
-    {
-        return $this->hookDisplayOrderConfirmation($params);
-    }
-
-    public function hookDisplayOrderConfirmation($params)
-    {
-        try {
-            $order = $params['order'];
-            $checkoutSessionData = $this->getCartSessionDatas(
-                $order->id_cart
-            );
-            if (isset($checkoutSessionData) && $checkoutSessionData) {
-                $checkoutSessionData = json_decode(json_encode($checkoutSessionData), true);
-                if (!$checkoutSessionData) {
-                    return;
-                }
-                $hiddenKeys = [
-                    'hidden',
-                    'everHide',
-                    'submitCustomStep',
-                    'controller',
-                ];
-                if (is_array($checkoutSessionData)) {
-                    foreach ($checkoutSessionData as $key => $value) {
-                        if (in_array($key, $hiddenKeys)) {
-                            unset($checkoutSessionData[$key]);
-                        }
-                        if (empty($value)) {
-                            unset($checkoutSessionData[$key]);
-                        }
-                    }
-                    $this->context->smarty->assign(array(
-                        'checkoutSessionData' => $checkoutSessionData,
-                    ));
-                    return $this->display(__FILE__, 'views/templates/hook/orderconfirmation.tpl');
-                }
-            }
-        } catch (Exception $e) {
-            PrestaShopLogger::addLog($this->name . ' | ' . $e->getMessage());
-            EverblocklightTools::setLog(
-                $this->name . date('y-m-d'),
-                $e->getMessage()
-            );
-        }
-    }
-
-    public function hookDisplayAdminOrder($params)
-    {
-        try {
-            $order = new Order((int) $params['id_order']);
-            $checkoutSessionData = $this->getCartSessionDatas(
-                $order->id_cart
-            );
-            if (isset($checkoutSessionData) && $checkoutSessionData) {
-                $checkoutSessionData = json_decode(json_encode($checkoutSessionData), true);
-                if (is_array($checkoutSessionData) && !empty($checkoutSessionData)) {
-                    $this->context->smarty->assign(array(
-                        'checkoutSessionData' => $checkoutSessionData,
-                    ));
-                    return $this->display(__FILE__, 'views/templates/hook/orderconfirmation.tpl');
-                }
-            }
-        } catch (Exception $e) {
-            PrestaShopLogger::addLog($this->name . ' | ' . $e->getMessage());
-            EverblocklightTools::setLog(
-                $this->name . date('y-m-d'),
-                $e->getMessage()
-            );
-        }
-    }
-
-    public function hookDisplayPDFDeliverySlip($params)
-    {
-        return $this->hookDisplayPDFInvoice($params);
-    }
-
-    public function hookDisplayPDFInvoice($params)
-    {
-        try {
-            $order = new Order((int) $params['object']->id_order);
-            $checkoutSessionData = $this->getCartSessionDatas(
-                $order->id_cart
-            );
-            if (isset($checkoutSessionData) && $checkoutSessionData) {
-                $checkoutSessionData = json_decode(json_encode($checkoutSessionData), true);
-                $hiddenKeys = [
-                    'hidden',
-                    'everHide',
-                    'submitCustomStep',
-                    'controller',
-                ];
-                if (is_array($checkoutSessionData) && !empty($checkoutSessionData)) {
-                    foreach ($checkoutSessionData as $key => $value) {
-                        if (in_array($key, $hiddenKeys)) {
-                            unset($checkoutSessionData[$key]);
-                        }
-                        if (empty($value)) {
-                            unset($checkoutSessionData[$key]);
-                        }
-                    }
-                    $this->context->smarty->assign(array(
-                        'checkoutSessionData' => $checkoutSessionData,
-                    ));
-                    return $this->display(__FILE__, 'views/templates/hook/pdf.tpl');
-                }
-            }
-        } catch (Exception $e) {
-            PrestaShopLogger::addLog($this->name . ' | ' . $e->getMessage());
-            EverblocklightTools::setLog(
-                $this->name . date('y-m-d'),
-                $e->getMessage()
-            );
-        }
-    }
-
     public function hookActionEmailAddAfterContent($params)
     {
         try {
@@ -1799,79 +1593,6 @@ class Everblocklight extends Module
                 $e->getMessage()
             );
         }
-    }
-
-    public function hookActionEmailSendBefore($params)
-    {
-        if (isset($params['templateVars']['{id_order}'])) {
-            try {
-                $id_order = (int) $params['templateVars'] ["{id_order}"];
-                $order = new Order(
-                    (int) $id_order
-                );
-                $checkoutSessionData = $this->getCartSessionDatas(
-                    $order->id_cart
-                );
-                if (isset($checkoutSessionData) && $checkoutSessionData) {
-                    $checkoutSessionData = json_decode(json_encode($checkoutSessionData), true);
-                    $hiddenKeys = [
-                        'hidden',
-                        'everHide',
-                        'submitCustomStep',
-                        'controller',
-                    ];
-                    if (is_array($checkoutSessionData) && !empty($checkoutSessionData)) {
-                        foreach ($checkoutSessionData as $key => $value) {
-                            if (in_array($key, $hiddenKeys)) {
-                                unset($checkoutSessionData[$key]);
-                            }
-                            if (empty($value)) {
-                                unset($checkoutSessionData[$key]);
-                            }
-                        }
-                        $this->context->smarty->assign(array(
-                            'checkoutSessionData' => $checkoutSessionData,
-                        ));
-                        $optionsHtml = $this->context->smarty->fetch(
-                            $this->local_path . 'views/templates/hook/pdf.tpl'
-                        );
-                        $params['templateVars']['{order_options}'] = $optionsHtml;
-                    }
-                }
-            } catch (Exception $e) {
-                PrestaShopLogger::addLog($this->name . ' | ' . $e->getMessage());
-                EverblocklightTools::setLog(
-                    $this->name . date('y-m-d'),
-                    $e->getMessage()
-                );
-            }
-        }
-        return $params;
-    }
-
-    public static function getCartSessionDatas($idCart)
-    {
-        $sql = new DbQuery();
-        $sql->select('checkout_session_data');
-        $sql->from(
-            'cart'
-        );
-        $sql->where(
-            'id_cart = ' . (int) $idCart
-        );
-        $res =  Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($sql);
-        if (!$res) {
-            return;
-        }
-        $checkout_session_data = json_decode(
-            $res
-        );
-        foreach ($checkout_session_data as $key => $value) {
-            if ($key == 'ever-checkout-step') {
-                return $value->everdata;
-            }
-        }
-        return false;
     }
 
     public function hookActionObjectEverBlockLightClassDeleteAfter($params)

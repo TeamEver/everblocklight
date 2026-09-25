@@ -171,7 +171,6 @@ class EverblocklightTools
             '[newsletter_form]' => ['method' => 'getNewsletterFormShortcode', 'args' => ['context', 'module']],
             '[nativecontact]' => ['method' => 'getNativeContactShortcode', 'args' => ['context', 'module']],
             '[evercontactform_open]' => ['method' => 'getFormShortcode', 'args' => ['context', 'module']],
-            '[everorderform_open]' => ['method' => 'getOrderFormShortcode', 'args' => ['context', 'module']],
             '[random_product' => ['method' => 'getRandomProductsShortcode', 'args' => ['context', 'module']],
             '[accessories' => ['method' => 'getAccessoriesShortcode', 'args' => ['context', 'module']],
             '[linkedproducts' => ['method' => 'getLinkedProductsShortcode', 'args' => ['context', 'module']],
@@ -2383,23 +2382,6 @@ class EverblocklightTools
             return static::generateFormFromShortcode($matches[0], $context, $module);
         }, $txt);
 
-        return $result;
-    }
-
-    /**
-     * Gère le shortcode associé à `getOrderFormShortcode`.
-     *
-     * @example $html = EverblocklightTools::getOrderFormShortcode('[everorderform_open]', $context, $module);
-     */
-    public static function getOrderFormShortcode(string $txt, Context $context, Everblocklight $module): string
-    {
-        $txt = str_replace('[everorderform_open]', '<div class="container">', $txt);
-        $txt = str_replace('[everorderform_close]', '</div>', $txt);
-        $pattern = '/\[everorderform\s[^\]]+\]/';
-        $result = preg_replace_callback($pattern, function ($matches) use ($context, $module) {
-            // $matches[0] contient le shortcode trouvé
-            return static::generateFormFromShortcode($matches[0], $context, $module);
-        }, $txt);
         return $result;
     }
 

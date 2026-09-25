@@ -15,13 +15,6 @@ final class AdminConfigurationManager
     public function getFormData(\Everblocklight $module): array
     {
         $data = $module->getAdminConfigurationLegacyFormValues();
-        $languages = Language::getLanguages(false);
-
-        foreach ($languages as $language) {
-            $langId = (int) $language['id_lang'];
-            $data['EVERBLOCKLIGHT_OPTIONS_TITLE_' . $langId] = $data['EVERBLOCKLIGHT_OPTIONS_TITLE'][$langId] ?? '';
-        }
-        unset($data['EVERBLOCKLIGHT_OPTIONS_TITLE']);
 
         foreach ([
             'EVERBLOCKLIGHT_LOAD_FRONT_CSS',

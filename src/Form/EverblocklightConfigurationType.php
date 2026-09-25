@@ -37,7 +37,6 @@ final class EverblocklightConfigurationType extends AbstractType
     {
         $fieldTabs = [
             'settings' => [
-                'EVERBLOCKLIGHT_OPTIONS_POSITION',
                 'EVERBLOCKLIGHT_LOAD_FRONT_CSS',
                 'EVERBLOCKLIGHT_USE_OBF',
                 'EVERBLOCKLIGHT_TINYMCE',
@@ -79,10 +78,6 @@ final class EverblocklightConfigurationType extends AbstractType
             'cron' => [],
         ];
 
-        foreach ($languages as $language) {
-            array_unshift($fieldTabs['settings'], 'EVERBLOCKLIGHT_OPTIONS_TITLE_' . (int) $language['id_lang']);
-        }
-
         if ($hasInstagramToken) {
             $fieldTabs['meta_tools'][] = 'EVERBLOCKLIGHT_INSTA_LINK';
             $fieldTabs['meta_tools'][] = 'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION';
@@ -109,7 +104,7 @@ final class EverblocklightConfigurationType extends AbstractType
     public static function docs(): array
     {
         return [
-            'settings' => 'Configure global behavior: checkout step, front assets, editor and generated content defaults.',
+            'settings' => 'Configure global behavior: front assets, editor and generated content defaults.',
             'meta_tools' => 'Configure Meta integrations, including Instagram access and display options.',
             'wordpress_tools' => 'Configure the WordPress REST endpoint and the latest posts block.',
             'google_maps' => 'Configure Google Places reviews, Google Maps keys and store locator marker options.',
@@ -121,31 +116,6 @@ final class EverblocklightConfigurationType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        foreach ($options['languages'] as $language) {
-            $langId = (int) $language['id_lang'];
-            $label = (string) ($language['iso_code'] ?? $langId);
-            $builder->add('EVERBLOCKLIGHT_OPTIONS_TITLE_' . $langId, TextType::class, [
-                'label' => 'New order step title (' . $label . ')',
-                'required' => false,
-                'help' => 'If not set, new order step will not be shown.',
-            ]);
-        }
-
-        $builder
-            ->add('EVERBLOCKLIGHT_OPTIONS_POSITION', ChoiceType::class, [
-                'label' => 'New order step position',
-                'choices' => [
-                    'After login' => 1,
-                    'After address form' => 2,
-                    'After shipping form' => 3,
-                ],
-                'required' => false,
-                'attr' => [
-                    'class' => 'everblocklight-enhanced-select',
-                    'data-everblocklight-placeholder' => 'Search position',
-                ],
-            ]);
-
         $this->addSwitch($builder, 'EVERBLOCKLIGHT_LOAD_FRONT_CSS', 'Load everblocklight.css on the front office ?');
         $this->addSwitch($builder, 'EVERBLOCKLIGHT_USE_OBF', 'Enable front-office script for obfuscation ?');
         $this->addSwitch($builder, 'EVERBLOCKLIGHT_TINYMCE', 'Extends TinyMCE on blocks management ?');

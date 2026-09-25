@@ -4,8 +4,7 @@
   "type": "prestashop-module",
   "authors": [
     {
-      "name": "Team Ever",
-      "email": "info@team-ever.com"
+      "name": "Griiv"
     }
   ],
   "autoload": {
@@ -19,6 +18,6 @@
     "prepend-autoloader": false
   },
   "require": {
-      "php": ">=8.1"
+    "php": ">=8.1"
   }
 }

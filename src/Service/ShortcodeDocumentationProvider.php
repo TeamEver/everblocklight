@@ -868,47 +868,6 @@ class ShortcodeDocumentationProvider
                         'description' => $translator->trans('Close a custom contact form and inject the hidden security token.', [], $domain),
                         'parameters' => [],
                     ],
-                    [
-                        'code' => '[everorderform_open]',
-                        'description' => $translator->trans('Open an additional checkout form block.', [], $domain),
-                        'parameters' => [],
-                    ],
-                    [
-                        'code' => '[everorderform type="text" label="Your name" required="true"]',
-                        'description' => $translator->trans('Field definition used inside the order form wrapper.', [], $domain),
-                        'parameters' => [
-                            [
-                                'name' => 'type',
-                                'description' => $translator->trans('Supported values include text, number, textarea, select, radio, checkbox, multiselect, file, hidden and submit.', [], $domain),
-                                'required' => true,
-                            ],
-                            [
-                                'name' => 'label',
-                                'description' => $translator->trans('Customer-facing label of the field.', [], $domain),
-                                'required' => true,
-                            ],
-                            [
-                                'name' => 'values',
-                                'description' => $translator->trans('Comma-separated options for select, radio, checkbox and multiselect fields.', [], $domain),
-                                'required' => false,
-                            ],
-                            [
-                                'name' => 'required',
-                                'description' => $translator->trans('Mark the field as mandatory (true/false).', [], $domain),
-                                'required' => false,
-                            ],
-                            [
-                                'name' => 'class / value',
-                                'description' => $translator->trans('Extra CSS classes or a predefined value depending on the field type.', [], $domain),
-                                'required' => false,
-                            ],
-                        ],
-                    ],
-                    [
-                        'code' => '[everorderform_close]',
-                        'description' => $translator->trans('Close the additional checkout form block.', [], $domain),
-                        'parameters' => [],
-                    ],
                 ],
             ],
         ];
