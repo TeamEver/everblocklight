@@ -90,4 +90,6 @@ _PS_ROOT_DIR_=/chemin/vers/prestashop vendor/bin/phpstan analyse -c phpstan.neon
 - PHPStan (niveau 3) s'exécute contre les sources réelles de PrestaShop (`_PS_ROOT_DIR_` : clone du dépôt officiel + `composer install --no-dev`).
 
 La CI GitHub Actions (`.github/workflows/ci.yml`) joue à chaque push / pull request et chaque lundi :
-lint PHP 8.1 → 8.4, syntaxe JS, PHPUnit PHP 8.1 → 8.4, PHPStan contre PrestaShop 8.2.8 et 9.1.5 (+ branche 9.2.x en informatif), puis produit l'archive `everblocklight.zip` sans l'outillage de développement.
+lint PHP 8.1 → 8.4, syntaxe JS, PHPUnit PHP 8.1 → 8.4, PHPStan contre PrestaShop 8.2.8 et 9.1.5 (+ branche 9.2.x en informatif), test d'installation réel, puis produit l'archive `everblocklight.zip` sans l'outillage de développement.
+
+Le test d'installation (`tests/install/run.sh <tag image>`, job `install`) démarre les images Docker officielles `prestashop/prestashop` (8.2 / PHP 8.1 et 9.1 / PHP 8.4) avec MySQL 8.0, installe le module en ligne de commande, vérifie tables / hooks / onglets / routes / conteneur Symfony, enregistre un bloc et un shortcode via les repositories du module, contrôle leur rendu sur la page d'accueil (sans erreur PHP), puis désinstalle et vérifie le nettoyage. Il se lance aussi en local : `tests/install/run.sh 9.1-8.4`.

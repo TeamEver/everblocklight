@@ -22,6 +22,24 @@ abstract class AbstractEverblocklightRepository
         return '`' . str_replace('`', '', $this->databasePrefix . $table) . '`';
     }
 
+    /**
+     * Entoure les noms de colonnes de backticks pour Connection::insert()/update(),
+     * qui les injectent tels quels dans la requête (mots réservés MySQL : groups, etc.).
+     *
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
+    protected function quoteColumns(array $data): array
+    {
+        $quoted = [];
+        foreach ($data as $column => $value) {
+            $quoted['`' . str_replace('`', '', (string) $column) . '`'] = $value;
+        }
+
+        return $quoted;
+    }
+
     protected function normalizeNullableDate($value): ?string
     {
         $value = trim((string) $value);

@@ -112,10 +112,30 @@ jobs:
           _PS_ROOT_DIR_: ${{ github.workspace }}/prestashop
         run: php -d memory_limit=2G vendor/bin/phpstan analyse -c phpstan.neon --no-progress
 
+  install:
+    name: Installation PrestaShop ${{ matrix.label }}
+    runs-on: ubuntu-latest
+    needs: [lint]
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: '8.2 (PHP 8.1)'
+            image: '8.2-8.1'
+          - label: '9.1 (PHP 8.4)'
+            image: '9.1-8.4'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: everblocklight
+      - name: Installation, rendu front et désinstallation du module
+        run: everblocklight/tests/install/run.sh '${{ matrix.image }}'
+
   package:
     name: Archive du module
     runs-on: ubuntu-latest
-    needs: [lint, js, tests, phpstan]
+    needs: [lint, js, tests, phpstan, install]
     steps:
       - uses: actions/checkout@v7
         with:

@@ -125,6 +125,9 @@ final class BlockRepository extends AbstractEverblocklightRepository
             'active' => (int) $block->active,
         ];
 
+        // DBAL ne protège pas les noms de colonnes : `groups` est un mot réservé depuis MySQL 8.0.
+        $data = $this->quoteColumns($data);
+
         $this->connection->beginTransaction();
         try {
             if ($block->id) {
