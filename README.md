@@ -5,7 +5,8 @@ Version allégée du module PrestaShop **Ever Block** (Team Ever, v9.0.6, licenc
 - Nom technique : `everblocklight`
 - Compatibilité déclarée : PrestaShop 8.0+ (`ps_versions_compliancy`), PHP 8.1+ (`composer.json`)
 - Auteur : Griiv
-- Licence : AFL 3.0 (voir `LICENSE.md`), code dérivé de [Ever Block](https://www.team-ever.com/)
+- Licence : AFL 3.0 (voir `LICENSE.md`)
+- Œuvre dérivée d'[Ever Block](https://www.team-ever.com/) 9.0.6 (© 2019-2025 Team Ever), modifiée par Griiv en 2026. Les mentions de copyright et de licence d'origine sont conservées dans chaque fichier, conformément à l'article 6 de l'AFL 3.0.
 
 ## Fonctionnalités conservées
 

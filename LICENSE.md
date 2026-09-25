@@ -1,4 +1,9 @@
 Copyright (c) 2019-2025 Team Ever.
+Copyright (c) 2026 Griiv (modifications).
+
+Ever Block Light is a Derivative Work of "Ever Block" by Team Ever (https://www.team-ever.com/),
+version 9.0.6, modified by Griiv in 2026. The original work and this Derivative Work are
+licensed under the Academic Free License v. 3.0 below.
 
 Academic Free License ("AFL") v. 3.0
 

@@ -2,6 +2,7 @@
   "name": "team-ever/everblocklight",
   "description": "Ever Block Light",
   "type": "prestashop-module",
+  "license": "AFL-3.0",
   "authors": [
     {
       "name": "Griiv"

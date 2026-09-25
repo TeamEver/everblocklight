@@ -16,6 +16,8 @@
  *  @author    Team Ever <https://www.team-ever.com/>
  *  @copyright 2019-2025 Team Ever
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *
+ *  Ever Block Light : oeuvre derivee d'Ever Block 9.0.6 (Team Ever), modifiee par Griiv en 2026.
  */
 if (!defined('_PS_VERSION_')) {
     exit;
