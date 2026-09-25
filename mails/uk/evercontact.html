@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{shop_name} message</title>
+    <style>
+      body {background:#f5f5f5;font-family:Arial,Helvetica,sans-serif;margin:0;padding:30px;color:#333;}
+      .wrapper{max-width:600px;margin:auto;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 2px 4px rgba(0,0,0,0.1);} 
+      .header{background:#333;padding:20px;text-align:center;}
+      .header img{max-width:150px;height:auto;}
+      .content{padding:20px;}
+      .title{font-size:18px;font-weight:bold;margin:0 0 10px 0;}
+      .subtitle{margin:0 0 15px 0;color:#555;}
+      .message-content{white-space:pre-wrap;line-height:1.6;color:#333;}
+      .footer{background:#fafafa;color:#888;text-align:center;font-size:12px;padding:10px;}
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <img src="{shop_logo}" alt="{shop_name}">
+      </div>
+      <div class="content">
+        <p class="title">A message was sent from your site {shop_name}</p>
+        <p class="subtitle">The request is as follows:</p>
+        <div class="message-content">{message}</div>
+      </div>
+    </div>
+  </body>
+</html>
