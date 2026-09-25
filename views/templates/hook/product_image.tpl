@@ -16,14 +16,14 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *}
 {if isset($productImage) && $productImage}
-  <div class="everblock-product-image">
+  <div class="everblocklight-product-image">
     <picture>
       <source srcset="{$productImage.image_url}" type="image/webp">
       <source srcset="{$productImage.image_url|replace:'.webp':'.jpg'}" type="image/jpeg">
       <img src="{$productImage.image_url|replace:'.webp':'.jpg'}" 
            alt="{$productImage.image_alt|escape:'htmlall':'UTF-8'}" 
            title="{$productImage.product_name|escape:'htmlall':'UTF-8'}"
-           class="img-fluid lazyload everblock-product-image-img" 
+           class="img-fluid lazyload everblocklight-product-image-img" 
            loading="lazy"
            data-product-id="{$productImage.id_product|escape:'htmlall':'UTF-8'}"
            data-image-number="{$productImage.image_number|escape:'htmlall':'UTF-8'}"

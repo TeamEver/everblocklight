@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Repository;
+namespace Everblocklight\Tools\Repository;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -22,9 +22,9 @@ final class RepositoryProvider
      * @var array<string, class-string>
      */
     private const SERVICE_MAP = [
-        'everblock.repository.block' => BlockRepository::class,
-        'everblock.repository.shortcode' => ShortcodeRepository::class,
-        'everblock.repository.hook' => HookRepository::class,
+        'everblocklight.repository.block' => BlockRepository::class,
+        'everblocklight.repository.shortcode' => ShortcodeRepository::class,
+        'everblocklight.repository.hook' => HookRepository::class,
     ];
 
     /** @var Connection|null */
@@ -38,7 +38,7 @@ final class RepositoryProvider
                 return $container->get($serviceId);
             }
 
-            throw new RuntimeException(sprintf('Everblock repository service "%s" is not available.', $serviceId));
+            throw new RuntimeException(sprintf('Everblocklight repository service "%s" is not available.', $serviceId));
         }
 
         return self::buildFallbackRepository($serviceId);
@@ -74,7 +74,7 @@ final class RepositoryProvider
     private static function buildFallbackRepository(string $serviceId): object
     {
         if (!isset(self::SERVICE_MAP[$serviceId])) {
-            throw new RuntimeException(sprintf('Everblock repository service "%s" is not available.', $serviceId));
+            throw new RuntimeException(sprintf('Everblocklight repository service "%s" is not available.', $serviceId));
         }
 
         $class = self::SERVICE_MAP[$serviceId];
@@ -89,11 +89,11 @@ final class RepositoryProvider
         }
 
         if (!class_exists(DriverManager::class)) {
-            throw new RuntimeException('Doctrine\\DBAL\\DriverManager is not available; cannot build a fallback connection for Everblock repositories.');
+            throw new RuntimeException('Doctrine\\DBAL\\DriverManager is not available; cannot build a fallback connection for Everblocklight repositories.');
         }
 
         if (!defined('_DB_SERVER_') || !defined('_DB_NAME_') || !defined('_DB_USER_')) {
-            throw new RuntimeException('PrestaShop database constants are not defined; cannot build a fallback connection for Everblock repositories.');
+            throw new RuntimeException('PrestaShop database constants are not defined; cannot build a fallback connection for Everblocklight repositories.');
         }
 
         $host = (string) constant('_DB_SERVER_');

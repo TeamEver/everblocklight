@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Handler;
+namespace Everblocklight\Tools\Handler;
 
-use Everblock\Tools\Command\DeleteAdminItemCommand;
-use Everblock\Tools\Entity\Block;
-use Everblock\Tools\Repository\BlockRepository;
-use Everblock\Tools\Repository\HookRepository;
-use Everblock\Tools\Repository\ShortcodeRepository;
-use Everblock\Tools\Service\EverblockCache;
+use Everblocklight\Tools\Command\DeleteAdminItemCommand;
+use Everblocklight\Tools\Entity\Block;
+use Everblocklight\Tools\Repository\BlockRepository;
+use Everblocklight\Tools\Repository\HookRepository;
+use Everblocklight\Tools\Repository\ShortcodeRepository;
+use Everblocklight\Tools\Service\EverblocklightCache;
 
 final class DeleteAdminItemHandler
 {
@@ -63,12 +63,12 @@ final class DeleteAdminItemHandler
                 if ($langId <= 0) {
                     continue;
                 }
-                EverblockCache::cacheDrop('EverblockShortcode_getAllShortcodes_' . $command->shopId . '_' . $langId);
+                EverblocklightCache::cacheDrop('EverblocklightShortcode_getAllShortcodes_' . $command->shopId . '_' . $langId);
                 if ($shortcode !== '') {
-                    EverblockCache::cacheDrop('EverblockShortcode_getEverShortcode_' . $shortcode . '_' . $command->shopId . '_' . $langId);
+                    EverblocklightCache::cacheDrop('EverblocklightShortcode_getEverShortcode_' . $shortcode . '_' . $command->shopId . '_' . $langId);
                 }
             }
-            EverblockCache::cacheDrop('EverblockShortcode_getAllShortcodeIds_' . $command->shopId);
+            EverblocklightCache::cacheDrop('EverblocklightShortcode_getAllShortcodeIds_' . $command->shopId);
 
             return;
         }

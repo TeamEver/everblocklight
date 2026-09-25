@@ -18,7 +18,7 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-namespace Everblock\Tools\Service;
+namespace Everblocklight\Tools\Service;
 
 use Address;
 use Cart;
@@ -33,9 +33,9 @@ use Customer;
 use Db;
 use DbQuery;
 use DirectoryIterator;
-use Everblock;
-use EverblockClass;
-use EverblockShortcode;
+use Everblocklight;
+use EverblocklightClass;
+use EverblocklightShortcode;
 use Exception;
 use Gender;
 use Hook;
@@ -72,7 +72,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class EverblockTools
+class EverblocklightTools
 {
     public static function linkRewrite(string $value): string
     {
@@ -121,9 +121,9 @@ class EverblockTools
      *
      * Le texte est enrichi en plusieurs étapes : hooks d'extension, résolution des
      * shortcodes métier, remplacement des variables Smarty et post-traitements client.
-     * @example $html = EverblockTools::renderShortcodes('[cart_total]', $context, $module);
+     * @example $html = EverblocklightTools::renderShortcodes('[cart_total]', $context, $module);
      */
-    public static function renderShortcodes(string $txt, Context $context, Everblock $module): string
+    public static function renderShortcodes(string $txt, Context $context, Everblocklight $module): string
     {
         Hook::exec('displayBeforeRenderingShortcodes', ['html' => &$txt]);
         $controllerTypes = [
@@ -145,7 +145,7 @@ class EverblockTools
             '[evermap]' => ['method' => 'getEverMapShortcode', 'args' => ['context', 'module']],
             '{hook h=' => 'replaceHook',
             '[llorem]' => ['method' => 'generateLoremIpsum', 'args' => ['context']],
-            '[everblock' => ['method' => 'getEverBlockShortcode', 'args' => ['context']],
+            '[everblocklight' => ['method' => 'getEverBlockLightShortcode', 'args' => ['context']],
             '[subcategories' => ['method' => 'getSubcategoriesShortcode', 'args' => ['context', 'module']],
             '[everstore' => ['method' => 'getStoreShortcode', 'args' => ['context', 'module']],
             '[video' => 'getVideoShortcode',
@@ -217,7 +217,7 @@ class EverblockTools
      * @param string $attrStr
      *
      * @return array<string, mixed>
-     * @example $attrs = EverblockTools::parseShortcodeAttrs('limit="4" order="rand"');
+     * @example $attrs = EverblocklightTools::parseShortcodeAttrs('limit="4" order="rand"');
      */
     protected static function parseShortcodeAttrs(string $attrStr): array
     {
@@ -241,9 +241,9 @@ class EverblockTools
      * @param array<int, string> $args
      *
      * @return array<int, mixed>
-     * @example $args = EverblockTools::resolveShortcodeArgs(['context', 'module'], $context, $module);
+     * @example $args = EverblocklightTools::resolveShortcodeArgs(['context', 'module'], $context, $module);
      */
-    protected static function resolveShortcodeArgs(array $args, Context $context, Everblock $module): array
+    protected static function resolveShortcodeArgs(array $args, Context $context, Everblocklight $module): array
     {
         $resolved = [];
 
@@ -266,12 +266,12 @@ class EverblockTools
      *
      * @param string $txt
      * @param Context $context
-     * @param Everblock $module
+     * @param Everblocklight $module
      *
      * @return string
-     * @example $html = EverblockTools::getProductsByTagShortcode('[products_by_tag tag="summer|sale" limit="6"]', $context, $module);
+     * @example $html = EverblocklightTools::getProductsByTagShortcode('[products_by_tag tag="summer|sale" limit="6"]', $context, $module);
      */
-    protected static function getProductsByTagShortcode(string $txt, Context $context, Everblock $module): string
+    protected static function getProductsByTagShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         return (string) preg_replace_callback('/\[products_by_tag\s+([^\]]+)\]/i', function ($matches) use ($context, $module) {
             $attrs = static::parseShortcodeAttrs($matches[1]);
@@ -447,12 +447,12 @@ class EverblockTools
      *
      * @param string  $txt
      * @param Context $context
-     * @param Everblock $module
+     * @param Everblocklight $module
      *
      * @return string
-     * @example $html = EverblockTools::getLowStockShortcode('[low_stock threshold="3" limit="4"]', $context, $module);
+     * @example $html = EverblocklightTools::getLowStockShortcode('[low_stock threshold="3" limit="4"]', $context, $module);
      */
-    protected static function getLowStockShortcode(string $txt, Context $context, Everblock $module): string
+    protected static function getLowStockShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         return (string) preg_replace_callback('/\[low_stock(?:\s+([^\]]+))?\]/i', function ($matches) use ($context, $module) {
             $attrs = static::parseShortcodeAttrs($matches[1] ?? '');
@@ -465,7 +465,7 @@ class EverblockTools
             $offset = isset($attrs['offset']) ? max(0, (int) $attrs['offset']) : 0;
             $threshold = isset($attrs['threshold'])
                 ? (int) $attrs['threshold']
-                : (int) (Configuration::get('EVERBLOCK_LOW_STOCK_THRESHOLD') ?: 5);
+                : (int) (Configuration::get('EVERBLOCKLIGHT_LOW_STOCK_THRESHOLD') ?: 5);
 
             $match = strtolower($attrs['match'] ?? 'lte');
             $allowedMatch = ['lt', 'lte', 'eq', 'gt', 'gte'];
@@ -725,9 +725,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getCrossSellingShortcode`.
      *
-     * @example $html = EverblockTools::getCrossSellingShortcode('[crosselling id_product=12]', $context, $module);
+     * @example $html = EverblocklightTools::getCrossSellingShortcode('[crosselling id_product=12]', $context, $module);
      */
-    public static function getCrossSellingShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getCrossSellingShortcode(string $txt, Context $context, Everblocklight $module): string
     {
 
         preg_match_all(
@@ -783,7 +783,7 @@ class EverblockTools
             }
 
             $cacheId = 'getCrossSellingShortcode_' . md5(json_encode([$cartIds, $limit, $orderBy, $orderWay]));
-            if (!EverblockCache::isCacheStored($cacheId)) {
+            if (!EverblocklightCache::isCacheStored($cacheId)) {
                 $sql = new DbQuery();
                 $sql->select('DISTINCT p.id_product');
                 $sql->from('accessory', 'a');
@@ -793,9 +793,9 @@ class EverblockTools
                 $sql->orderBy('p.' . pSQL($orderBy) . ' ' . pSQL($orderWay));
                 $sql->limit($limit * 2);
                 $productIds = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
-                EverblockCache::cacheStore($cacheId, $productIds);
+                EverblocklightCache::cacheStore($cacheId, $productIds);
             } else {
-                $productIds = EverblockCache::cacheRetrieve($cacheId);
+                $productIds = EverblocklightCache::cacheRetrieve($cacheId);
             }
 
             $ids = [];
@@ -989,7 +989,7 @@ class EverblockTools
             }
             $updated = $context->cart->updateQty($quantity, $productId, $productAttributeId);
             if ($updated) {
-                $module = Module::getInstanceByName('everblock');
+                $module = Module::getInstanceByName('everblocklight');
                 $context->controller->success[] = $module->l('Product added to cart successfully');
                 $context->controller->redirectWithNotifications(
                     $context->link->getPageLink('cart', true, null, ['action' => 'show'])
@@ -1003,9 +1003,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getAddToCartShortcode`.
      *
-     * @example $html = EverblockTools::getAddToCartShortcode('[everaddtocart id_product=42]', $context, $module);
+     * @example $html = EverblocklightTools::getAddToCartShortcode('[everaddtocart id_product=42]', $context, $module);
      */
-    public static function getAddToCartShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getAddToCartShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         // Expression régulière pour capturer le shortcode avec les paramètres 'ref' et optionnellement 'text'
         $pattern = '/\[everaddtocart\s+ref="([^"]+)"(?:\s+text="([^"]+)")?\]/';
@@ -1062,7 +1062,7 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getCmsShortcode`.
      *
-     * @example $html = EverblockTools::getCmsShortcode('[cms id=5]', $context);
+     * @example $html = EverblocklightTools::getCmsShortcode('[cms id=5]', $context);
      */
     public static function getCmsShortcode(string $txt, Context $context): string
     {
@@ -1089,9 +1089,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getInstagramShortcodes`.
      *
-     * @example $html = EverblockTools::getInstagramShortcodes('[everinstagram]', $context, $module);
+     * @example $html = EverblocklightTools::getInstagramShortcodes('[everinstagram]', $context, $module);
      */
-    public static function getInstagramShortcodes(string $txt, Context $context, Everblock $module): string
+    public static function getInstagramShortcodes(string $txt, Context $context, Everblocklight $module): string
     {
         $imgs = static::fetchInstagramImages();
         if (!$imgs || count($imgs) <= 0) {
@@ -1101,10 +1101,10 @@ class EverblockTools
         $templatePath = static::getTemplatePath('hook/instagram.tpl', $module);
         $context->smarty->assign([
             'everinsta_shopid' => $context->shop->id,
-            'EVERINSTA_ACCESS_TOKEN' => Configuration::get('EVERINSTA_ACCESS_TOKEN'),
+            'EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN' => Configuration::get('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN'),
             'everinsta_nbr' => 12,
-            'everinsta_link' => Configuration::get('EVERINSTA_LINK'),
-            'everinsta_show_caption' => Configuration::get('EVERINSTA_SHOW_CAPTION'),
+            'everinsta_link' => Configuration::get('EVERBLOCKLIGHT_INSTA_LINK'),
+            'everinsta_show_caption' => Configuration::get('EVERBLOCKLIGHT_INSTA_SHOW_CAPTION'),
             'insta_imgs' => $imgs,
         ]);
 
@@ -1125,23 +1125,23 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getWordpressPostsShortcode`.
      *
-     * @example $html = EverblockTools::getWordpressPostsShortcode('[wordpress-posts]', $context, $module);
+     * @example $html = EverblocklightTools::getWordpressPostsShortcode('[wordpress-posts]', $context, $module);
      */
-    public static function getWordpressPostsShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getWordpressPostsShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         preg_match_all('/\[wordpress-posts\]/i', $txt, $matches, PREG_SET_ORDER);
         $templatePath = static::getTemplatePath('hook/generated_wp_posts.tpl', $module);
 
-        if (!file_exists(_PS_MODULE_DIR_ . 'everblock/views/templates/hook/generated_wp_posts.tpl')) {
+        if (!file_exists(_PS_MODULE_DIR_ . 'everblocklight/views/templates/hook/generated_wp_posts.tpl')) {
             foreach ($matches as $match) {
                 $txt = str_replace($match[0], '', $txt);
             }
             return $txt;
         }
 
-        $generatedDir = _PS_MODULE_DIR_ . 'everblock/views/templates/hook/generated_wp_posts/';
+        $generatedDir = _PS_MODULE_DIR_ . 'everblocklight/views/templates/hook/generated_wp_posts/';
         $storedPosts = [];
-        $storedFile = Configuration::get('EVERWP_POSTS_DATA_FILE');
+        $storedFile = Configuration::get('EVERBLOCKLIGHT_WP_POSTS_DATA_FILE');
         if ($storedFile) {
             $storedPath = $generatedDir . $storedFile;
             if (is_file($storedPath) && is_readable($storedPath)) {
@@ -1155,16 +1155,16 @@ class EverblockTools
             }
         }
 
-        $backgroundImage = Configuration::get('EVERWP_POSTS_BG_IMAGE');
+        $backgroundImage = Configuration::get('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE');
         $backgroundUrl = '';
         if ($backgroundImage) {
             $backgroundUrl = $context->link->getBaseLink(null, null)
                 . 'modules/' . $module->name . '/views/img/' . $backgroundImage;
         }
         $context->smarty->assign([
-            'everblock_wp_posts' => $storedPosts,
-            'everblock_wp_blog_url' => Configuration::get('EVERWP_BLOG_URL') ?: '/blog',
-            'everblock_wp_background_image' => $backgroundUrl,
+            'everblocklight_wp_posts' => $storedPosts,
+            'everblocklight_wp_blog_url' => Configuration::get('EVERBLOCKLIGHT_WP_BLOG_URL') ?: '/blog',
+            'everblocklight_wp_background_image' => $backgroundUrl,
         ]);
 
         foreach ($matches as $match) {
@@ -1178,9 +1178,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getGoogleReviewsShortcode`.
      *
-     * @example $html = EverblockTools::getGoogleReviewsShortcode('[googlereviews limit="5"]', $context, $module);
+     * @example $html = EverblocklightTools::getGoogleReviewsShortcode('[googlereviews limit="5"]', $context, $module);
      */
-    public static function getGoogleReviewsShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getGoogleReviewsShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         $pattern = '/\[googlereviews(?:\s+([^\]]+))?\]/i';
 
@@ -1283,39 +1283,39 @@ class EverblockTools
      */
     protected static function prepareGoogleReviewsOptions(array $overrides = []): array
     {
-        $defaultLimit = (int) Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_LIMIT');
+        $defaultLimit = (int) Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT');
         if ($defaultLimit <= 0) {
             $defaultLimit = 5;
         }
 
-        $defaultMinRating = Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_MIN_RATING');
-        $defaultSort = (string) Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_SORT');
+        $defaultMinRating = Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_MIN_RATING');
+        $defaultSort = (string) Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SORT');
         $defaultSort = in_array($defaultSort, ['newest', 'most_relevant'], true) ? $defaultSort : 'most_relevant';
 
-        $defaultShowRating = static::parseBoolean(Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_SHOW_RATING'));
+        $defaultShowRating = static::parseBoolean(Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_RATING'));
         if ($defaultShowRating === null) {
             $defaultShowRating = true;
         }
-        $defaultShowAvatar = static::parseBoolean(Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_SHOW_AVATAR'));
+        $defaultShowAvatar = static::parseBoolean(Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_AVATAR'));
         if ($defaultShowAvatar === null) {
             $defaultShowAvatar = true;
         }
-        $defaultShowCta = static::parseBoolean(Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_SHOW_CTA'));
+        $defaultShowCta = static::parseBoolean(Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_CTA'));
         if ($defaultShowCta === null) {
             $defaultShowCta = true;
         }
 
         $options = [
-            'api_key' => trim((string) ($overrides['api_key'] ?? Configuration::get('EVERBLOCK_GOOGLE_API_KEY'))),
-            'place_id' => trim((string) ($overrides['place_id'] ?? Configuration::get('EVERBLOCK_GOOGLE_PLACE_ID'))),
+            'api_key' => trim((string) ($overrides['api_key'] ?? Configuration::get('EVERBLOCKLIGHT_GOOGLE_API_KEY'))),
+            'place_id' => trim((string) ($overrides['place_id'] ?? Configuration::get('EVERBLOCKLIGHT_GOOGLE_PLACE_ID'))),
             'limit' => (int) ($overrides['limit'] ?? $defaultLimit),
             'min_rating' => (float) ($overrides['min_rating'] ?? ($defaultMinRating !== false ? (float) $defaultMinRating : 0.0)),
             'sort' => (string) ($overrides['sort'] ?? $defaultSort),
             'show_rating' => $defaultShowRating,
             'show_avatar' => $defaultShowAvatar,
             'show_cta' => $defaultShowCta,
-            'cta_label' => trim((string) ($overrides['cta_label'] ?? Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_CTA_LABEL'))),
-            'cta_url' => trim((string) ($overrides['cta_url'] ?? Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_CTA_URL'))),
+            'cta_label' => trim((string) ($overrides['cta_label'] ?? Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_LABEL'))),
+            'cta_url' => trim((string) ($overrides['cta_url'] ?? Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_URL'))),
             'columns' => (int) ($overrides['columns'] ?? 3),
             'css_class' => trim((string) ($overrides['css_class'] ?? '')),
             'heading' => trim((string) ($overrides['heading'] ?? '')),
@@ -1433,9 +1433,9 @@ class EverblockTools
             return $empty;
         }
 
-        $cacheId = 'everblock_google_reviews_' . md5($placeId . '|' . $limit . '|' . $minRating . '|' . $sort);
+        $cacheId = 'everblocklight_google_reviews_' . md5($placeId . '|' . $limit . '|' . $minRating . '|' . $sort);
 
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $query = [
                 'place_id' => $placeId,
                 'fields' => 'name,rating,user_ratings_total,reviews,url,website',
@@ -1448,15 +1448,15 @@ class EverblockTools
             $response = Tools::file_get_contents($endpoint);
 
             if ($response === false) {
-                PrestaShopLogger::addLog('Everblock Google Reviews: unable to contact Google Places API.', 2);
-                EverblockCache::cacheStore($cacheId, $empty);
+                PrestaShopLogger::addLog('Everblocklight Google Reviews: unable to contact Google Places API.', 2);
+                EverblocklightCache::cacheStore($cacheId, $empty);
             } else {
                 $payload = json_decode($response, true);
 
                 if (!is_array($payload) || ($payload['status'] ?? '') !== 'OK') {
                     $status = isset($payload['status']) ? (string) $payload['status'] : 'unknown';
-                    PrestaShopLogger::addLog('Everblock Google Reviews: API status ' . $status, 2);
-                    EverblockCache::cacheStore($cacheId, $empty);
+                    PrestaShopLogger::addLog('Everblocklight Google Reviews: API status ' . $status, 2);
+                    EverblocklightCache::cacheStore($cacheId, $empty);
                 } else {
                     $result = isset($payload['result']) && is_array($payload['result']) ? $payload['result'] : [];
                     $reviews = isset($result['reviews']) && is_array($result['reviews']) ? $result['reviews'] : [];
@@ -1491,12 +1491,12 @@ class EverblockTools
                         'reviews' => array_slice($filteredReviews, 0, $limit),
                     ];
 
-                    EverblockCache::cacheStore($cacheId, $data);
+                    EverblocklightCache::cacheStore($cacheId, $data);
                 }
             }
         }
 
-        $cachedData = EverblockCache::cacheRetrieve($cacheId);
+        $cachedData = EverblocklightCache::cacheRetrieve($cacheId);
 
         return is_array($cachedData) ? $cachedData : $empty;
     }
@@ -1504,9 +1504,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getProductShortcodes`.
      *
-     * @example $html = EverblockTools::getProductShortcodes('[product id=42]', $context, $module);
+     * @example $html = EverblocklightTools::getProductShortcodes('[product id=42]', $context, $module);
      */
-    public static function getProductShortcodes(string $txt, Context $context, Everblock $module): string
+    public static function getProductShortcodes(string $txt, Context $context, Everblocklight $module): string
     {
         $templatePath = static::getTemplatePath('hook/ever_presented_products.tpl', $module);
         // Update regex to capture optional carousel parameter
@@ -1536,9 +1536,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getProductImageShortcodes`.
      *
-     * @example $html = EverblockTools::getProductImageShortcodes('[product_image id=42 type="large_default"]', $context, $module);
+     * @example $html = EverblocklightTools::getProductImageShortcodes('[product_image id=42 type="large_default"]', $context, $module);
      */
-    public static function getProductImageShortcodes(string $txt, Context $context, Everblock $module): string
+    public static function getProductImageShortcodes(string $txt, Context $context, Everblocklight $module): string
     {
         // Debug: vérifier si le shortcode est détecté
         if (strpos($txt, '[product_image') === false) {
@@ -1636,9 +1636,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getFeatureProductShortcodes`.
      *
-     * @example $html = EverblockTools::getFeatureProductShortcodes('[productfeature id_product=42 id_feature=3]', $context, $module);
+     * @example $html = EverblocklightTools::getFeatureProductShortcodes('[productfeature id_product=42 id_feature=3]', $context, $module);
      */
-    public static function getFeatureProductShortcodes(string $txt, Context $context, Everblock $module): string
+    public static function getFeatureProductShortcodes(string $txt, Context $context, Everblocklight $module): string
     {
         $templatePath = static::getTemplatePath('hook/ever_presented_products.tpl', $module);
 
@@ -1692,11 +1692,11 @@ class EverblockTools
      */
     protected static function getProductsByFeature(int $featureId, int $limit, Context $context, string $orderBy = 'id_product', string $orderWay = 'DESC')
     {
-        $cacheId = 'everblock_getProductsByFeature_'
+        $cacheId = 'everblocklight_getProductsByFeature_'
             . $featureId . '_' . $limit . '_' . $context->language->id
             . '_' . $orderBy . '_' . $orderWay;
 
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $sql = new DbQuery();
             $sql->select('p.id_product');
             $sql->from('product', 'p');
@@ -1707,19 +1707,19 @@ class EverblockTools
             $sql->limit($limit);
 
             $productIds = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
-            EverblockCache::cacheStore($cacheId, $productIds);
+            EverblocklightCache::cacheStore($cacheId, $productIds);
             return $productIds;
         }
 
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     /**
      * Gère le shortcode associé à `getFeatureValueProductShortcodes`.
      *
-     * @example $html = EverblockTools::getFeatureValueProductShortcodes('[productfeaturevalue id_product=42 id_feature=3]', $context, $module);
+     * @example $html = EverblocklightTools::getFeatureValueProductShortcodes('[productfeaturevalue id_product=42 id_feature=3]', $context, $module);
      */
-    public static function getFeatureValueProductShortcodes(string $txt, Context $context, Everblock $module): string
+    public static function getFeatureValueProductShortcodes(string $txt, Context $context, Everblocklight $module): string
     {
         $templatePath = static::getTemplatePath('hook/ever_presented_products.tpl', $module);
         // Mise à jour de la regex pour capturer les paramètres id, nb, limit, carousel, orderby et orderway
@@ -1757,14 +1757,14 @@ class EverblockTools
      */
     protected static function getProductsByFeatureValue(int $featureValueId, int $limit, Context $context, string $orderBy = 'date_add', string $orderWay = 'DESC')
     {
-        $cacheId = 'everblock_getProductsByFeatureValue_'
+        $cacheId = 'everblocklight_getProductsByFeatureValue_'
         . (int) $featureValueId
         . '_'
         . (int) $limit
         . '_'
         . (int) $context->language->id
         . '_' . $orderBy . '_' . $orderWay;
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $sql = new DbQuery();
             $sql->select('p.id_product');
             $sql->from('product', 'p');
@@ -1775,18 +1775,18 @@ class EverblockTools
             $sql->limit($limit);
 
             $productIds = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
-            EverblockCache::cacheStore($cacheId, $productIds);
+            EverblocklightCache::cacheStore($cacheId, $productIds);
             return $productIds;
         }
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     /**
      * Gère le shortcode associé à `getCategoryShortcodes`.
      *
-     * @example $html = EverblockTools::getCategoryShortcodes('[category id=2]', $context, $module);
+     * @example $html = EverblocklightTools::getCategoryShortcodes('[category id=2]', $context, $module);
      */
-    public static function getCategoryShortcodes(string $txt, Context $context, Everblock $module): string
+    public static function getCategoryShortcodes(string $txt, Context $context, Everblocklight $module): string
     {
         $templatePath = static::getTemplatePath('hook/ever_presented_products.tpl', $module);
 
@@ -1835,10 +1835,10 @@ class EverblockTools
             return [];
         }
 
-        $cacheId = 'everblock_getProductsByCategoryId_'
+        $cacheId = 'everblocklight_getProductsByCategoryId_'
             . $categoryId . '_' . $limit . '_' . $orderBy . '_' . $orderWay . '_' . (int) $includeSubcategories;
 
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $idLang = (int) Context::getContext()->language->id;
             $categoryIds = [$categoryId];
 
@@ -1883,20 +1883,20 @@ class EverblockTools
                 }
             }
 
-            EverblockCache::cacheStore($cacheId, $products);
+            EverblocklightCache::cacheStore($cacheId, $products);
             return $products;
         }
 
-        $cachedProducts = EverblockCache::cacheRetrieve($cacheId);
+        $cachedProducts = EverblocklightCache::cacheRetrieve($cacheId);
         return is_array($cachedProducts) ? $cachedProducts : [];
     }
 
     /**
      * Gère le shortcode associé à `getManufacturerShortcodes`.
      *
-     * @example $html = EverblockTools::getManufacturerShortcodes('[manufacturer id=7]', $context, $module);
+     * @example $html = EverblocklightTools::getManufacturerShortcodes('[manufacturer id=7]', $context, $module);
      */
-    public static function getManufacturerShortcodes($message, $context, Everblock $module)
+    public static function getManufacturerShortcodes($message, $context, Everblocklight $module)
     {
         $templatePath = static::getTemplatePath('hook/ever_presented_products.tpl', $module);
 
@@ -1946,10 +1946,10 @@ class EverblockTools
 
     protected static function getProductsByManufacturerId(int $manufacturerId, int $limit, string $orderBy = 'id_product', string $orderWay = 'DESC'): array
     {
-        $cacheId = 'everblock_getProductsByManufacturerId_'
+        $cacheId = 'everblocklight_getProductsByManufacturerId_'
             . $manufacturerId . '_' . $limit . '_' . $orderBy . '_' . $orderWay;
 
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $manufacturer = new Manufacturer($manufacturerId);
             $return = [];
 
@@ -1965,19 +1965,19 @@ class EverblockTools
                 $return = $products;
             }
 
-            EverblockCache::cacheStore($cacheId, $return);
+            EverblocklightCache::cacheStore($cacheId, $return);
             return $return;
         }
 
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     /**
      * Gère le shortcode associé à `getBrandsShortcode`.
      *
-     * @example $html = EverblockTools::getBrandsShortcode('[brands limit="12"]', $context, $module);
+     * @example $html = EverblocklightTools::getBrandsShortcode('[brands limit="12"]', $context, $module);
      */
-    public static function getBrandsShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getBrandsShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         $templatePath = static::getTemplatePath('hook/ever_brand.tpl', $module);
 
@@ -2008,12 +2008,12 @@ class EverblockTools
 
     protected static function getBrandsData($limit, $context)
     {
-        $cacheId = 'everblock_getBrandsData_'
+        $cacheId = 'everblocklight_getBrandsData_'
             . (int) $context->language->id
             . '_'
             . (int) $limit;
 
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $brands = Manufacturer::getLiteManufacturersList(
                 (int) $context->language->id
             );
@@ -2056,23 +2056,23 @@ class EverblockTools
                     ];
                 }
             }
-            EverblockCache::cacheStore($cacheId, $limitedBrands);
+            EverblocklightCache::cacheStore($cacheId, $limitedBrands);
             return $limitedBrands;
         }
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     protected static function getBestSellingProductIds(int $limit, string $orderBy = 'total_quantity', string $orderWay = 'DESC', ?int $days = null): array
     {
         $context = Context::getContext();
-        $cacheId = 'everblock_bestSellingProductIds_'
+        $cacheId = 'everblocklight_bestSellingProductIds_'
             . (int) $context->shop->id . '_'
             . $limit . '_'
             . ($days ?? 'all') . '_'
             . $orderBy . '_'
             . $orderWay;
 
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $sql = 'SELECT od.product_id, SUM(od.product_quantity) AS total_quantity'
                 . ' FROM ' . _DB_PREFIX_ . 'order_detail od'
                 . ' JOIN ' . _DB_PREFIX_ . 'orders o ON od.id_order = o.id_order'
@@ -2092,17 +2092,17 @@ class EverblockTools
             $ids = array_map(function ($row) {
                 return (int) $row['product_id'];
             }, $rows);
-            EverblockCache::cacheStore($cacheId, $ids);
+            EverblocklightCache::cacheStore($cacheId, $ids);
             return $ids;
         }
 
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     protected static function getBestSellingProductIdsByCategory(int $categoryId, int $limit, string $orderBy = 'total_quantity', string $orderWay = 'DESC', ?int $days = null): array
     {
         $context = Context::getContext();
-        $cacheId = 'everblock_bestSellingProductIds_category_'
+        $cacheId = 'everblocklight_bestSellingProductIds_category_'
             . (int) $context->shop->id . '_'
             . $categoryId . '_'
             . $limit . '_'
@@ -2110,7 +2110,7 @@ class EverblockTools
             . $orderBy . '_'
             . $orderWay;
 
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $shopId = (int) $context->shop->id;
             $sql = 'SELECT od.product_id, SUM(od.product_quantity) AS total_quantity'
                 . ' FROM ' . _DB_PREFIX_ . 'order_detail od'
@@ -2135,17 +2135,17 @@ class EverblockTools
             $ids = array_map(function ($row) {
                 return (int) $row['product_id'];
             }, $rows);
-            EverblockCache::cacheStore($cacheId, $ids);
+            EverblocklightCache::cacheStore($cacheId, $ids);
             return $ids;
         }
 
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     protected static function getBestSellingProductIdsByBrand(int $brandId, int $limit, string $orderBy = 'total_quantity', string $orderWay = 'DESC', ?int $days = null): array
     {
         $context = Context::getContext();
-        $cacheId = 'everblock_bestSellingProductIds_brand_'
+        $cacheId = 'everblocklight_bestSellingProductIds_brand_'
             . (int) $context->shop->id . '_'
             . $brandId . '_'
             . $limit . '_'
@@ -2153,7 +2153,7 @@ class EverblockTools
             . $orderBy . '_'
             . $orderWay;
 
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $shopId = (int) $context->shop->id;
             $sql = 'SELECT od.product_id, SUM(od.product_quantity) AS total_quantity'
                 . ' FROM ' . _DB_PREFIX_ . 'order_detail od'
@@ -2178,17 +2178,17 @@ class EverblockTools
             $ids = array_map(function ($row) {
                 return (int) $row['product_id'];
             }, $rows);
-            EverblockCache::cacheStore($cacheId, $ids);
+            EverblocklightCache::cacheStore($cacheId, $ids);
             return $ids;
         }
 
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     protected static function getBestSellingProductIdsByFeature(int $featureId, int $limit, string $orderBy = 'total_quantity', string $orderWay = 'DESC', ?int $days = null): array
     {
         $context = Context::getContext();
-        $cacheId = 'everblock_bestSellingProductIds_feature_'
+        $cacheId = 'everblocklight_bestSellingProductIds_feature_'
             . (int) $context->shop->id . '_'
             . $featureId . '_'
             . $limit . '_'
@@ -2196,7 +2196,7 @@ class EverblockTools
             . $orderBy . '_'
             . $orderWay;
 
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $shopId = (int) $context->shop->id;
             $sql = 'SELECT od.product_id, SUM(od.product_quantity) AS total_quantity'
                 . ' FROM ' . _DB_PREFIX_ . 'order_detail od'
@@ -2221,17 +2221,17 @@ class EverblockTools
             $ids = array_map(function ($row) {
                 return (int) $row['product_id'];
             }, $rows);
-            EverblockCache::cacheStore($cacheId, $ids);
+            EverblocklightCache::cacheStore($cacheId, $ids);
             return $ids;
         }
 
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     protected static function getBestSellingProductIdsByFeatureValue(int $featureValueId, int $limit, string $orderBy = 'total_quantity', string $orderWay = 'DESC', ?int $days = null): array
     {
         $context = Context::getContext();
-        $cacheId = 'everblock_bestSellingProductIds_feature_value_'
+        $cacheId = 'everblocklight_bestSellingProductIds_feature_value_'
             . (int) $context->shop->id . '_'
             . $featureValueId . '_'
             . $limit . '_'
@@ -2239,7 +2239,7 @@ class EverblockTools
             . $orderBy . '_'
             . $orderWay;
 
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $shopId = (int) $context->shop->id;
             $sql = 'SELECT od.product_id, SUM(od.product_quantity) AS total_quantity'
                 . ' FROM ' . _DB_PREFIX_ . 'order_detail od'
@@ -2264,17 +2264,17 @@ class EverblockTools
             $ids = array_map(function ($row) {
                 return (int) $row['product_id'];
             }, $rows);
-            EverblockCache::cacheStore($cacheId, $ids);
+            EverblocklightCache::cacheStore($cacheId, $ids);
             return $ids;
         }
 
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     /**
      * Gère le shortcode associé à `getWidgetShortcode`.
      *
-     * @example $html = EverblockTools::getWidgetShortcode('[widget id=footer_links]');
+     * @example $html = EverblocklightTools::getWidgetShortcode('[widget id=footer_links]');
      */
     public static function getWidgetShortcode($txt)
     {
@@ -2299,12 +2299,12 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `generateFormFromShortcode`.
      *
-     * @example $html = EverblockTools::generateFormFromShortcode('[evercontactform_open]', $context, $module, 'contact');
+     * @example $html = EverblocklightTools::generateFormFromShortcode('[evercontactform_open]', $context, $module, 'contact');
      */
     public static function generateFormFromShortcode(
         string $shortcode,
         Context $context,
-        Everblock $module
+        Everblocklight $module
     ) {
         preg_match_all('/(\w+)\s*=\s*"([^"]+)"|(\w+)\s*=\s*([^"\s,]+)/', $shortcode, $matches, PREG_SET_ORDER);
         $attributes = [];
@@ -2358,9 +2358,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getFormShortcode`.
      *
-     * @example $html = EverblockTools::getFormShortcode('[evercontactform_open]', $context, $module);
+     * @example $html = EverblocklightTools::getFormShortcode('[evercontactform_open]', $context, $module);
      */
-    public static function getFormShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getFormShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         // Remplace [evercontactform_open] par le formulaire ouvrant
         $txt = str_replace(
@@ -2389,9 +2389,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getOrderFormShortcode`.
      *
-     * @example $html = EverblockTools::getOrderFormShortcode('[everorderform_open]', $context, $module);
+     * @example $html = EverblocklightTools::getOrderFormShortcode('[everorderform_open]', $context, $module);
      */
-    public static function getOrderFormShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getOrderFormShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         $txt = str_replace('[everorderform_open]', '<div class="container">', $txt);
         $txt = str_replace('[everorderform_close]', '</div>', $txt);
@@ -2426,9 +2426,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getNativeContactShortcode`.
      *
-     * @example $html = EverblockTools::getNativeContactShortcode('[nativecontact]', $context, $module);
+     * @example $html = EverblocklightTools::getNativeContactShortcode('[nativecontact]', $context, $module);
      */
-    public static function getNativeContactShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getNativeContactShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         $templatePath = static::getTemplatePath('hook/contact.tpl', $module);
         $replacement = $context->smarty->fetch($templatePath);
@@ -2439,9 +2439,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getCartShortcode`.
      *
-     * @example $html = EverblockTools::getCartShortcode('[evercart]', $context, $module);
+     * @example $html = EverblocklightTools::getCartShortcode('[evercart]', $context, $module);
      */
-    public static function getCartShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getCartShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         $templatePath = static::getTemplatePath('hook/cart.tpl', $module);
         $replacement = $context->smarty->fetch($templatePath);
@@ -2452,7 +2452,7 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getCartTotalShortcode`.
      *
-     * @example $html = EverblockTools::getCartTotalShortcode('[cart_total]', $context);
+     * @example $html = EverblocklightTools::getCartTotalShortcode('[cart_total]', $context);
      */
     public static function getCartTotalShortcode(string $txt, Context $context): string
     {
@@ -2472,7 +2472,7 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getCartQuantityShortcode`.
      *
-     * @example $html = EverblockTools::getCartQuantityShortcode('[cart_quantity]', $context);
+     * @example $html = EverblocklightTools::getCartQuantityShortcode('[cart_quantity]', $context);
      */
     public static function getCartQuantityShortcode(string $txt, Context $context): string
     {
@@ -2487,7 +2487,7 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getShopLogoShortcode`.
      *
-     * @example $html = EverblockTools::getShopLogoShortcode('[shop_logo]', $context);
+     * @example $html = EverblocklightTools::getShopLogoShortcode('[shop_logo]', $context);
      */
     public static function getShopLogoShortcode(string $txt, Context $context): string
     {
@@ -2515,7 +2515,7 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getAlertShortcode`.
      *
-     * @example $html = EverblockTools::getAlertShortcode('[alert type="warning" text="Stock faible"]');
+     * @example $html = EverblocklightTools::getAlertShortcode('[alert type="warning" text="Stock faible"]');
      */
     public static function getAlertShortcode(string $txt): string
     {
@@ -2541,9 +2541,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getNewsletterFormShortcode`.
      *
-     * @example $html = EverblockTools::getNewsletterFormShortcode('[newsletter_form]', $context, $module);
+     * @example $html = EverblocklightTools::getNewsletterFormShortcode('[newsletter_form]', $context, $module);
      */
-    public static function getNewsletterFormShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getNewsletterFormShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         if (Module::isInstalled('ps_emailsubscription') && Module::isEnabled('ps_emailsubscription')) {
             $newsletter = Module::getInstanceByName('ps_emailsubscription');
@@ -2556,7 +2556,7 @@ class EverblockTools
                 // loaded via AJAX (e.g. inside a modal), the request URI points to
                 // the AJAX controller. In that case, rely on the origin URL sent
                 // from JavaScript.
-                $currentUrl = Tools::getValue('everblock_origin_url');
+                $currentUrl = Tools::getValue('everblocklight_origin_url');
                 if (!$currentUrl || !Validate::isUrl($currentUrl)) {
                     $currentUrl = Tools::getHttpHost(true) . $_SERVER['REQUEST_URI'];
                 }
@@ -2573,29 +2573,29 @@ class EverblockTools
     }
 
     /**
-     * Gère le shortcode associé à `getEverBlockShortcode`.
+     * Gère le shortcode associé à `getEverBlockLightShortcode`.
      *
-     * @example $html = EverblockTools::getEverBlockShortcode('[everblock 12]', $context);
+     * @example $html = EverblocklightTools::getEverBlockLightShortcode('[everblocklight 12]', $context);
      */
-    public static function getEverBlockShortcode(string $txt, Context $context): string
+    public static function getEverBlockLightShortcode(string $txt, Context $context): string
     {
         $idLang = (int) $context->language->id;
         $idShop = (int) $context->shop->id;
 
         return (string) preg_replace_callback(
-            '/\[everblock\s+(\d+)\]/i',
+            '/\[everblocklight\s+(\d+)\]/i',
             static function (array $matches) use ($idLang, $idShop): string {
-                $everblock = new EverblockClass(
+                $everblocklight = new EverblocklightClass(
                     (int) $matches[1],
                     $idLang,
                     $idShop
                 );
 
-                if (!Validate::isLoadedObject($everblock)) {
+                if (!Validate::isLoadedObject($everblocklight)) {
                     return '';
                 }
 
-                return $everblock->getContent($idLang);
+                return $everblocklight->getContent($idLang);
             },
             $txt
         );
@@ -2604,9 +2604,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getRandomProductsShortcode`.
      *
-     * @example $html = EverblockTools::getRandomProductsShortcode('[random_product nb=4 carousel=true]', $context, $module);
+     * @example $html = EverblocklightTools::getRandomProductsShortcode('[random_product nb=4 carousel=true]', $context, $module);
      */
-    public static function getRandomProductsShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getRandomProductsShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         // Update regex to capture optional params nb, limit, carousel, orderby and orderway
         preg_match_all('/\[random_product(?:\s+nb="?(\d+)")?(?:\s+limit="?(\d+)")?(?:\s+carousel=(true|false))?(?:\s+orderby="?(\w+)"?)?(?:\s+orderway="?(ASC|DESC)"?)?\]/i', $txt, $matches, PREG_SET_ORDER);
@@ -2673,9 +2673,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getLastProductsShortcode`.
      *
-     * @example $html = EverblockTools::getLastProductsShortcode('[last-products nb=6]', $context, $module);
+     * @example $html = EverblocklightTools::getLastProductsShortcode('[last-products nb=6]', $context, $module);
      */
-    public static function getLastProductsShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getLastProductsShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         // Update regex to capture optional nb, limit, carousel, orderby and orderway
         preg_match_all('/\[last-products(?:\s+(\d+))?(?:\s+nb=(\d+))?(?:\s+limit=(\d+))?(?:\s+carousel=(true|false))?(?:\s+orderby="?(\w+)"?)?(?:\s+orderway="?(ASC|DESC)"?)?\]/i', $txt, $matches, PREG_SET_ORDER);
@@ -2741,9 +2741,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getRecentlyViewedShortcode`.
      *
-     * @example $html = EverblockTools::getRecentlyViewedShortcode('[recently_viewed nb=5]', $context, $module);
+     * @example $html = EverblocklightTools::getRecentlyViewedShortcode('[recently_viewed nb=5]', $context, $module);
      */
-    public static function getRecentlyViewedShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getRecentlyViewedShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         preg_match_all('/\[recently_viewed(?:\s+nb=(\d+))?(?:\s+carousel=(true|false))?\]/i', $txt, $matches, PREG_SET_ORDER);
 
@@ -2784,9 +2784,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getPromoProductsShortcode`.
      *
-     * @example $html = EverblockTools::getPromoProductsShortcode('[promo-products nb=8]', $context, $module);
+     * @example $html = EverblocklightTools::getPromoProductsShortcode('[promo-products nb=8]', $context, $module);
      */
-    public static function getPromoProductsShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getPromoProductsShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         // Update regex to capture optional nb, limit, carousel, orderby and orderway
         preg_match_all('/\[promo-products(?:\s+(\d+))?(?:\s+nb=(\d+))?(?:\s+limit=(\d+))?(?:\s+carousel=(true|false))?(?:\s+orderby="?(\w+)"?)?(?:\s+orderway="?(ASC|DESC)"?)?\]/i', $txt, $matches, PREG_SET_ORDER);
@@ -2853,9 +2853,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getBestSalesShortcode`.
      *
-     * @example $html = EverblockTools::getBestSalesShortcode('[best-sales nb=6]', $context, $module);
+     * @example $html = EverblocklightTools::getBestSalesShortcode('[best-sales nb=6]', $context, $module);
      */
-    public static function getBestSalesShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getBestSalesShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         preg_match_all(
             '/\[best-sales(?:\s+nb=(\d+))?(?:\s+limit=(\d+))?(?:\s+days=(\d+))?(?:\s+carousel=(true|false))?(?:\s+orderby="?(\w+)"?)?(?:\s+orderway="?(\w+)"?)?\]/i',
@@ -2887,7 +2887,7 @@ class EverblockTools
                 . ($days ?? 'all')
                 . "_{$orderBy}_{$orderWay}";
 
-            if (!EverblockCache::isCacheStored($cacheId)) {
+            if (!EverblocklightCache::isCacheStored($cacheId)) {
                 $sql = 'SELECT od.product_id, SUM(od.product_quantity) AS total_quantity
                         FROM ' . _DB_PREFIX_ . 'order_detail od
                         JOIN ' . _DB_PREFIX_ . 'orders o ON od.id_order = o.id_order
@@ -2904,9 +2904,9 @@ class EverblockTools
                           LIMIT ' . (int)$limit;
 
                 $productIds = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
-                EverblockCache::cacheStore($cacheId, $productIds);
+                EverblocklightCache::cacheStore($cacheId, $productIds);
             } else {
-                $productIds = EverblockCache::cacheRetrieve($cacheId);
+                $productIds = EverblocklightCache::cacheRetrieve($cacheId);
             }
             if (!empty($productIds)) {
                 $productIdsArray = array_map(function ($row) {
@@ -2935,9 +2935,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getCategoryBestSalesShortcode`.
      *
-     * @example $html = EverblockTools::getCategoryBestSalesShortcode('[categorybestsales id_category=2 nb=6]', $context, $module);
+     * @example $html = EverblocklightTools::getCategoryBestSalesShortcode('[categorybestsales id_category=2 nb=6]', $context, $module);
      */
-    public static function getCategoryBestSalesShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getCategoryBestSalesShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         preg_match_all(
             '/\[categorybestsales\s+id="?(\d+)"?(?:\s+nb=(\d+))?(?:\s+limit=(\d+))?(?:\s+days=(\d+))?(?:\s+carousel=(true|false))?(?:\s+orderby="?(\w+)"?)?(?:\s+orderway="?(\w+)"?)?\]/i',
@@ -3009,9 +3009,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getBrandBestSalesShortcode`.
      *
-     * @example $html = EverblockTools::getBrandBestSalesShortcode('[brandbestsales id_manufacturer=7 nb=6]', $context, $module);
+     * @example $html = EverblocklightTools::getBrandBestSalesShortcode('[brandbestsales id_manufacturer=7 nb=6]', $context, $module);
      */
-    public static function getBrandBestSalesShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getBrandBestSalesShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         preg_match_all(
             '/\[brandbestsales\s+id="?(\d+)"?(?:\s+nb=(\d+))?(?:\s+limit=(\d+))?(?:\s+days=(\d+))?(?:\s+carousel=(true|false))?(?:\s+orderby="?(\w+)"?)?(?:\s+orderway="?(\w+)"?)?\]/i',
@@ -3083,9 +3083,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getFeatureBestSalesShortcode`.
      *
-     * @example $html = EverblockTools::getFeatureBestSalesShortcode('[featurebestsales id_feature=3 nb=6]', $context, $module);
+     * @example $html = EverblocklightTools::getFeatureBestSalesShortcode('[featurebestsales id_feature=3 nb=6]', $context, $module);
      */
-    public static function getFeatureBestSalesShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getFeatureBestSalesShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         preg_match_all(
             '/\[featurebestsales\s+id="?(\d+)"?(?:\s+nb=(\d+))?(?:\s+limit=(\d+))?(?:\s+days=(\d+))?(?:\s+carousel=(true|false))?(?:\s+orderby="?(\w+)"?)?(?:\s+orderway="?(\w+)"?)?\]/i',
@@ -3157,9 +3157,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getFeatureValueBestSalesShortcode`.
      *
-     * @example $html = EverblockTools::getFeatureValueBestSalesShortcode('[featurevaluebestsales id_feature_value=9 nb=6]', $context, $module);
+     * @example $html = EverblocklightTools::getFeatureValueBestSalesShortcode('[featurevaluebestsales id_feature_value=9 nb=6]', $context, $module);
      */
-    public static function getFeatureValueBestSalesShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getFeatureValueBestSalesShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         preg_match_all(
             '/\[featurevaluebestsales\s+id="?(\d+)"?(?:\s+nb=(\d+))?(?:\s+limit=(\d+))?(?:\s+days=(\d+))?(?:\s+carousel=(true|false))?(?:\s+orderby="?(\w+)"?)?(?:\s+orderway="?(\w+)"?)?\]/i',
@@ -3231,9 +3231,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getLinkedProductsShortcode`.
      *
-     * @example $html = EverblockTools::getLinkedProductsShortcode('[linkedproducts id_product=42]', $context, $module);
+     * @example $html = EverblocklightTools::getLinkedProductsShortcode('[linkedproducts id_product=42]', $context, $module);
      */
-    public static function getLinkedProductsShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getLinkedProductsShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         if (!Tools::getValue('id_product')) {
             return $txt;
@@ -3265,7 +3265,7 @@ class EverblockTools
                 . (int) $context->shop->id . '_' . $productId . '_' . $limit
                 . '_' . $orderBy . '_' . $orderWay;
 
-            if (!EverblockCache::isCacheStored($cacheId)) {
+            if (!EverblocklightCache::isCacheStored($cacheId)) {
                 $sql = new DbQuery();
                 $sql->select('p.id_product');
                 $sql->from('product', 'p');
@@ -3276,9 +3276,9 @@ class EverblockTools
                 $sql->limit($limit);
 
                 $productIds = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
-                EverblockCache::cacheStore($cacheId, $productIds);
+                EverblocklightCache::cacheStore($cacheId, $productIds);
             } else {
-                $productIds = EverblockCache::cacheRetrieve($cacheId);
+                $productIds = EverblocklightCache::cacheRetrieve($cacheId);
             }
 
             if (!empty($productIds)) {
@@ -3321,9 +3321,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getAccessoriesShortcode`.
      *
-     * @example $html = EverblockTools::getAccessoriesShortcode('[accessories id_product=42]', $context, $module);
+     * @example $html = EverblocklightTools::getAccessoriesShortcode('[accessories id_product=42]', $context, $module);
      */
-    public static function getAccessoriesShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getAccessoriesShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         if (!Tools::getValue('id_product')) {
             return $txt;
@@ -3372,7 +3372,7 @@ class EverblockTools
                 . (int) $context->shop->id . '_' . $productId . '_' . $limit
                 . '_' . $orderBy . '_' . $orderWay;
 
-            if (!EverblockCache::isCacheStored($cacheId)) {
+            if (!EverblocklightCache::isCacheStored($cacheId)) {
                 $sql = new DbQuery();
                 $sql->select('p.id_product');
                 $sql->from('product', 'p');
@@ -3383,9 +3383,9 @@ class EverblockTools
                 $sql->limit($limit);
 
                 $productIds = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
-                EverblockCache::cacheStore($cacheId, $productIds);
+                EverblocklightCache::cacheStore($cacheId, $productIds);
             } else {
-                $productIds = EverblockCache::cacheRetrieve($cacheId);
+                $productIds = EverblocklightCache::cacheRetrieve($cacheId);
             }
 
             if (!empty($productIds)) {
@@ -3418,9 +3418,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getSubcategoriesShortcode`.
      *
-     * @example $html = EverblockTools::getSubcategoriesShortcode('[subcategories id_category=2]', $context, $module);
+     * @example $html = EverblocklightTools::getSubcategoriesShortcode('[subcategories id_category=2]', $context, $module);
      */
-    public static function getSubcategoriesShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getSubcategoriesShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         $categoryShortcodes = [];
         preg_match_all('/\[subcategories\s+id="(\d+)"\s+nb="(\d+)"\]/i', $txt, $matches, PREG_SET_ORDER);
@@ -3467,9 +3467,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getStoreShortcode`.
      *
-     * @example $html = EverblockTools::getStoreShortcode('[everstore id_store=1]', $context, $module);
+     * @example $html = EverblocklightTools::getStoreShortcode('[everstore id_store=1]', $context, $module);
      */
-    public static function getStoreShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getStoreShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         preg_match_all('/\[everstore\s+(\d+)\]/i', $txt, $matches);
         foreach ($matches[1] as $match) {
@@ -3564,9 +3564,9 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getEverImgShortcode`.
      *
-     * @example $html = EverblockTools::getEverImgShortcode('[everimg src="/img/cms/banner.jpg" alt="Banniere"]', $context, $module);
+     * @example $html = EverblocklightTools::getEverImgShortcode('[everimg src="/img/cms/banner.jpg" alt="Banniere"]', $context, $module);
      */
-    public static function getEverImgShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getEverImgShortcode(string $txt, Context $context, Everblocklight $module): string
     {
         // 🔹 Regex robuste : compatible avec carousel=true ou carousel="true"
         preg_match_all(
@@ -3745,7 +3745,7 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getVideoShortcode`.
      *
-     * @example $html = EverblockTools::getVideoShortcode('[video src="https://www.youtube.com/watch?v=dQw4w9WgXcQ"]');
+     * @example $html = EverblocklightTools::getVideoShortcode('[video src="https://www.youtube.com/watch?v=dQw4w9WgXcQ"]');
      */
     public static function getVideoShortcode(string $txt): string
     {
@@ -4011,7 +4011,7 @@ class EverblockTools
         $result = [];
         $holidays = self::getFrenchHolidays((int) date('Y'));
         foreach ($holidays as $date) {
-            $hoursKey = 'EVERBLOCK_HOLIDAY_HOURS_' . (int) $storeId . '_' . $date;
+            $hoursKey = 'EVERBLOCKLIGHT_HOLIDAY_HOURS_' . (int) $storeId . '_' . $date;
             $hours = Configuration::get($hoursKey);
             if ($hours) {
                 $result[$date] = trim($hours);
@@ -4023,24 +4023,24 @@ class EverblockTools
     public static function getStoreCoordinates(int $storeId): array
     {
         $cacheId = 'store_coordinates_' . (int) $storeId;
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $store = new Store((int) $storeId);
             if (Validate::isLoadedObject($store)) {
                 $coordinates = [
                     'latitude' => (float) $store->latitude,
                     'longitude' => (float) $store->longitude
                 ];
-                EverblockCache::cacheStore($cacheId, $coordinates);
+                EverblocklightCache::cacheStore($cacheId, $coordinates);
             } else {
                 return [];
             }
         }
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
-    public static function generateGoogleMap(string $txt, Context $context, Everblock $module): string
+    public static function generateGoogleMap(string $txt, Context $context, Everblocklight $module): string
     {
-        $apiKey = Configuration::get('EVERBLOCK_GMAP_KEY');
+        $apiKey = Configuration::get('EVERBLOCKLIGHT_GMAP_KEY');
         if (!$apiKey) {
             return str_replace('[storelocator]', '', $txt);
         }
@@ -4049,8 +4049,8 @@ class EverblockTools
             $smarty = $context->smarty;
             $templatePath = static::getTemplatePath('hook/storelocator.tpl', $module);
             $smarty->assign([
-                'everblock_stores' => $stores,
-                'everblock_show_map_toggle' => (bool) Configuration::get('EVERBLOCK_STORELOCATOR_TOGGLE'),
+                'everblocklight_stores' => $stores,
+                'everblocklight_show_map_toggle' => (bool) Configuration::get('EVERBLOCKLIGHT_STORELOCATOR_TOGGLE'),
             ]);
             $storeLocatorContent = $smarty->fetch($templatePath);
             $txt = str_replace('[storelocator]', $storeLocatorContent, $txt);
@@ -4075,7 +4075,7 @@ class EverblockTools
                 var infoWindow;
                 var markers = ' . json_encode($markers) . ';
                 var markerMap = {};
-                var storeList = document.getElementById("everblock-storelist");
+                var storeList = document.getElementById("everblocklight-storelist");
                 var originalItems = storeList ? Array.from(storeList.children) : [];
                 var defaultCenter = { lat: markers[0].lat, lng: markers[0].lng };
 
@@ -4085,7 +4085,7 @@ class EverblockTools
                     var directions = `<a href="https://www.google.com/maps/dir/?api=1&destination=${marker.lat},${marker.lng}" target="_blank" rel="noopener noreferrer" class="btn btn-primary w-100">${marker.directions_label}</a>`;
                     var title = marker.cms_link ? `<a href="${marker.cms_link}" class="text-dark text-decoration-none">${marker.title}</a>` : marker.title;
                     return `
-                        <div class="everblock-marker-info row g-3 mx-0">
+                        <div class="everblocklight-marker-info row g-3 mx-0">
                             <div class="col-4">
                                 <img src="${marker.img}" alt="${marker.title}" style="width:80px;height:80px;object-fit:cover;" class="rounded w-100 ms-2">
                             </div>
@@ -4121,7 +4121,7 @@ class EverblockTools
                 }
 
                 function filterStores(userLocation) {
-                    var items = document.querySelectorAll("#everblock-storelist .everblock-store-item");
+                    var items = document.querySelectorAll("#everblocklight-storelist .everblocklight-store-item");
                     var distances = [];
                     items.forEach(function (el) {
                         var lat = parseFloat(el.getAttribute("data-lat"));
@@ -4166,7 +4166,7 @@ class EverblockTools
                 }
 
                 function initMap() {
-                    map = new google.maps.Map(document.getElementById("everblock-storelocator"), {
+                    map = new google.maps.Map(document.getElementById("everblocklight-storelocator"), {
                         center: defaultCenter,
                         zoom: 13
                     });
@@ -4189,7 +4189,7 @@ class EverblockTools
                         });
                     });
 
-                    document.getElementById("everblock-storelocator").style.height = "500px";
+                    document.getElementById("everblocklight-storelocator").style.height = "500px";
                 }
 
                 function initAutocomplete() {
@@ -4268,7 +4268,7 @@ class EverblockTools
                 }
 
                 document.addEventListener("DOMContentLoaded", function () {
-                    storeList = document.getElementById("everblock-storelist");
+                    storeList = document.getElementById("everblocklight-storelist");
                     if (storeList) {
                         originalItems = Array.from(storeList.children);
                     }
@@ -4281,13 +4281,13 @@ class EverblockTools
                         });
                     }
 
-                    var storeListEl = document.getElementById("everblock-storelist");
+                    var storeListEl = document.getElementById("everblocklight-storelist");
                     if (storeListEl) {
                         storeListEl.addEventListener("click", function (e) {
                             var nameEl = e.target.closest("h6");
                             if (nameEl && window.innerWidth >= 768) {
                                 e.preventDefault();
-                                var itemEl = nameEl.closest(".everblock-store-item");
+                                var itemEl = nameEl.closest(".everblocklight-store-item");
                                 var id = parseInt(itemEl.getAttribute("data-id"));
                                 var marker = markers.find(function (m) { return m.id === id; });
                                 var markerObj = markerMap[id];
@@ -4303,7 +4303,7 @@ class EverblockTools
 
                     var mapToggleBtn = document.getElementById("store_toggle_map");
                     if (mapToggleBtn) {
-                        var wrapper = document.getElementById("everblock-storelocator-wrapper");
+                        var wrapper = document.getElementById("everblocklight-storelocator-wrapper");
                         var mapPane = document.getElementById("pane-map");
                         var listPane = document.getElementById("pane-list");
                         var tabs = document.getElementById("storeLocatorTabs");
@@ -4381,13 +4381,13 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getEverMapShortcode`.
      *
-     * @example $html = EverblockTools::getEverMapShortcode('[evermap lat="48.8566" lng="2.3522"]', $context, $module);
+     * @example $html = EverblocklightTools::getEverMapShortcode('[evermap lat="48.8566" lng="2.3522"]', $context, $module);
      */
-    public static function getEverMapShortcode(string $txt, Context $context, Everblock $module): string
+    public static function getEverMapShortcode(string $txt, Context $context, Everblocklight $module): string
     {
-        $apiKey = Configuration::get('EVERBLOCK_GMAP_KEY');
+        $apiKey = Configuration::get('EVERBLOCKLIGHT_GMAP_KEY');
         if (!$apiKey) {
-            $message = $module->l('Please set a Google Maps API key in the module configuration.', 'EverblockTools');
+            $message = $module->l('Please set a Google Maps API key in the module configuration.', 'EverblocklightTools');
             return str_replace('[evermap]', $message, $txt);
         }
 
@@ -4399,7 +4399,7 @@ class EverblockTools
         $countryName = $country ? $country->name : '';
 
         if (!$address1 || !$postcode || !$city || !$countryName) {
-            $message = $module->l('Please fill the postal address of the shop.', 'EverblockTools');
+            $message = $module->l('Please fill the postal address of the shop.', 'EverblocklightTools');
             return str_replace('[evermap]', $message, $txt);
         }
 
@@ -4408,13 +4408,13 @@ class EverblockTools
 
         $coords = static::getCoordinatesFromAddress($fullAddress, $apiKey);
         if (!$coords) {
-            $message = $module->l('Unable to geocode the store address.', 'EverblockTools');
+            $message = $module->l('Unable to geocode the store address.', 'EverblocklightTools');
             return str_replace('[evermap]', $message, $txt);
         }
 
-        $mapHtml = '<div id="everblock-gmap" style="width:100%;height:300px;"></div>';
-        $mapHtml .= '<script>function initEverblockGmap(){var c={lat:' . $coords['lat'] . ',lng:' . $coords['lng'] . '};var m=new google.maps.Map(document.getElementById("everblock-gmap"),{zoom:15,center:c});new google.maps.Marker({position:c,map:m});}</script>';
-        $mapHtml .= '<script src="https://maps.googleapis.com/maps/api/js?key=' . $apiKey . '&callback=initEverblockGmap" async defer></script>';
+        $mapHtml = '<div id="everblocklight-gmap" style="width:100%;height:300px;"></div>';
+        $mapHtml .= '<script>function initEverblocklightGmap(){var c={lat:' . $coords['lat'] . ',lng:' . $coords['lng'] . '};var m=new google.maps.Map(document.getElementById("everblocklight-gmap"),{zoom:15,center:c});new google.maps.Marker({position:c,map:m});}</script>';
+        $mapHtml .= '<script src="https://maps.googleapis.com/maps/api/js?key=' . $apiKey . '&callback=initEverblocklightGmap" async defer></script>';
 
         return str_replace('[evermap]', $mapHtml, $txt);
     }
@@ -4469,7 +4469,7 @@ class EverblockTools
 
     public static function obfuscateTextByClass(string $text): string
     {
-        if ((bool) Configuration::get('EVERBLOCK_USE_OBF') === false) {
+        if ((bool) Configuration::get('EVERBLOCKLIGHT_USE_OBF') === false) {
             return $text;
         }
         // Capturer uniquement <a ...obfme...>CONTENU</a>
@@ -4532,7 +4532,7 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getCustomerShortcodes`.
      *
-     * @example $html = EverblockTools::getCustomerShortcodes('Bonjour [firstname]', $context);
+     * @example $html = EverblocklightTools::getCustomerShortcodes('Bonjour [firstname]', $context);
      */
     public static function getCustomerShortcodes(string $txt, Context $context): string
     {
@@ -4559,11 +4559,11 @@ class EverblockTools
     /**
      * Gère le shortcode associé à `getEverShortcodes`.
      *
-     * @example $html = EverblockTools::getEverShortcodes('Bienvenue sur [shop_name]', $context);
+     * @example $html = EverblocklightTools::getEverShortcodes('Bienvenue sur [shop_name]', $context);
      */
-    public static function getEverShortcodes(string $txt, Context $context, ?Everblock $module = null): string
+    public static function getEverShortcodes(string $txt, Context $context, ?Everblocklight $module = null): string
     {
-        $customShortcodes = EverblockShortcode::getAllShortcodes(
+        $customShortcodes = EverblocklightShortcode::getAllShortcodes(
             $context->shop->id,
             $context->language->id
         );
@@ -4576,12 +4576,12 @@ class EverblockTools
     public static function generateLoremIpsum(string $txt, Context $context): string
     {
         $cacheId = 'generateLoremIpsum_' . (int) $context->shop->id;
-        if (!EverblockCache::isCacheStored($cacheId)) {
-            $lloremParagraphNum = (int) EverblockCache::getModuleConfiguration('EVERPSCSS_P_LLOREM_NUMBER');
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
+            $lloremParagraphNum = (int) EverblocklightCache::getModuleConfiguration('EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER');
             if ($lloremParagraphNum <= 0) {
                 $lloremParagraphNum = 5;
             }
-            $lloremSentencesNum = (int) EverblockCache::getModuleConfiguration('EVERPSCSS_S_LLOREM_NUMBER');
+            $lloremSentencesNum = (int) EverblocklightCache::getModuleConfiguration('EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER');
             if ($lloremSentencesNum <= 0) {
                 $lloremSentencesNum = 5;
             }
@@ -4603,9 +4603,9 @@ class EverblockTools
                 $paragraphs[] = $paragraph;
             }
             $llorem = implode("\n\n", $paragraphs);
-            EverblockCache::cacheStore($cacheId, $llorem);
+            EverblocklightCache::cacheStore($cacheId, $llorem);
         } else {
-            $llorem = EverblockCache::cacheRetrieve($cacheId);
+            $llorem = EverblocklightCache::cacheRetrieve($cacheId);
         }
         $txt = str_replace('[llorem]', $llorem, $txt);
         return $txt;
@@ -4617,17 +4617,17 @@ class EverblockTools
     public static function checkAndFixDatabase()
     {
         $tableNames = [
-            _DB_PREFIX_ . 'everblock',
-            _DB_PREFIX_ . 'everblock_lang',
-            _DB_PREFIX_ . 'everblock_shortcode',
-            _DB_PREFIX_ . 'everblock_shortcode_lang',
+            _DB_PREFIX_ . 'everblocklight',
+            _DB_PREFIX_ . 'everblocklight_lang',
+            _DB_PREFIX_ . 'everblocklight_shortcode',
+            _DB_PREFIX_ . 'everblocklight_shortcode_lang',
         ];
         foreach ($tableNames as $tableName) {
             if (static::ifTableExists($tableName)) {
                 continue;
             }
 
-            $sql = include _PS_MODULE_DIR_ . 'everblock/sql/install.php';
+            $sql = include _PS_MODULE_DIR_ . 'everblocklight/sql/install.php';
             foreach ((array) $sql as $query) {
                 Db::getInstance()->execute($query);
             }
@@ -4757,7 +4757,7 @@ class EverblockTools
     public static function fetchInstagramImages()
     {
         $cacheId = 'fetchInstagramImages';
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $request = static::getInstagramRequest();
             $result = json_decode($request, true);
             $imgs = [];
@@ -4795,15 +4795,15 @@ class EverblockTools
                 }
             }
             static::refreshInstagramToken();
-            EverblockCache::cacheStore($cacheId, $imgs);
+            EverblocklightCache::cacheStore($cacheId, $imgs);
             return $imgs;
         }
-        return EverblockCache::cacheRetrieve($cacheId);
+        return EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     public static function getInstagramRequest()
     {
-        $instaToken = Configuration::get('EVERINSTA_ACCESS_TOKEN');
+        $instaToken = Configuration::get('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN');
         $fields = '&fields=id,caption,media_type,media_url,permalink,thumbnail_url,username,timestamp';
         $url = "https://graph.instagram.com/me/media?access_token=" . $instaToken . $fields;
         return Tools::file_get_contents($url);
@@ -4811,12 +4811,12 @@ class EverblockTools
 
     public static function refreshInstagramToken()
     {
-        $instaToken = Configuration::get('EVERINSTA_ACCESS_TOKEN');
+        $instaToken = Configuration::get('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN');
         $url = 'https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=' . $instaToken;
         $result = Tools::file_get_contents($url);
         $json = json_decode($result, true);
         if (isset($json['access_token'])) {
-            Configuration::updateValue('EVERINSTA_ACCESS_TOKEN', $json['access_token']);
+            Configuration::updateValue('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN', $json['access_token']);
             return $json['access_token'];
         }
         return null;
@@ -4824,11 +4824,11 @@ class EverblockTools
 
     public static function fetchWordpressPosts(): bool
     {
-        $apiUrl = trim(Configuration::get('EVERWP_API_URL'));
+        $apiUrl = trim(Configuration::get('EVERBLOCKLIGHT_WP_API_URL'));
         if (!$apiUrl) {
             return false;
         }
-        $limit = (int) Configuration::get('EVERWP_POST_NBR');
+        $limit = (int) Configuration::get('EVERBLOCKLIGHT_WP_POST_NBR');
         if ($limit < 1) {
             $limit = 3;
         }
@@ -4844,7 +4844,7 @@ class EverblockTools
         if (!$posts || !is_array($posts)) {
             return false;
         }
-        $generatedDir = _PS_MODULE_DIR_ . 'everblock/views/templates/hook/generated_wp_posts/';
+        $generatedDir = _PS_MODULE_DIR_ . 'everblocklight/views/templates/hook/generated_wp_posts/';
         if (!is_dir($generatedDir)) {
             if (!@mkdir($generatedDir, 0755, true) && !is_dir($generatedDir)) {
                 return false;
@@ -4911,7 +4911,7 @@ class EverblockTools
             return false;
         }
 
-        $previousFile = Configuration::get('EVERWP_POSTS_DATA_FILE');
+        $previousFile = Configuration::get('EVERBLOCKLIGHT_WP_POSTS_DATA_FILE');
         if ($previousFile) {
             $previousPath = $generatedDir . $previousFile;
             if (is_file($previousPath) && $previousPath !== $finalFile) {
@@ -4919,15 +4919,15 @@ class EverblockTools
             }
         }
 
-        Configuration::updateValue('EVERWP_POSTS_DATA_FILE', basename($finalFile));
+        Configuration::updateValue('EVERBLOCKLIGHT_WP_POSTS_DATA_FILE', basename($finalFile));
 
-        $legacyFile = Configuration::get('EVERWP_POSTS_TEMPLATE_FILE');
+        $legacyFile = Configuration::get('EVERBLOCKLIGHT_WP_POSTS_TEMPLATE_FILE');
         if ($legacyFile) {
             $legacyPath = $generatedDir . $legacyFile;
             if (is_file($legacyPath)) {
                 @unlink($legacyPath);
             }
-            Configuration::deleteByName('EVERWP_POSTS_TEMPLATE_FILE');
+            Configuration::deleteByName('EVERBLOCKLIGHT_WP_POSTS_TEMPLATE_FILE');
         }
         return true;
     }
@@ -5357,7 +5357,7 @@ class EverblockTools
             if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif'], true)) {
                 $extension = 'jpg';
             }
-            $fileName = 'everblock-remote-' . substr(sha1($url), 0, 16) . '.' . $extension;
+            $fileName = 'everblocklight-remote-' . substr(sha1($url), 0, 16) . '.' . $extension;
 
             // Define the local path where the image will be saved
             $localPath = _PS_ROOT_DIR_ . '/img/cms/' . $fileName;
@@ -5421,4 +5421,4 @@ class EverblockTools
 
 }
 
-class_alias(__NAMESPACE__ . '\\EverblockTools', 'EverblockTools');
+class_alias(__NAMESPACE__ . '\\EverblocklightTools', 'EverblocklightTools');

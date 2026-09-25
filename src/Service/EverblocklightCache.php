@@ -18,7 +18,7 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-namespace Everblock\Tools\Service;
+namespace Everblocklight\Tools\Service;
 
 use Cache;
 use Configuration;
@@ -28,7 +28,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class EverblockCache
+class EverblocklightCache
 {
     /** @var array<string, mixed> */
     private static array $runtimeCache = [];
@@ -36,9 +36,9 @@ class EverblockCache
     private static array $runtimeStored = [];
 
     private const MODULE_CACHE_PREFIXES = [
-        'everblock',
-        'Everblock',
-        'EverBlock',
+        'everblocklight',
+        'Everblocklight',
+        'EverBlockLight',
         'fetchInstagramImages',
         'generateLoremIpsum_',
         'getAccessoriesShortcode_',
@@ -159,7 +159,7 @@ class EverblockCache
 
     private static function buildObjectVersionCacheKey(string $objectType, int $objectId): string
     {
-        return 'everblock-version-' . preg_replace('/[^A-Za-z0-9_]/', '_', $objectType) . '-' . $objectId;
+        return 'everblocklight-version-' . preg_replace('/[^A-Za-z0-9_]/', '_', $objectType) . '-' . $objectId;
     }
 
     public static function clearAllModuleCache(): void

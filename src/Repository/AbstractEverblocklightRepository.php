@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Repository;
+namespace Everblocklight\Tools\Repository;
 
 use Doctrine\DBAL\Connection;
 
-abstract class AbstractEverblockRepository
+abstract class AbstractEverblocklightRepository
 {
     protected Connection $connection;
     protected string $databasePrefix;

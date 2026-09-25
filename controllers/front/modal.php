@@ -22,9 +22,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Everblock\Tools\Service\EverblockTools;
+use Everblocklight\Tools\Service\EverblocklightTools;
 
-class EverblockmodalModuleFrontController extends ModuleFrontController
+class EverblocklightmodalModuleFrontController extends ModuleFrontController
 {
     public function init()
     {
@@ -44,9 +44,9 @@ class EverblockmodalModuleFrontController extends ModuleFrontController
         if (!Tools::getValue('token') || Tools::getValue('token') != $validToken) {
             Tools::redirect('index.php');
         }
-        $blockId = (int) Tools::getValue('id_everblock');
+        $blockId = (int) Tools::getValue('id_everblocklight');
         $cmsId = (int) Tools::getValue('id_cms');
-        if (!$this->module instanceof Everblock) {
+        if (!$this->module instanceof Everblocklight) {
             die();
         }
         $module = $this->module;
@@ -56,18 +56,18 @@ class EverblockmodalModuleFrontController extends ModuleFrontController
             if (!Validate::isLoadedObject($cms) || !(bool) $cms->active) {
                 die();
             }
-            $cmsContent = EverblockTools::renderShortcodes(
+            $cmsContent = EverblocklightTools::renderShortcodes(
                 $cms->content,
                 $this->context,
                 $module
             );
             $this->context->smarty->assign([
-                'everblock_modal' => (object) ['content' => $cmsContent],
+                'everblocklight_modal' => (object) ['content' => $cmsContent],
             ]);
-            $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblock/views/templates/front/modal.tpl');
+            $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblocklight/views/templates/front/modal.tpl');
             die($response);
         }
-        $block = new EverBlockClass(
+        $block = new EverBlockLightClass(
             $blockId,
             $this->context->language->id,
             $this->context->shop->id
@@ -103,18 +103,18 @@ class EverblockmodalModuleFrontController extends ModuleFrontController
             if (strpos($blockContent, '[storelocator]') !== false) {
                 $blockContent = str_replace('[storelocator]', '', $blockContent);
             }
-            $blockContent = EverBlockTools::renderShortcodes(
+            $blockContent = EverBlockLightTools::renderShortcodes(
                 $blockContent,
                 $this->context,
                 $module
             );
             $this->context->smarty->assign([
-                'everblock_modal' => (object) [
+                'everblocklight_modal' => (object) [
                     'content' => $blockContent,
                     'background' => $block->background,
                 ],
             ]);
-            $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblock/views/templates/front/modal.tpl');
+            $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblocklight/views/templates/front/modal.tpl');
             die($response);
         }
         die();

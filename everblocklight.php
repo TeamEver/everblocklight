@@ -27,7 +27,7 @@ if (is_file($autoloadPath)) {
 }
 
 spl_autoload_register(static function ($className) {
-    $prefix = 'Everblock\\Tools\\';
+    $prefix = 'Everblocklight\\Tools\\';
     if (strncmp($className, $prefix, strlen($prefix)) !== 0) {
         return;
     }
@@ -39,10 +39,10 @@ spl_autoload_register(static function ($className) {
     }
 });
 
-require_once __DIR__ . '/src/Service/EverblockCache.php';
+require_once __DIR__ . '/src/Service/EverblocklightCache.php';
 
-if (!function_exists('everblockRegisterLegacyAlias')) {
-    function everblockRegisterLegacyAlias(string $className, string $legacyAlias, string $relativePath): void
+if (!function_exists('everblocklightRegisterLegacyAlias')) {
+    function everblocklightRegisterLegacyAlias(string $className, string $legacyAlias, string $relativePath): void
     {
         if (class_exists($legacyAlias, false)) {
             return;
@@ -63,23 +63,23 @@ if (!function_exists('everblockRegisterLegacyAlias')) {
     }
 }
 
-everblockRegisterLegacyAlias(\Everblock\Tools\Entity\Block::class, 'EverBlockClass', 'src/Entity/Block.php');
-everblockRegisterLegacyAlias(\Everblock\Tools\Entity\Shortcode::class, 'EverblockShortcode', 'src/Entity/Shortcode.php');
+everblocklightRegisterLegacyAlias(\Everblocklight\Tools\Entity\Block::class, 'EverBlockLightClass', 'src/Entity/Block.php');
+everblocklightRegisterLegacyAlias(\Everblocklight\Tools\Entity\Shortcode::class, 'EverblocklightShortcode', 'src/Entity/Shortcode.php');
 
-use Everblock\Tools\Checkout\EverblockCheckoutStep;
-use Everblock\Tools\Service\AdminConfigurationManager;
-use Everblock\Tools\Service\EverblockCache;
-use Everblock\Tools\Service\EverblockTools;
-use Everblock\Tools\Service\ShortcodeDocumentationProvider;
+use Everblocklight\Tools\Checkout\EverblocklightCheckoutStep;
+use Everblocklight\Tools\Service\AdminConfigurationManager;
+use Everblocklight\Tools\Service\EverblocklightCache;
+use Everblocklight\Tools\Service\EverblocklightTools;
+use Everblocklight\Tools\Service\ShortcodeDocumentationProvider;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class_exists(EverblockTools::class);
+class_exists(EverblocklightTools::class);
 
-class Everblock extends Module
+class Everblocklight extends Module
 {
     private const ADMIN_MENU_ICON = 'view_quilt';
-    public const CONFIG_PREFIX = 'EVERBLOCK_';
+    public const CONFIG_PREFIX = 'EVERBLOCKLIGHT_';
 
     private $postErrors = [];
     private $postSuccess = [];
@@ -94,14 +94,14 @@ class Everblock extends Module
 
     public function __construct()
     {
-        $this->name = 'everblock';
+        $this->name = 'everblocklight';
         $this->tab = 'front_office_features';
-        $this->version = '9.0.6';
+        $this->version = '1.0.0';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->bootstrap = true;
         parent::__construct();
-        $this->displayName = $this->l('Ever Block');
+        $this->displayName = $this->l('Ever Block Light');
         $this->description = $this->l('Add HTML block everywhere !');
         $this->confirmUninstall = $this->l('Do yo really want to uninstall this module ?');
         $this->ps_versions_compliancy = [
@@ -181,30 +181,30 @@ class Everblock extends Module
     private function installConfiguration(): bool
     {
         $configuration = [
-            ['EVERBLOCK_LOAD_FRONT_CSS', 1],
-            ['EVERBLOCK_TINYMCE', 1],
-            ['EVERPSCSS_P_LLOREM_NUMBER', 5],
-            ['EVERPSCSS_S_LLOREM_NUMBER', 5],
-            ['EVERWP_API_URL', ''],
-            ['EVERWP_BLOG_URL', '/blog'],
-            ['EVERWP_POST_NBR', 3],
-            ['EVERWP_POSTS_BG_IMAGE', ''],
-            ['EVERINSTA_SHOW_CAPTION', 0],
-            ['EVERBLOCK_CONTACT_MAX_UPLOAD_SIZE', 2097152],
-            ['EVERBLOCK_CONTACT_ALLOWED_EXTENSIONS', json_encode(['pdf', 'jpg', 'jpeg', 'png']), true],
-            ['EVERBLOCK_CONTACT_ALLOWED_MIME_TYPES', json_encode(['application/pdf', 'image/jpeg', 'image/png']), true],
-            ['EVERBLOCK_LOW_STOCK_THRESHOLD', 5],
-            ['EVERBLOCK_STORELOCATOR_TOGGLE', 0],
-            ['EVERBLOCK_GOOGLE_API_KEY', ''],
-            ['EVERBLOCK_GOOGLE_PLACE_ID', ''],
-            ['EVERBLOCK_GOOGLE_REVIEWS_LIMIT', 5],
-            ['EVERBLOCK_GOOGLE_REVIEWS_MIN_RATING', 0],
-            ['EVERBLOCK_GOOGLE_REVIEWS_SORT', 'most_relevant'],
-            ['EVERBLOCK_GOOGLE_REVIEWS_SHOW_RATING', 1],
-            ['EVERBLOCK_GOOGLE_REVIEWS_SHOW_AVATAR', 1],
-            ['EVERBLOCK_GOOGLE_REVIEWS_SHOW_CTA', 1],
-            ['EVERBLOCK_GOOGLE_REVIEWS_CTA_LABEL', $this->l('Read all reviews on Google')],
-            ['EVERBLOCK_GOOGLE_REVIEWS_CTA_URL', ''],
+            ['EVERBLOCKLIGHT_LOAD_FRONT_CSS', 1],
+            ['EVERBLOCKLIGHT_TINYMCE', 1],
+            ['EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER', 5],
+            ['EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER', 5],
+            ['EVERBLOCKLIGHT_WP_API_URL', ''],
+            ['EVERBLOCKLIGHT_WP_BLOG_URL', '/blog'],
+            ['EVERBLOCKLIGHT_WP_POST_NBR', 3],
+            ['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE', ''],
+            ['EVERBLOCKLIGHT_INSTA_SHOW_CAPTION', 0],
+            ['EVERBLOCKLIGHT_CONTACT_MAX_UPLOAD_SIZE', 2097152],
+            ['EVERBLOCKLIGHT_CONTACT_ALLOWED_EXTENSIONS', json_encode(['pdf', 'jpg', 'jpeg', 'png']), true],
+            ['EVERBLOCKLIGHT_CONTACT_ALLOWED_MIME_TYPES', json_encode(['application/pdf', 'image/jpeg', 'image/png']), true],
+            ['EVERBLOCKLIGHT_LOW_STOCK_THRESHOLD', 5],
+            ['EVERBLOCKLIGHT_STORELOCATOR_TOGGLE', 0],
+            ['EVERBLOCKLIGHT_GOOGLE_API_KEY', ''],
+            ['EVERBLOCKLIGHT_GOOGLE_PLACE_ID', ''],
+            ['EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT', 5],
+            ['EVERBLOCKLIGHT_GOOGLE_REVIEWS_MIN_RATING', 0],
+            ['EVERBLOCKLIGHT_GOOGLE_REVIEWS_SORT', 'most_relevant'],
+            ['EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_RATING', 1],
+            ['EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_AVATAR', 1],
+            ['EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_CTA', 1],
+            ['EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_LABEL', $this->l('Read all reviews on Google')],
+            ['EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_URL', ''],
         ];
 
         foreach ($configuration as $item) {
@@ -227,7 +227,7 @@ class Everblock extends Module
         try {
             $this->importLegacyTranslations($idLang);
         } catch (Throwable $exception) {
-            PrestaShopLogger::addLog('Everblock translations import failed: ' . $exception->getMessage(), 2);
+            PrestaShopLogger::addLog('Everblocklight translations import failed: ' . $exception->getMessage(), 2);
         }
 
         return true;
@@ -280,15 +280,15 @@ class Everblock extends Module
     private function getCustomHooks(): array
     {
         return [
-            ['displayEverblockExtraOrderStep', 'Extra order step', 'This hook is triggered on extra order step'],
-            ['actionGetEverBlockBefore', 'Before block is rendered', 'This hook triggers before block is rendered'],
-            ['actionEverBlockChangeShortcodeBefore', 'Before block shortcodes are rendered', 'This hook triggers before every block shortcode is rendered'],
-            ['actionEverBlockChangeShortcodeAfter', 'After block shortcodes are rendered', 'This hook triggers after every block shortcode is rendered'],
+            ['displayEverblocklightExtraOrderStep', 'Extra order step', 'This hook is triggered on extra order step'],
+            ['actionGetEverBlockLightBefore', 'Before block is rendered', 'This hook triggers before block is rendered'],
+            ['actionEverBlockLightChangeShortcodeBefore', 'Before block shortcodes are rendered', 'This hook triggers before every block shortcode is rendered'],
+            ['actionEverBlockLightChangeShortcodeAfter', 'After block shortcodes are rendered', 'This hook triggers after every block shortcode is rendered'],
             ['displayBeforeRenderingShortcodes', 'Before rendering shortcodes', 'This hook triggers before shortcodes are rendered'],
             ['displayAfterRenderingShortcodes', 'After rendering shortcodes', 'This hook triggers after shortcodes are rendered'],
             ['displayFakeHook', 'Fake hook', 'Ne pas afficher ce hook en front, il sera utilisé pour du contenu asynchrone'],
-            ['displayBeforeStoreLocator', 'display before Everblock store locator', 'This hook triggers before store locator is rendered'],
-            ['displayAfterStoreLocator', 'display after Everblock store locator', 'This hook triggers after store locator is rendered'],
+            ['displayBeforeStoreLocator', 'display before Everblocklight store locator', 'This hook triggers before store locator is rendered'],
+            ['displayAfterStoreLocator', 'display after Everblocklight store locator', 'This hook triggers after store locator is rendered'],
             ['displayAfterLocatorStore', 'display after store content on store locator', 'This hook triggers after store content on store locator'],
             ['displayBeforeProductMiniature', 'display before product miniature', 'This hook triggers before product miniature is rendered'],
             ['displayAfterProductMiniature', 'display after product miniature', 'This hook triggers after product miniature is rendered'],
@@ -315,8 +315,8 @@ class Everblock extends Module
             'displayAdminOrder',
             'displayPDFInvoice',
             'displayPDFDeliverySlip',
-            'actionObjectEverBlockClassUpdateAfter',
-            'actionObjectEverBlockClassDeleteAfter',
+            'actionObjectEverBlockLightClassUpdateAfter',
+            'actionObjectEverBlockLightClassDeleteAfter',
         ];
     }
 
@@ -353,8 +353,8 @@ class Everblock extends Module
 
         foreach ($shopIds as $idShop) {
             $existingBlockId = (int) Db::getInstance()->getValue(
-                'SELECT `id_everblock`
-                FROM `' . _DB_PREFIX_ . 'everblock`
+                'SELECT `id_everblocklight`
+                FROM `' . _DB_PREFIX_ . 'everblocklight`
                 WHERE `id_shop` = ' . (int) $idShop . '
                   AND `name` = "' . pSQL('exemple') . '"'
             );
@@ -364,12 +364,12 @@ class Everblock extends Module
 
             $position = (int) Db::getInstance()->getValue(
                 'SELECT COALESCE(MAX(`position`), 0) + 1
-                FROM `' . _DB_PREFIX_ . 'everblock`
+                FROM `' . _DB_PREFIX_ . 'everblocklight`
                 WHERE `id_shop` = ' . (int) $idShop . '
                   AND `id_hook` = ' . (int) $idHook
             );
 
-            if (!Db::getInstance()->insert('everblock', [
+            if (!Db::getInstance()->insert('everblocklight', [
                 'name' => 'exemple',
                 'id_hook' => (int) $idHook,
                 'only_home' => 1,
@@ -411,8 +411,8 @@ class Everblock extends Module
                 }
 
                 if (!Db::getInstance()->execute(
-                    'INSERT INTO `' . _DB_PREFIX_ . 'everblock_lang`
-                    (`id_everblock`, `id_lang`, `content`, `custom_code`)
+                    'INSERT INTO `' . _DB_PREFIX_ . 'everblocklight_lang`
+                    (`id_everblocklight`, `id_lang`, `content`, `custom_code`)
                     VALUES (
                         ' . (int) $idBlock . ',
                         ' . (int) $idLang . ',
@@ -420,8 +420,8 @@ class Everblock extends Module
                         ""
                     )'
                 )) {
-                    Db::getInstance()->delete('everblock_lang', '`id_everblock` = ' . (int) $idBlock);
-                    Db::getInstance()->delete('everblock', '`id_everblock` = ' . (int) $idBlock . ' AND `id_shop` = ' . (int) $idShop);
+                    Db::getInstance()->delete('everblocklight_lang', '`id_everblocklight` = ' . (int) $idBlock);
+                    Db::getInstance()->delete('everblocklight', '`id_everblocklight` = ' . (int) $idBlock . ' AND `id_shop` = ' . (int) $idShop);
 
                     return false;
                 }
@@ -450,7 +450,7 @@ class Everblock extends Module
             return '';
         }
 
-        return '<h2>Exemple shortcodes Ever Block</h2>' . PHP_EOL
+        return '<h2>Exemple shortcodes Ever Block Light</h2>' . PHP_EOL
             . implode(PHP_EOL, array_map(static function (string $shortcode): string {
                 return '<p>' . $shortcode . '</p>';
             }, $shortcodes));
@@ -479,12 +479,12 @@ class Everblock extends Module
     private function installTabs(): bool
     {
         $tabs = [
-            ['AdminEverBlockParent', 'IMPROVE', $this->l('Ever Block'), null],
-            ['AdminEverBlockConfiguration', 'AdminEverBlockParent', $this->l('Configuration'), 'admin_everblock_configuration'],
-            ['AdminEverBlock', 'AdminEverBlockParent', $this->l('HTML Blocks'), 'admin_everblock_blocks'],
-            ['AdminEverBlockHook', 'AdminEverBlockParent', $this->l('Hooks'), 'admin_everblock_hooks'],
-            ['AdminEverBlockShortcode', 'AdminEverBlockParent', $this->l('Shortcodes'), 'admin_everblock_shortcodes'],
-            ['AdminEverBlockShortcodeDocumentation', 'AdminEverBlockParent', $this->l('Shortcode documentation'), 'admin_everblock_shortcodes_documentation'],
+            ['AdminEverBlockLightParent', 'IMPROVE', $this->l('Ever Block Light'), null],
+            ['AdminEverBlockLightConfiguration', 'AdminEverBlockLightParent', $this->l('Configuration'), 'admin_everblocklight_configuration'],
+            ['AdminEverBlockLight', 'AdminEverBlockLightParent', $this->l('HTML Blocks'), 'admin_everblocklight_blocks'],
+            ['AdminEverBlockLightHook', 'AdminEverBlockLightParent', $this->l('Hooks'), 'admin_everblocklight_hooks'],
+            ['AdminEverBlockLightShortcode', 'AdminEverBlockLightParent', $this->l('Shortcodes'), 'admin_everblocklight_shortcodes'],
+            ['AdminEverBlockLightShortcodeDocumentation', 'AdminEverBlockLightParent', $this->l('Shortcode documentation'), 'admin_everblocklight_shortcodes_documentation'],
         ];
 
         foreach ($tabs as $tab) {
@@ -520,12 +520,12 @@ class Everblock extends Module
         }
 
         return parent::uninstall()
-            && $this->uninstallModuleTab('AdminEverBlockConfiguration')
-            && $this->uninstallModuleTab('AdminEverBlock')
-            && $this->uninstallModuleTab('AdminEverBlockHook')
-            && $this->uninstallModuleTab('AdminEverBlockShortcode')
-            && $this->uninstallModuleTab('AdminEverBlockShortcodeDocumentation')
-            && $this->uninstallModuleTab('AdminEverBlockParent');
+            && $this->uninstallModuleTab('AdminEverBlockLightConfiguration')
+            && $this->uninstallModuleTab('AdminEverBlockLight')
+            && $this->uninstallModuleTab('AdminEverBlockLightHook')
+            && $this->uninstallModuleTab('AdminEverBlockLightShortcode')
+            && $this->uninstallModuleTab('AdminEverBlockLightShortcodeDocumentation')
+            && $this->uninstallModuleTab('AdminEverBlockLightParent');
     }
 
     /**
@@ -796,7 +796,7 @@ class Everblock extends Module
                 }
             }
 
-            if ($className === 'AdminEverBlockParent'
+            if ($className === 'AdminEverBlockLightParent'
                 && property_exists($existingTab, 'icon')
                 && $existingTab->icon !== self::ADMIN_MENU_ICON
             ) {
@@ -822,7 +822,7 @@ class Everblock extends Module
             $tab->route_name = $routeName;
         }
 
-        if ($className === 'AdminEverBlockParent' && property_exists($tab, 'icon')) {
+        if ($className === 'AdminEverBlockLightParent' && property_exists($tab, 'icon')) {
             $tab->icon = self::ADMIN_MENU_ICON;
         }
 
@@ -856,7 +856,7 @@ class Everblock extends Module
         try {
             $blocksHooks = Db::getInstance()->executeS(
                 'SELECT DISTINCT h.`name`
-                FROM `' . _DB_PREFIX_ . 'everblock` b
+                FROM `' . _DB_PREFIX_ . 'everblocklight` b
                 INNER JOIN `' . _DB_PREFIX_ . 'hook` h ON h.`id_hook` = b.`id_hook`
                 WHERE b.`id_hook` > 0
                   AND h.`name` NOT LIKE "action%"
@@ -885,10 +885,10 @@ class Everblock extends Module
     public function getContent()
     {
         $this->secureModuleFolder();
-        EverblockTools::checkAndFixDatabase();
+        EverblocklightTools::checkAndFixDatabase();
         $this->checkHooks();
 
-        Tools::redirectAdmin($this->context->link->getAdminLink('AdminEverBlockConfiguration'));
+        Tools::redirectAdmin($this->context->link->getAdminLink('AdminEverBlockLightConfiguration'));
 
         return '';
     }
@@ -931,7 +931,7 @@ class Everblock extends Module
     public function prepareAdminConfigurationEnvironment(): void
     {
         $this->secureModuleFolder();
-        EverblockTools::checkAndFixDatabase();
+        EverblocklightTools::checkAndFixDatabase();
         $this->checkHooks();
     }
 
@@ -994,43 +994,43 @@ class Everblock extends Module
             $headerScripts = '';
         }
         $configData = [
-            'EVEROPTIONS_POSITION' => Configuration::get('EVEROPTIONS_POSITION'),
-            'EVEROPTIONS_TITLE' => $this->getConfigInMultipleLangs('EVEROPTIONS_TITLE'),
-            'EVERINSTA_ACCESS_TOKEN' => Configuration::get('EVERINSTA_ACCESS_TOKEN'),
-            'EVERINSTA_LINK' => Configuration::get('EVERINSTA_LINK'),
-            'EVERINSTA_SHOW_CAPTION' => Configuration::get('EVERINSTA_SHOW_CAPTION'),
-            'EVERWP_API_URL' => Configuration::get('EVERWP_API_URL'),
-            'EVERWP_BLOG_URL' => Configuration::get('EVERWP_BLOG_URL'),
-            'EVERWP_POST_NBR' => Configuration::get('EVERWP_POST_NBR'),
-            'EVERWP_POSTS_BG_IMAGE' => Configuration::get('EVERWP_POSTS_BG_IMAGE'),
-            'EVERBLOCK_GOOGLE_API_KEY' => Configuration::get('EVERBLOCK_GOOGLE_API_KEY'),
-            'EVERBLOCK_GOOGLE_PLACE_ID' => Configuration::get('EVERBLOCK_GOOGLE_PLACE_ID'),
-            'EVERBLOCK_GOOGLE_REVIEWS_LIMIT' => Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_LIMIT'),
-            'EVERBLOCK_GOOGLE_REVIEWS_MIN_RATING' => Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_MIN_RATING'),
-            'EVERBLOCK_GOOGLE_REVIEWS_SORT' => Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_SORT'),
-            'EVERBLOCK_GOOGLE_REVIEWS_SHOW_RATING' => Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_SHOW_RATING'),
-            'EVERBLOCK_GOOGLE_REVIEWS_SHOW_AVATAR' => Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_SHOW_AVATAR'),
-            'EVERBLOCK_GOOGLE_REVIEWS_SHOW_CTA' => Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_SHOW_CTA'),
-            'EVERBLOCK_GOOGLE_REVIEWS_CTA_LABEL' => Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_CTA_LABEL'),
-            'EVERBLOCK_GOOGLE_REVIEWS_CTA_URL' => Configuration::get('EVERBLOCK_GOOGLE_REVIEWS_CTA_URL'),
-            'EVERBLOCK_GMAP_KEY' => Configuration::get('EVERBLOCK_GMAP_KEY'),
-            'EVERBLOCK_MARKER_ICON' => Configuration::get('EVERBLOCK_MARKER_ICON'),
-            'EVERBLOCK_STORELOCATOR_TOGGLE' => Configuration::get('EVERBLOCK_STORELOCATOR_TOGGLE'),
-            'EVERBLOCK_USE_OBF' => Configuration::get('EVERBLOCK_USE_OBF'),
-            'EVERPSCSS' => $custom_css,
-            'EVERPSJS' => $custom_js,
-            'EVERPSCSS_LINKS' => Configuration::get('EVERPSCSS_LINKS'),
-            'EVERPSJS_LINKS' => Configuration::get('EVERPSJS_LINKS'),
-            'EVERPS_HEADER_SCRIPTS' => $headerScripts,
-            'EVERPSCSS_P_LLOREM_NUMBER' => Configuration::get('EVERPSCSS_P_LLOREM_NUMBER'),
-            'EVERPSCSS_S_LLOREM_NUMBER' => Configuration::get('EVERPSCSS_S_LLOREM_NUMBER'),
-            'EVERBLOCK_TINYMCE' => Configuration::get('EVERBLOCK_TINYMCE'),
+            'EVERBLOCKLIGHT_OPTIONS_POSITION' => Configuration::get('EVERBLOCKLIGHT_OPTIONS_POSITION'),
+            'EVERBLOCKLIGHT_OPTIONS_TITLE' => $this->getConfigInMultipleLangs('EVERBLOCKLIGHT_OPTIONS_TITLE'),
+            'EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN' => Configuration::get('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN'),
+            'EVERBLOCKLIGHT_INSTA_LINK' => Configuration::get('EVERBLOCKLIGHT_INSTA_LINK'),
+            'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION' => Configuration::get('EVERBLOCKLIGHT_INSTA_SHOW_CAPTION'),
+            'EVERBLOCKLIGHT_WP_API_URL' => Configuration::get('EVERBLOCKLIGHT_WP_API_URL'),
+            'EVERBLOCKLIGHT_WP_BLOG_URL' => Configuration::get('EVERBLOCKLIGHT_WP_BLOG_URL'),
+            'EVERBLOCKLIGHT_WP_POST_NBR' => Configuration::get('EVERBLOCKLIGHT_WP_POST_NBR'),
+            'EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE' => Configuration::get('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE'),
+            'EVERBLOCKLIGHT_GOOGLE_API_KEY' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_API_KEY'),
+            'EVERBLOCKLIGHT_GOOGLE_PLACE_ID' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_PLACE_ID'),
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT'),
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_MIN_RATING' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_MIN_RATING'),
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SORT' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SORT'),
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_RATING' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_RATING'),
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_AVATAR' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_AVATAR'),
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_CTA' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_CTA'),
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_LABEL' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_LABEL'),
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_URL' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_URL'),
+            'EVERBLOCKLIGHT_GMAP_KEY' => Configuration::get('EVERBLOCKLIGHT_GMAP_KEY'),
+            'EVERBLOCKLIGHT_MARKER_ICON' => Configuration::get('EVERBLOCKLIGHT_MARKER_ICON'),
+            'EVERBLOCKLIGHT_STORELOCATOR_TOGGLE' => Configuration::get('EVERBLOCKLIGHT_STORELOCATOR_TOGGLE'),
+            'EVERBLOCKLIGHT_USE_OBF' => Configuration::get('EVERBLOCKLIGHT_USE_OBF'),
+            'EVERBLOCKLIGHT_CSS' => $custom_css,
+            'EVERBLOCKLIGHT_JS' => $custom_js,
+            'EVERBLOCKLIGHT_CSS_LINKS' => Configuration::get('EVERBLOCKLIGHT_CSS_LINKS'),
+            'EVERBLOCKLIGHT_JS_LINKS' => Configuration::get('EVERBLOCKLIGHT_JS_LINKS'),
+            'EVERBLOCKLIGHT_HEADER_SCRIPTS' => $headerScripts,
+            'EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER' => Configuration::get('EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER'),
+            'EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER' => Configuration::get('EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER'),
+            'EVERBLOCKLIGHT_TINYMCE' => Configuration::get('EVERBLOCKLIGHT_TINYMCE'),
         ];
         $stores = Store::getStores((int) $this->context->language->id);
-        $holidays = EverblockTools::getFrenchHolidays((int) date('Y'));
+        $holidays = EverblocklightTools::getFrenchHolidays((int) date('Y'));
         foreach ($stores as $store) {
             foreach ($holidays as $date) {
-                $hoursKey = 'EVERBLOCK_HOLIDAY_HOURS_' . (int) $store['id_store'] . '_' . $date;
+                $hoursKey = 'EVERBLOCKLIGHT_HOLIDAY_HOURS_' . (int) $store['id_store'] . '_' . $date;
                 $configData[$hoursKey] = Configuration::get($hoursKey);
             }
         }
@@ -1041,9 +1041,9 @@ class Everblock extends Module
     {
         $idShop = (int) $this->context->shop->id;
         $stats = [
-            'blocks_total' => $this->countTableRecords('everblock', 'id_shop = ' . $idShop),
-            'blocks_active' => $this->countTableRecords('everblock', 'id_shop = ' . $idShop . ' AND active = 1'),
-            'shortcodes' => $this->countTableRecords('everblock_shortcode', 'id_shop = ' . $idShop),
+            'blocks_total' => $this->countTableRecords('everblocklight', 'id_shop = ' . $idShop),
+            'blocks_active' => $this->countTableRecords('everblocklight', 'id_shop = ' . $idShop . ' AND active = 1'),
+            'shortcodes' => $this->countTableRecords('everblocklight_shortcode', 'id_shop = ' . $idShop),
         ];
 
         return $stats;
@@ -1086,35 +1086,35 @@ class Everblock extends Module
     public function postValidation()
     {
         if (Tools::isSubmit('submit' . $this->name . 'Module')) {
-            if (Tools::getValue('EVERPSCSS_P_LLOREM_NUMBER')
-                && !Validate::isInt(Tools::getValue('EVERPSCSS_P_LLOREM_NUMBER'))
+            if (Tools::getValue('EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER')
+                && !Validate::isInt(Tools::getValue('EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER'))
             ) {
                 $this->postErrors[] = $this->l(
                     'Error : The field "Llorem paragraph number" is not valid'
                 );
             }
-            if (Tools::getValue('EVERPSCSS_S_LLOREM_NUMBER')
-                && !Validate::isInt(Tools::getValue('EVERPSCSS_S_LLOREM_NUMBER'))
+            if (Tools::getValue('EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER')
+                && !Validate::isInt(Tools::getValue('EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER'))
             ) {
                 $this->postErrors[] = $this->l(
                     'Error : The field "Llorem sentences per paragraphs number" is not valid'
                 );
             }
-            if (Tools::getValue('EVERBLOCK_TINYMCE')
-                && !Validate::isBool(Tools::getValue('EVERBLOCK_TINYMCE'))
+            if (Tools::getValue('EVERBLOCKLIGHT_TINYMCE')
+                && !Validate::isBool(Tools::getValue('EVERBLOCKLIGHT_TINYMCE'))
             ) {
                 $this->postErrors[] = $this->l(
                     'Error : The field "Extends TinyMCE" is not valid'
                 );
             }
-            if (Tools::getValue('EVERWP_POST_NBR')
-                && !Validate::isUnsignedInt(Tools::getValue('EVERWP_POST_NBR'))
+            if (Tools::getValue('EVERBLOCKLIGHT_WP_POST_NBR')
+                && !Validate::isUnsignedInt(Tools::getValue('EVERBLOCKLIGHT_WP_POST_NBR'))
             ) {
                 $this->postErrors[] = $this->l(
                     'Error : The field "Number of blog posts" is not valid'
                 );
             }
-            $blogUrl = Tools::getValue('EVERWP_BLOG_URL');
+            $blogUrl = Tools::getValue('EVERBLOCKLIGHT_WP_BLOG_URL');
             if (!empty($blogUrl)
                 && !Validate::isUrl($blogUrl)
                 && (strpos($blogUrl, '/') !== 0)
@@ -1123,13 +1123,13 @@ class Everblock extends Module
                     'Error : The field "Blog URL" must be a valid URL or start with /'
                 );
             }
-            if (Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_LIMIT')
-                && (!Validate::isUnsignedInt(Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_LIMIT'))
-                || (int) Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_LIMIT') < 1)
+            if (Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT')
+                && (!Validate::isUnsignedInt(Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT'))
+                || (int) Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT') < 1)
             ) {
                 $this->postErrors[] = $this->l('Error: the field "Maximum number of reviews" is not valid');
             }
-            $minRatingValue = Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_MIN_RATING');
+            $minRatingValue = Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_MIN_RATING');
             if ($minRatingValue !== '' && $minRatingValue !== null) {
                 if (!is_numeric($minRatingValue)) {
                     $this->postErrors[] = $this->l('Error: the field "Minimum rating to display" must be a number');
@@ -1137,14 +1137,14 @@ class Everblock extends Module
                     $this->postErrors[] = $this->l('Error: the field "Minimum rating to display" must be between 0 and 5');
                 }
             }
-            $sortValue = Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_SORT');
+            $sortValue = Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SORT');
             if ($sortValue && !in_array($sortValue, ['most_relevant', 'newest'], true)) {
                 $this->postErrors[] = $this->l('Error: the field "Reviews sort order" is not valid');
             }
             $boolFields = [
-                'EVERBLOCK_GOOGLE_REVIEWS_SHOW_RATING',
-                'EVERBLOCK_GOOGLE_REVIEWS_SHOW_AVATAR',
-                'EVERBLOCK_GOOGLE_REVIEWS_SHOW_CTA',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_RATING',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_AVATAR',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_CTA',
             ];
             foreach ($boolFields as $boolField) {
                 $value = Tools::getValue($boolField);
@@ -1153,8 +1153,8 @@ class Everblock extends Module
                     break;
                 }
             }
-            if (Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_CTA_URL')
-                && !Validate::isUrl(Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_CTA_URL'))
+            if (Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_URL')
+                && !Validate::isUrl(Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_URL'))
             ) {
                 $this->postErrors[] = $this->l('Error: the field "CTA link override" must be a valid URL');
             }
@@ -1168,8 +1168,8 @@ class Everblock extends Module
         $custom_js = _PS_MODULE_DIR_ . $this->name . '/views/js/custom' . $idShop . '.js';
         // Compressed
         $compressedCss = _PS_MODULE_DIR_ . $this->name . '/views/css/custom-compressed' . $idShop . '.css';
-        $cssCode = Tools::getValue('EVERPSCSS');
-        $jsCode = Tools::getValue('EVERPSJS');
+        $cssCode = Tools::getValue('EVERBLOCKLIGHT_CSS');
+        $jsCode = Tools::getValue('EVERBLOCKLIGHT_JS');
         // Compress CSS code
         $compressedCssCode = $this->compressCSSCode(
             $cssCode
@@ -1198,12 +1198,12 @@ class Everblock extends Module
             fclose($handle_js);
         }
         Configuration::updateValue(
-            'EVERBLOCK_LOAD_FRONT_CSS',
-            Tools::getValue('EVERBLOCK_LOAD_FRONT_CSS')
+            'EVERBLOCKLIGHT_LOAD_FRONT_CSS',
+            Tools::getValue('EVERBLOCKLIGHT_LOAD_FRONT_CSS')
         );
         Configuration::updateValue(
-            'EVERBLOCK_USE_OBF',
-            Tools::getValue('EVERBLOCK_USE_OBF')
+            'EVERBLOCKLIGHT_USE_OBF',
+            Tools::getValue('EVERBLOCKLIGHT_USE_OBF')
         );
         file_put_contents(
             $custom_css,
@@ -1218,62 +1218,62 @@ class Everblock extends Module
             $compressedCssCode
         );
         Configuration::updateValue(
-            'EVEROPTIONS_POSITION',
-            Tools::getValue('EVEROPTIONS_POSITION')
+            'EVERBLOCKLIGHT_OPTIONS_POSITION',
+            Tools::getValue('EVERBLOCKLIGHT_OPTIONS_POSITION')
         );
         $formTitle = [];
         foreach (Language::getLanguages(false) as $lang) {
             $formTitle[$lang['id_lang']] = (
-                Tools::getValue('EVEROPTIONS_TITLE_' . $lang['id_lang'])
+                Tools::getValue('EVERBLOCKLIGHT_OPTIONS_TITLE_' . $lang['id_lang'])
             ) ? Tools::getValue(
-                'EVEROPTIONS_TITLE_' . $lang['id_lang']
+                'EVERBLOCKLIGHT_OPTIONS_TITLE_' . $lang['id_lang']
             ) : '';
         }
-        $headerScripts = Tools::getValue('EVERPS_HEADER_SCRIPTS');
+        $headerScripts = Tools::getValue('EVERBLOCKLIGHT_HEADER_SCRIPTS');
         $filePath = _PS_MODULE_DIR_ . $this->name . '/views/js/header-scripts-' . $this->context->shop->id . '.js';
         file_put_contents($filePath, $headerScripts);
         Configuration::updateValue(
-            'EVEROPTIONS_TITLE',
+            'EVERBLOCKLIGHT_OPTIONS_TITLE',
             $formTitle,
             true
         );
         Configuration::updateValue(
-            'EVERINSTA_ACCESS_TOKEN',
-            Tools::getValue('EVERINSTA_ACCESS_TOKEN')
+            'EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN',
+            Tools::getValue('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN')
         );
         // Auto refresh Instagram token
-        if (Tools::getValue('EVERINSTA_ACCESS_TOKEN')) {
-            EverblockTools::refreshInstagramToken();
+        if (Tools::getValue('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN')) {
+            EverblocklightTools::refreshInstagramToken();
         }
         Configuration::updateValue(
-            'EVERINSTA_LINK',
-            Tools::getValue('EVERINSTA_LINK')
+            'EVERBLOCKLIGHT_INSTA_LINK',
+            Tools::getValue('EVERBLOCKLIGHT_INSTA_LINK')
         );
         Configuration::updateValue(
-            'EVERINSTA_SHOW_CAPTION',
-            Tools::getValue('EVERINSTA_SHOW_CAPTION')
+            'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION',
+            Tools::getValue('EVERBLOCKLIGHT_INSTA_SHOW_CAPTION')
         );
         Configuration::updateValue(
-            'EVERWP_API_URL',
-            Tools::getValue('EVERWP_API_URL')
+            'EVERBLOCKLIGHT_WP_API_URL',
+            Tools::getValue('EVERBLOCKLIGHT_WP_API_URL')
         );
-        $blogUrl = trim((string) Tools::getValue('EVERWP_BLOG_URL'));
+        $blogUrl = trim((string) Tools::getValue('EVERBLOCKLIGHT_WP_BLOG_URL'));
         if ($blogUrl === '') {
             $blogUrl = '/blog';
         }
         Configuration::updateValue(
-            'EVERWP_BLOG_URL',
+            'EVERBLOCKLIGHT_WP_BLOG_URL',
             $blogUrl
         );
         Configuration::updateValue(
-            'EVERWP_POST_NBR',
-            Tools::getValue('EVERWP_POST_NBR')
+            'EVERBLOCKLIGHT_WP_POST_NBR',
+            Tools::getValue('EVERBLOCKLIGHT_WP_POST_NBR')
         );
-        $googleReviewsLimit = (int) Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_LIMIT');
+        $googleReviewsLimit = (int) Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT');
         if ($googleReviewsLimit <= 0) {
             $googleReviewsLimit = 5;
         }
-        $googleReviewsMinRating = Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_MIN_RATING');
+        $googleReviewsMinRating = Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_MIN_RATING');
         if ($googleReviewsMinRating === '' || $googleReviewsMinRating === null) {
             $googleReviewsMinRating = 0;
         }
@@ -1284,101 +1284,101 @@ class Everblock extends Module
         if ($googleReviewsMinRating > 5) {
             $googleReviewsMinRating = 5;
         }
-        $googleReviewsSort = Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_SORT');
+        $googleReviewsSort = Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SORT');
         if (!in_array($googleReviewsSort, ['newest', 'most_relevant'], true)) {
             $googleReviewsSort = 'most_relevant';
         }
-        $googleReviewsShowRating = Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_SHOW_RATING');
+        $googleReviewsShowRating = Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_RATING');
         $googleReviewsShowRating = in_array((string) $googleReviewsShowRating, ['1', 'true', 'on'], true) ? 1 : 0;
-        $googleReviewsShowAvatar = Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_SHOW_AVATAR');
+        $googleReviewsShowAvatar = Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_AVATAR');
         $googleReviewsShowAvatar = in_array((string) $googleReviewsShowAvatar, ['1', 'true', 'on'], true) ? 1 : 0;
-        $googleReviewsShowCta = Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_SHOW_CTA');
+        $googleReviewsShowCta = Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_CTA');
         $googleReviewsShowCta = in_array((string) $googleReviewsShowCta, ['1', 'true', 'on'], true) ? 1 : 0;
-        $googleReviewsCtaLabel = trim((string) Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_CTA_LABEL'));
-        $googleReviewsCtaUrl = trim((string) Tools::getValue('EVERBLOCK_GOOGLE_REVIEWS_CTA_URL'));
+        $googleReviewsCtaLabel = trim((string) Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_LABEL'));
+        $googleReviewsCtaUrl = trim((string) Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_URL'));
         Configuration::updateValue(
-            'EVERBLOCK_GOOGLE_API_KEY',
-            Tools::getValue('EVERBLOCK_GOOGLE_API_KEY')
+            'EVERBLOCKLIGHT_GOOGLE_API_KEY',
+            Tools::getValue('EVERBLOCKLIGHT_GOOGLE_API_KEY')
         );
         Configuration::updateValue(
-            'EVERBLOCK_GOOGLE_PLACE_ID',
-            Tools::getValue('EVERBLOCK_GOOGLE_PLACE_ID')
+            'EVERBLOCKLIGHT_GOOGLE_PLACE_ID',
+            Tools::getValue('EVERBLOCKLIGHT_GOOGLE_PLACE_ID')
         );
         Configuration::updateValue(
-            'EVERBLOCK_GOOGLE_REVIEWS_LIMIT',
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT',
             $googleReviewsLimit
         );
         Configuration::updateValue(
-            'EVERBLOCK_GOOGLE_REVIEWS_MIN_RATING',
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_MIN_RATING',
             $googleReviewsMinRating
         );
         Configuration::updateValue(
-            'EVERBLOCK_GOOGLE_REVIEWS_SORT',
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SORT',
             $googleReviewsSort
         );
         Configuration::updateValue(
-            'EVERBLOCK_GOOGLE_REVIEWS_SHOW_RATING',
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_RATING',
             $googleReviewsShowRating
         );
         Configuration::updateValue(
-            'EVERBLOCK_GOOGLE_REVIEWS_SHOW_AVATAR',
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_AVATAR',
             $googleReviewsShowAvatar
         );
         Configuration::updateValue(
-            'EVERBLOCK_GOOGLE_REVIEWS_SHOW_CTA',
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_CTA',
             $googleReviewsShowCta
         );
         Configuration::updateValue(
-            'EVERBLOCK_GOOGLE_REVIEWS_CTA_LABEL',
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_LABEL',
             $googleReviewsCtaLabel
         );
         Configuration::updateValue(
-            'EVERBLOCK_GOOGLE_REVIEWS_CTA_URL',
+            'EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_URL',
             $googleReviewsCtaUrl
         );
-        EverblockCache::cacheDropByPattern('everblock_google_reviews_');
+        EverblocklightCache::cacheDropByPattern('everblocklight_google_reviews_');
         Configuration::updateValue(
-            'EVERBLOCK_GMAP_KEY',
-            Tools::getValue('EVERBLOCK_GMAP_KEY')
+            'EVERBLOCKLIGHT_GMAP_KEY',
+            Tools::getValue('EVERBLOCKLIGHT_GMAP_KEY')
         );
         Configuration::updateValue(
-            'EVERBLOCK_STORELOCATOR_TOGGLE',
-            Tools::getValue('EVERBLOCK_STORELOCATOR_TOGGLE')
+            'EVERBLOCKLIGHT_STORELOCATOR_TOGGLE',
+            Tools::getValue('EVERBLOCKLIGHT_STORELOCATOR_TOGGLE')
         );
-        if (isset($_FILES['EVERBLOCK_MARKER_ICON'])
-            && isset($_FILES['EVERBLOCK_MARKER_ICON']['tmp_name'])
-            && !empty($_FILES['EVERBLOCK_MARKER_ICON']['tmp_name'])
+        if (isset($_FILES['EVERBLOCKLIGHT_MARKER_ICON'])
+            && isset($_FILES['EVERBLOCKLIGHT_MARKER_ICON']['tmp_name'])
+            && !empty($_FILES['EVERBLOCKLIGHT_MARKER_ICON']['tmp_name'])
         ) {
-            $filename = $_FILES['EVERBLOCK_MARKER_ICON']['name'];
+            $filename = $_FILES['EVERBLOCKLIGHT_MARKER_ICON']['name'];
             $extension = Tools::strtolower(pathinfo($filename, PATHINFO_EXTENSION));
             if ($extension !== 'svg') {
                 $this->postErrors[] = $this->l('Marker icon must be an SVG file.');
             } elseif (!($tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
-                || !move_uploaded_file($_FILES['EVERBLOCK_MARKER_ICON']['tmp_name'], $tmpName)
+                || !move_uploaded_file($_FILES['EVERBLOCKLIGHT_MARKER_ICON']['tmp_name'], $tmpName)
             ) {
                 $this->postErrors[] = $this->l('Error while uploading marker icon.');
             } else {
                 $dest = _PS_MODULE_DIR_ . $this->name . '/views/img/store-locator-marker.svg';
                 copy($tmpName, $dest);
                 @unlink($tmpName);
-                Configuration::updateValue('EVERBLOCK_MARKER_ICON', 'store-locator-marker.svg');
+                Configuration::updateValue('EVERBLOCKLIGHT_MARKER_ICON', 'store-locator-marker.svg');
             }
         }
-        if (isset($_FILES['EVERWP_POSTS_BG_IMAGE'])
-            && isset($_FILES['EVERWP_POSTS_BG_IMAGE']['tmp_name'])
-            && !empty($_FILES['EVERWP_POSTS_BG_IMAGE']['tmp_name'])
+        if (isset($_FILES['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE'])
+            && isset($_FILES['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE']['tmp_name'])
+            && !empty($_FILES['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE']['tmp_name'])
         ) {
-            $filename = $_FILES['EVERWP_POSTS_BG_IMAGE']['name'];
+            $filename = $_FILES['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE']['name'];
             $extension = Tools::strtolower(pathinfo($filename, PATHINFO_EXTENSION));
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
             if (!in_array($extension, $allowedExtensions, true)) {
                 $this->postErrors[] = $this->l('WordPress background image must be a JPG, PNG, WEBP, or GIF file.');
             } elseif (!($tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
-                || !move_uploaded_file($_FILES['EVERWP_POSTS_BG_IMAGE']['tmp_name'], $tmpName)
+                || !move_uploaded_file($_FILES['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE']['tmp_name'], $tmpName)
             ) {
                 $this->postErrors[] = $this->l('Error while uploading WordPress background image.');
             } else {
-                $previous = Configuration::get('EVERWP_POSTS_BG_IMAGE');
+                $previous = Configuration::get('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE');
                 if ($previous) {
                     $previousPath = _PS_MODULE_DIR_ . $this->name . '/views/img/' . $previous;
                     if (file_exists($previousPath)) {
@@ -1389,49 +1389,49 @@ class Everblock extends Module
                 $dest = _PS_MODULE_DIR_ . $this->name . '/views/img/' . $safeName;
                 copy($tmpName, $dest);
                 @unlink($tmpName);
-                $webpUrl = EverblockTools::convertToWebP($dest);
+                $webpUrl = EverblocklightTools::convertToWebP($dest);
                 if ($webpUrl) {
                     $webpPath = parse_url($webpUrl, PHP_URL_PATH);
                     $safeName = $webpPath ? basename($webpPath) : basename($webpUrl);
                 }
-                Configuration::updateValue('EVERWP_POSTS_BG_IMAGE', $safeName);
+                Configuration::updateValue('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE', $safeName);
             }
         }
         $stores = Store::getStores((int) $this->context->language->id);
-        $holidays = EverblockTools::getFrenchHolidays((int) date('Y'));
+        $holidays = EverblocklightTools::getFrenchHolidays((int) date('Y'));
         foreach ($stores as $store) {
             foreach ($holidays as $date) {
-                $hoursKey = 'EVERBLOCK_HOLIDAY_HOURS_' . (int) $store['id_store'] . '_' . $date;
+                $hoursKey = 'EVERBLOCKLIGHT_HOLIDAY_HOURS_' . (int) $store['id_store'] . '_' . $date;
                 Configuration::updateValue($hoursKey, Tools::getValue($hoursKey));
             }
         }
         Configuration::updateValue(
-            'EVERPSCSS_LINKS',
-            Tools::getValue('EVERPSCSS_LINKS')
+            'EVERBLOCKLIGHT_CSS_LINKS',
+            Tools::getValue('EVERBLOCKLIGHT_CSS_LINKS')
         );
         Configuration::updateValue(
-            'EVERPSJS_LINKS',
-            Tools::getValue('EVERPSJS_LINKS')
+            'EVERBLOCKLIGHT_JS_LINKS',
+            Tools::getValue('EVERBLOCKLIGHT_JS_LINKS')
         );
         Configuration::updateValue(
-            'EVERPSCSS_P_LLOREM_NUMBER',
-            Tools::getValue('EVERPSCSS_P_LLOREM_NUMBER')
+            'EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER',
+            Tools::getValue('EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER')
         );
         Configuration::updateValue(
-            'EVERPSCSS_S_LLOREM_NUMBER',
-            Tools::getValue('EVERPSCSS_S_LLOREM_NUMBER')
+            'EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER',
+            Tools::getValue('EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER')
         );
         Configuration::updateValue(
-            'EVERBLOCK_TINYMCE',
-            Tools::getValue('EVERBLOCK_TINYMCE')
+            'EVERBLOCKLIGHT_TINYMCE',
+            Tools::getValue('EVERBLOCKLIGHT_TINYMCE')
         );
-        $stores = EverblockTools::getStoreLocatorData();
+        $stores = EverblocklightTools::getStoreLocatorData();
         $filename = 'store-locator-' . $idShop . '.js';
         $filePath = _PS_MODULE_DIR_ . $this->name . '/views/js/' . $filename;
-        if (!empty($stores) && Tools::getValue('EVERBLOCK_GMAP_KEY')) {
+        if (!empty($stores) && Tools::getValue('EVERBLOCKLIGHT_GMAP_KEY')) {
             $markers = [];
             $context = Context::getContext();
-            $markerIcon = Configuration::get('EVERBLOCK_MARKER_ICON');
+            $markerIcon = Configuration::get('EVERBLOCKLIGHT_MARKER_ICON');
             foreach ($stores as $store) {
                 $storeId = isset($store['id']) ? (int) $store['id'] : (int) $store['id_store'];
                 if (!empty($store['is_open'])) {
@@ -1462,7 +1462,7 @@ class Everblock extends Module
                 }
                 $markers[] = $marker;
             }
-            $gmapScript = EverblockTools::generateGoogleMapScript($markers);
+            $gmapScript = EverblocklightTools::generateGoogleMapScript($markers);
             if ($gmapScript) {
                 file_put_contents($filePath, $gmapScript);
             }
@@ -1474,8 +1474,8 @@ class Everblock extends Module
 
     protected function emptyAllCache()
     {
-        EverblockCache::clearAllModuleCache();
-        $this->postSuccess[] = $this->l('Everblock cache has been cleared');
+        EverblocklightCache::clearAllModuleCache();
+        $this->postSuccess[] = $this->l('Everblocklight cache has been cleared');
     }
 
     public function hookActionAdminControllerSetMedia()
@@ -1483,21 +1483,21 @@ class Everblock extends Module
         $controller = Tools::getValue('controller');
         $isModuleConfiguration = Tools::getValue('configure') === $this->name;
         $requestUri = (string) ($_SERVER['REQUEST_URI'] ?? '');
-        $isSymfonyContentForm = (bool) preg_match('#/(?:modules/)?everblock/(blocks|shortcodes)/(new|[0-9]+/edit)#', $requestUri);
-        $isSymfonyEverblockAdmin = strpos($requestUri, '/modules/everblock/') !== false
-            || (bool) preg_match('#/everblock/(blocks|shortcodes|hooks|configuration|clear-cache)#', $requestUri);
+        $isSymfonyContentForm = (bool) preg_match('#/(?:modules/)?everblocklight/(blocks|shortcodes)/(new|[0-9]+/edit)#', $requestUri);
+        $isSymfonyEverblocklightAdmin = strpos($requestUri, '/modules/everblocklight/') !== false
+            || (bool) preg_match('#/everblocklight/(blocks|shortcodes|hooks|configuration|clear-cache)#', $requestUri);
         $moduleControllers = [
-            'AdminEverBlock',
-            'AdminEverBlockConfiguration',
-            'AdminEverBlockHook',
-            'AdminEverBlockShortcode',
-            'AdminEverBlockShortcodeDocumentation',
+            'AdminEverBlockLight',
+            'AdminEverBlockLightConfiguration',
+            'AdminEverBlockLightHook',
+            'AdminEverBlockLightShortcode',
+            'AdminEverBlockLightShortcodeDocumentation',
         ];
 
         if (Tools::getValue('id_' . $this->name)
             || Tools::getIsset('add' . $this->name)
             || $isModuleConfiguration
-            || $isSymfonyEverblockAdmin
+            || $isSymfonyEverblocklightAdmin
             || in_array($controller, $moduleControllers, true)
         ) {
             $this->context->controller->addCss($this->_path . 'views/css/ever.css');
@@ -1516,7 +1516,7 @@ class Everblock extends Module
                 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/javascript/javascript.min.js'
             );
             $this->context->controller->addJs($this->_path . 'views/js/admin.js');
-            if ((bool) Configuration::get('EVERBLOCK_TINYMCE') === true
+            if ((bool) Configuration::get('EVERBLOCKLIGHT_TINYMCE') === true
                 && !$isModuleConfiguration
                 && ($isSymfonyContentForm || Tools::getValue('id_' . $this->name) || Tools::getIsset('add' . $this->name))
             ) {
@@ -1579,20 +1579,20 @@ class Everblock extends Module
     public function hookActionOutputHTMLBefore($params)
     {
         $txt = $params['html'];
-        if (!EverblockTools::hasShortcodeToken($txt)) {
+        if (!EverblocklightTools::hasShortcodeToken($txt)) {
             return $txt;
         }
         try {
             $context = Context::getContext();
-            // @Todo : move to EverblockShortcodes
-            $txt = EverblockTools::renderShortcodes($txt, $context, $this);
+            // @Todo : move to EverblocklightShortcodes
+            $txt = EverblocklightTools::renderShortcodes($txt, $context, $this);
             $params['html'] = $txt;
             return $params['html'];
         } catch (Exception $e) {
             PrestaShopLogger::addLog(
-                'Ever Block hookActionOutputHTMLBefore : ' . $e->getMessage()
+                'Ever Block Light hookActionOutputHTMLBefore : ' . $e->getMessage()
             );
-            EverblockTools::setLog(
+            EverblocklightTools::setLog(
                 $this->name . date('y-m-d'),
                 $e->getMessage()
             );
@@ -1602,7 +1602,7 @@ class Everblock extends Module
 
     public function hookActionCheckoutRender($params)
     {
-        $stepTitle = $this->getConfigInMultipleLangs('EVEROPTIONS_TITLE');
+        $stepTitle = $this->getConfigInMultipleLangs('EVERBLOCKLIGHT_OPTIONS_TITLE');
         if (!$stepTitle[$this->context->language->id]
             || empty($stepTitle[$this->context->language->id])
         ) {
@@ -1614,13 +1614,13 @@ class Everblock extends Module
         $process = $params['checkoutProcess'];
         $steps = $process->getSteps();
 
-        $everStep = new EverblockCheckoutStep(
+        $everStep = new EverblocklightCheckoutStep(
             $this->context,
             $translator,
             $this
         );
         $everStep->setCheckoutProcess($process);
-        switch ((int) Configuration::get('EVEROPTIONS_POSITION')) {
+        switch ((int) Configuration::get('EVERBLOCKLIGHT_OPTIONS_POSITION')) {
             case 1:
                 $newSteps = [
                     $steps[0],
@@ -1704,7 +1704,7 @@ class Everblock extends Module
             }
         } catch (Exception $e) {
             PrestaShopLogger::addLog($this->name . ' | ' . $e->getMessage());
-            EverblockTools::setLog(
+            EverblocklightTools::setLog(
                 $this->name . date('y-m-d'),
                 $e->getMessage()
             );
@@ -1729,7 +1729,7 @@ class Everblock extends Module
             }
         } catch (Exception $e) {
             PrestaShopLogger::addLog($this->name . ' | ' . $e->getMessage());
-            EverblockTools::setLog(
+            EverblocklightTools::setLog(
                 $this->name . date('y-m-d'),
                 $e->getMessage()
             );
@@ -1773,7 +1773,7 @@ class Everblock extends Module
             }
         } catch (Exception $e) {
             PrestaShopLogger::addLog($this->name . ' | ' . $e->getMessage());
-            EverblockTools::setLog(
+            EverblocklightTools::setLog(
                 $this->name . date('y-m-d'),
                 $e->getMessage()
             );
@@ -1789,12 +1789,12 @@ class Everblock extends Module
                 (int) $languageId
             );
             $context->language = $lang;
-            $params['template_txt'] = EverblockTools::renderShortcodes($params['template_txt'], $context, $this);
-            $params['template_html'] = EverblockTools::renderShortcodes($params['template_html'], $context, $this);
+            $params['template_txt'] = EverblocklightTools::renderShortcodes($params['template_txt'], $context, $this);
+            $params['template_html'] = EverblocklightTools::renderShortcodes($params['template_html'], $context, $this);
             return $params;
         } catch (Exception $e) {
             PrestaShopLogger::addLog($this->name . ' | ' . $e->getMessage());
-            EverblockTools::setLog(
+            EverblocklightTools::setLog(
                 $this->name . date('y-m-d'),
                 $e->getMessage()
             );
@@ -1840,7 +1840,7 @@ class Everblock extends Module
                 }
             } catch (Exception $e) {
                 PrestaShopLogger::addLog($this->name . ' | ' . $e->getMessage());
-                EverblockTools::setLog(
+                EverblocklightTools::setLog(
                     $this->name . date('y-m-d'),
                     $e->getMessage()
                 );
@@ -1874,12 +1874,12 @@ class Everblock extends Module
         return false;
     }
 
-    public function hookActionObjectEverBlockClassDeleteAfter($params)
+    public function hookActionObjectEverBlockLightClassDeleteAfter($params)
     {
         $this->clearBlockObjectCacheFromHook($params);
     }
 
-    public function hookActionObjectEverBlockClassUpdateAfter($params)
+    public function hookActionObjectEverBlockLightClassUpdateAfter($params)
     {
         $this->clearBlockObjectCacheFromHook($params);
     }
@@ -1891,7 +1891,7 @@ class Everblock extends Module
         $shopId = is_object($object) && isset($object->id_shop) ? (int) $object->id_shop : (int) $this->context->shop->id;
         $hookId = is_object($object) && isset($object->id_hook) ? (int) $object->id_hook : 0;
 
-        EverBlockClass::clearCache($blockId, $shopId, Language::getLanguages(false), $hookId > 0 ? [$hookId] : []);
+        EverBlockLightClass::clearCache($blockId, $shopId, Language::getLanguages(false), $hookId > 0 ? [$hookId] : []);
     }
 
     public function everHook($method, $args)
@@ -1916,12 +1916,12 @@ class Everblock extends Module
         if (Tools::getValue('id_cms')) {
             $idObj = (int) Tools::getValue('id_cms');
         }
-        $everblock = EverblockClass::getBlocks(
+        $everblocklight = EverblocklightClass::getBlocks(
             (int) $id_hook,
             (int) $context->language->id,
             (int) $context->shop->id
         );
-        $isPreview = isset($args[0]['everblock_preview']) && (bool) $args[0]['everblock_preview'];
+        $isPreview = isset($args[0]['everblocklight_preview']) && (bool) $args[0]['everblocklight_preview'];
         $isBypassed = in_array($method, $this->bypassedControllers, true);
         $id_entity = isset($context->customer->id) && $context->customer->id ? (int) $context->customer->id : false;
         $customerGroups = $id_entity
@@ -1935,9 +1935,9 @@ class Everblock extends Module
         $visibleBlocks = [];
         $visibleCacheIds = [];
 
-        foreach ($everblock as $block) {
+        foreach ($everblocklight as $block) {
             if ((bool) $block['modal'] === true
-                && (bool) EverblockTools::isBot() === true
+                && (bool) EverblocklightTools::isBot() === true
             ) {
                 continue;
             }
@@ -2056,11 +2056,11 @@ class Everblock extends Module
             $cachedHtml = '';
             $allBlocksCached = true;
             foreach ($visibleCacheIds as $cacheId) {
-                if (!EverblockCache::isCacheStored($cacheId)) {
+                if (!EverblocklightCache::isCacheStored($cacheId)) {
                     $allBlocksCached = false;
                     break;
                 }
-                $cachedHtml .= (string) EverblockCache::cacheRetrieve($cacheId);
+                $cachedHtml .= (string) EverblocklightCache::cacheRetrieve($cacheId);
             }
 
             if ($allBlocksCached) {
@@ -2070,12 +2070,12 @@ class Everblock extends Module
 
         foreach ($visibleBlocks as $index => $block) {
             if ((bool) $block['obfuscate_link'] === true) {
-                $block['content'] = EverblockTools::obfuscateText(
+                $block['content'] = EverblocklightTools::obfuscateText(
                     $block['content']
                 );
             }
             if ((bool) $block['lazyload'] === true) {
-                $block['content'] = EverblockTools::addLazyLoadToImages(
+                $block['content'] = EverblocklightTools::addLazyLoadToImages(
                     $block['content']
                 );
             }
@@ -2084,7 +2084,7 @@ class Everblock extends Module
             }
             $currentBlock[] = [
                 'block' => $block,
-                '_everblock_cache_id' => $visibleCacheIds[$index] ?? null,
+                '_everblocklight_cache_id' => $visibleCacheIds[$index] ?? null,
             ];
         }
 
@@ -2112,19 +2112,19 @@ class Everblock extends Module
                 continue;
             }
 
-            $cacheId = isset($item['_everblock_cache_id']) && is_string($item['_everblock_cache_id'])
-                ? $item['_everblock_cache_id']
+            $cacheId = isset($item['_everblocklight_cache_id']) && is_string($item['_everblocklight_cache_id'])
+                ? $item['_everblocklight_cache_id']
                 : $this->buildBlockRenderCacheId($item['block'], $method, $hookName, $context, $idObj, $position);
-            if ($isPreview || !EverblockCache::isCacheStored($cacheId)) {
+            if ($isPreview || !EverblocklightCache::isCacheStored($cacheId)) {
                 $rendered = $this->renderBlockItems([$item], $method, $args, $isBypassed);
                 if (!$isPreview) {
-                    EverblockCache::cacheStore($cacheId, $rendered);
+                    EverblocklightCache::cacheStore($cacheId, $rendered);
                 }
                 $html .= $rendered;
                 continue;
             }
 
-            $html .= (string) EverblockCache::cacheRetrieve($cacheId);
+            $html .= (string) EverblocklightCache::cacheRetrieve($cacheId);
         }
 
         return $html;
@@ -2144,7 +2144,7 @@ class Everblock extends Module
 
     private function buildBlockRenderCacheId(array $block, string $method, string $hookName, Context $context, int $idObj, ?int $position): string
     {
-        $blockId = (int) ($block['id_everblock'] ?? 0);
+        $blockId = (int) ($block['id_everblocklight'] ?? 0);
         $fingerprintSource = json_encode($block);
         if (!is_string($fingerprintSource)) {
             $fingerprintSource = serialize($block);
@@ -2157,7 +2157,7 @@ class Everblock extends Module
             'id_hook',
             (int) ($block['id_hook'] ?? 0),
             'version',
-            EverblockCache::getObjectCacheVersion('block', $blockId),
+            EverblocklightCache::getObjectCacheVersion('block', $blockId),
             'controller',
             trim((string) Tools::getValue('controller')),
             'method',
@@ -2186,7 +2186,7 @@ class Everblock extends Module
         if (Tools::getValue('eac')
             && Validate::isInt(Tools::getValue('eac'))
         ) {
-            EverblockTools::addToCartByUrl(
+            EverblocklightTools::addToCartByUrl(
                 $this->context,
                 (int) Tools::getValue('id_product'),
                 (int) Tools::getValue('id_product_attribute'),
@@ -2210,7 +2210,7 @@ class Everblock extends Module
             $cookie->__set('viewed', implode(',', $viewedArray));
         }
         $idShop = (int) $this->context->shop->id;
-        if ((bool) EverblockCache::getModuleConfiguration('EVERBLOCK_LOAD_FRONT_CSS') === true) {
+        if ((bool) EverblocklightCache::getModuleConfiguration('EVERBLOCKLIGHT_LOAD_FRONT_CSS') === true) {
             $this->context->controller->registerStylesheet(
                 'module-' . $this->name . '-css',
                 'modules/' . $this->name . '/views/css/' . $this->name . '.css',
@@ -2222,7 +2222,7 @@ class Everblock extends Module
             'modules/' . $this->name . '/views/js/' . $this->name . '.js',
             ['position' => 'bottom', 'priority' => 200, 'version' => $this->version]
         );
-        if ((bool) EverblockCache::getModuleConfiguration('EVERBLOCK_USE_OBF') === true) {
+        if ((bool) EverblocklightCache::getModuleConfiguration('EVERBLOCKLIGHT_USE_OBF') === true) {
             $this->context->controller->registerJavascript(
                 'module-' . $this->name . '-obf-js',
                 'modules/' . $this->name . '/views/js/' . $this->name . '-obfuscation.js',
@@ -2245,7 +2245,7 @@ class Everblock extends Module
                 ['position' => 'bottom', 'priority' => 200]
             );
         }
-        $externalJs = EverblockCache::getModuleConfiguration('EVERPSJS_LINKS');
+        $externalJs = EverblocklightCache::getModuleConfiguration('EVERBLOCKLIGHT_JS_LINKS');
         $jsLinksArray = [];
         if ($externalJs) {
             $jsLinksArray = explode("\n", $externalJs);
@@ -2257,7 +2257,7 @@ class Everblock extends Module
                 );
             }
         }
-        $externalCss = EverblockCache::getModuleConfiguration('EVERPSCSS_LINKS');
+        $externalCss = EverblocklightCache::getModuleConfiguration('EVERBLOCKLIGHT_CSS_LINKS');
         $cssLinksArray = [];
         if ($externalCss) {
             $cssLinksArray = explode("\n", $externalCss);
@@ -2269,8 +2269,8 @@ class Everblock extends Module
                 );
             }
         }
-        // Do not show GMAP api KEY on Everblock cache
-        $apiKey = Configuration::get('EVERBLOCK_GMAP_KEY');
+        // Do not show GMAP api KEY on Everblocklight cache
+        $apiKey = Configuration::get('EVERBLOCKLIGHT_GMAP_KEY');
         if ($apiKey && Tools::getValue('controller') == 'cms') {
             $filename = 'store-locator-' . $idShop . '.js';
             $filePath = _PS_MODULE_DIR_ . $this->name . '/views/js/' . $filename;
@@ -2308,13 +2308,13 @@ class Everblock extends Module
                 $employeeLogged = true;
             }
         }
-        $this->context->smarty->assign('everblock_is_employee', $employeeLogged);
+        $this->context->smarty->assign('everblocklight_is_employee', $employeeLogged);
 
         Media::addJsDef([
-            'evercontact_link' => $contactLink,
-            'evermodal_link' => $modalLink,
-            'everblock_token' => Tools::getToken(),
-            'everblock_is_employee' => $employeeLogged,
+            'everblocklight_contact_link' => $contactLink,
+            'everblocklight_modal_link' => $modalLink,
+            'everblocklight_token' => Tools::getToken(),
+            'everblocklight_is_employee' => $employeeLogged,
         ]);
         $filePath = _PS_MODULE_DIR_ . $this->name . '/views/js/header-scripts-' . $this->context->shop->id . '.js';
         if (file_exists($filePath) && filesize($filePath) > 0) {

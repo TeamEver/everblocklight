@@ -21,14 +21,14 @@
             <div class="table-responsive">
                 <table>
                     <tr class="center small bold center">
-                        <td>{l s='Ordered Options' d='Modules.Everblock.Front'}</td>
+                        <td>{l s='Ordered Options' d='Modules.Everblocklight.Front'}</td>
                     </tr>
                 </table>
                 <table id="everpsorderoptions" class="display responsive nowrap dataTable no-footer dtr-inline collapsed table">
                     <thead>
                         <tr class="center small grey bold center">
-                            <th>{l s='Option' d='Modules.Everblock.Front'}</th>
-                            <th>{l s='Value' d='Modules.Everblock.Front'}</th>
+                            <th>{l s='Option' d='Modules.Everblocklight.Front'}</th>
+                            <th>{l s='Value' d='Modules.Everblocklight.Front'}</th>
                         </tr>
                     </thead>
                     <tbody>

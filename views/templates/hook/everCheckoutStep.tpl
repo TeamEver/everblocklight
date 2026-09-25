@@ -27,7 +27,7 @@
             >
                 {$fields nofilter}
                 <footer class="clearfix">
-                    <input type="submit" name="submitCustomStep" value="{l s='Submit' d='Modules.Everblock.Front'}"
+                    <input type="submit" name="submitCustomStep" value="{l s='Submit' d='Modules.Everblocklight.Front'}"
                            class="btn btn-primary continue float-xs-right"/>
                 </footer>
             </form>

@@ -18,7 +18,7 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-namespace Everblock\Tools\Service;
+namespace Everblocklight\Tools\Service;
 
 use Configuration;
 use Context;
@@ -27,8 +27,8 @@ use Currency;
 use Customer;
 use Db;
 use DbQuery;
-use EverBlockClass;
-use Everblock;
+use EverBlockLightClass;
+use Everblocklight;
 use Exception;
 use Group;
 use Hook;
@@ -41,9 +41,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class EverblockPreviewBuilder
+class EverblocklightPreviewBuilder
 {
-    /** @var Everblock */
+    /** @var Everblocklight */
     private $module;
 
     /** @var Context */
@@ -52,13 +52,13 @@ class EverblockPreviewBuilder
     /** @var array */
     private $shopContextSnapshot = [];
 
-    public function __construct(Everblock $module, Context $context)
+    public function __construct(Everblocklight $module, Context $context)
     {
         $this->module = $module;
         $this->context = $context;
     }
 
-    public function buildPreview(EverBlockClass $block, array $params): array
+    public function buildPreview(EverBlockLightClass $block, array $params): array
     {
         $contextSnapshot = $this->snapshotContext($this->context);
         $globalsSnapshot = $this->snapshotGlobals();
@@ -82,7 +82,7 @@ class EverblockPreviewBuilder
 
             $methodName = 'hook' . Tools::toCamelCase($hookName);
             $arguments = [[
-                'everblock_preview' => true,
+                'everblocklight_preview' => true,
                 'position' => isset($params['position']) ? (int) $params['position'] : null,
             ] + $params];
 
@@ -219,7 +219,7 @@ class EverblockPreviewBuilder
         }
     }
 
-    protected function prepareCustomer(EverBlockClass $block, array $params): Customer
+    protected function prepareCustomer(EverBlockLightClass $block, array $params): Customer
     {
         if (!empty($params['id_customer'])) {
             $customer = new Customer((int) $params['id_customer']);
@@ -321,7 +321,7 @@ class EverblockPreviewBuilder
         return $ids;
     }
 
-    protected function getBlockGroups(EverBlockClass $block): array
+    protected function getBlockGroups(EverBlockLightClass $block): array
     {
         $groups = [];
         if (!empty($block->groups)) {
@@ -360,7 +360,7 @@ class EverblockPreviewBuilder
         return null;
     }
 
-    protected function resolveGroupIds(EverBlockClass $block, Customer $customer): array
+    protected function resolveGroupIds(EverBlockLightClass $block, Customer $customer): array
     {
         $groups = $this->getBlockGroups($block);
         if (!empty($groups)) {

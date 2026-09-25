@@ -16,24 +16,24 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *}
 
-{if isset($everblock_modal) && $everblock_modal}
-<div class="modal fade everblockModal" id="everblockModal" tabindex="-1" role="dialog" aria-labelledby="everblockModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered everblock-modal-dialog" role="document">
+{if isset($everblocklight_modal) && $everblocklight_modal}
+<div class="modal fade everblocklightModal" id="everblocklightModal" tabindex="-1" role="dialog" aria-labelledby="everblocklightModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered everblocklight-modal-dialog" role="document">
         <div class="modal-content"
-            {if isset($everblock_modal->background) && $everblock_modal->background}
-            style="background-color:{$everblock_modal->background|escape:'htmlall':'UTF-8'};"
+            {if isset($everblocklight_modal->background) && $everblocklight_modal->background}
+            style="background-color:{$everblocklight_modal->background|escape:'htmlall':'UTF-8'};"
             {/if}>
             {* SEO : modal must have titles *}
-            <p id="everblockModalLabel" class="h5 modal-title d-none">
-                {l s='Modal' d='Modules.Everblock.Front'}
+            <p id="everblocklightModalLabel" class="h5 modal-title d-none">
+                {l s='Modal' d='Modules.Everblocklight.Front'}
             </p>
             <!-- Contenu de la modal -->
             <div class="modal-body">
                 <!-- Bouton de fermeture aligne a droite -->
-                <button type="button" class="close float-right" data-bs-dismiss="modal" data-dismiss="modal" aria-label="{l s='Close' d='Modules.Everblock.Front'}">
+                <button type="button" class="close float-right" data-bs-dismiss="modal" data-dismiss="modal" aria-label="{l s='Close' d='Modules.Everblocklight.Front'}">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                {$everblock_modal->content nofilter}
+                {$everblocklight_modal->content nofilter}
             </div>
         </div>
     </div>

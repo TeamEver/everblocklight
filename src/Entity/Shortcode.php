@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Entity;
+namespace Everblocklight\Tools\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Everblock\Tools\Repository\RepositoryProvider;
-use Everblock\Tools\Repository\ShortcodeRepository;
-use Everblock\Tools\Service\EverblockCache;
+use Everblocklight\Tools\Repository\RepositoryProvider;
+use Everblocklight\Tools\Repository\ShortcodeRepository;
+use Everblocklight\Tools\Service\EverblocklightCache;
 use Language;
 
 /**
- * @ORM\Table(name="everblock_shortcode")
- * @ORM\Entity(repositoryClass="Everblock\Tools\Repository\ShortcodeRepository")
+ * @ORM\Table(name="everblocklight_shortcode")
+ * @ORM\Entity(repositoryClass="Everblocklight\Tools\Repository\ShortcodeRepository")
  */
 class Shortcode
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="id_everblock_shortcode", type="integer")
+     * @ORM\Column(name="id_everblocklight_shortcode", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     public ?int $id = null;
-    public ?int $id_everblock_shortcode = null;
+    public ?int $id_everblocklight_shortcode = null;
 
     /** @ORM\Column(name="shortcode", type="text", nullable=true) */
     public string $shortcode = '';
@@ -49,7 +49,7 @@ class Shortcode
     public static function repository(): ShortcodeRepository
     {
         /** @var ShortcodeRepository $repository */
-        $repository = RepositoryProvider::get('everblock.repository.shortcode');
+        $repository = RepositoryProvider::get('everblocklight.repository.shortcode');
 
         return $repository;
     }
@@ -57,8 +57,8 @@ class Shortcode
     public static function fromDatabase(array $row, array $langRows = [], ?int $singleLangId = null): self
     {
         $shortcode = new self();
-        $shortcode->id = isset($row['id_everblock_shortcode']) ? (int) $row['id_everblock_shortcode'] : null;
-        $shortcode->id_everblock_shortcode = $shortcode->id;
+        $shortcode->id = isset($row['id_everblocklight_shortcode']) ? (int) $row['id_everblocklight_shortcode'] : null;
+        $shortcode->id_everblocklight_shortcode = $shortcode->id;
         $shortcode->shortcode = (string) ($row['shortcode'] ?? '');
         $shortcode->id_shop = (int) ($row['id_shop'] ?? 1);
 
@@ -91,7 +91,7 @@ class Shortcode
     public function save(): bool
     {
         $this->id = self::repository()->save($this, Language::getLanguages(false));
-        $this->id_everblock_shortcode = $this->id;
+        $this->id_everblocklight_shortcode = $this->id;
 
         return $this->id > 0;
     }
@@ -107,65 +107,65 @@ class Shortcode
 
     public static function getAllShortcodes(int $idShop, int $langId): array
     {
-        $cacheId = 'EverblockShortcode_getAllShortcodes_' . $idShop . '_' . $langId;
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        $cacheId = 'EverblocklightShortcode_getAllShortcodes_' . $idShop . '_' . $langId;
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $shortcodes = array_map(
                 static fn (array $row): self => self::fromDatabase($row, [], $langId),
                 self::findAllLegacy($idShop, $langId)
             );
-            EverblockCache::cacheStore($cacheId, $shortcodes);
+            EverblocklightCache::cacheStore($cacheId, $shortcodes);
 
             return $shortcodes;
         }
 
-        return (array) EverblockCache::cacheRetrieve($cacheId);
+        return (array) EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     public static function getAllShortcodeIds(int $idShop): array
     {
-        $cacheId = 'EverblockShortcode_getAllShortcodeIds_' . $idShop;
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        $cacheId = 'EverblocklightShortcode_getAllShortcodeIds_' . $idShop;
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $ids = (array) \Db::getInstance()->executeS(
-                'SELECT id_everblock_shortcode
-                FROM `' . _DB_PREFIX_ . 'everblock_shortcode`
+                'SELECT id_everblocklight_shortcode
+                FROM `' . _DB_PREFIX_ . 'everblocklight_shortcode`
                 WHERE id_shop = ' . (int) $idShop
             );
-            EverblockCache::cacheStore($cacheId, $ids);
+            EverblocklightCache::cacheStore($cacheId, $ids);
 
             return $ids;
         }
 
-        return (array) EverblockCache::cacheRetrieve($cacheId);
+        return (array) EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     public static function getEverShortcode(string $shortcode, int $shopId, int $langId): string
     {
-        $cacheId = 'EverblockShortcode_getEverShortcode_' . trim($shortcode) . '_' . $shopId . '_' . $langId;
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        $cacheId = 'EverblocklightShortcode_getEverShortcode_' . trim($shortcode) . '_' . $shopId . '_' . $langId;
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $content = (string) \Db::getInstance()->getValue(
                 'SELECT sl.content
-                FROM `' . _DB_PREFIX_ . 'everblock_shortcode` s
-                INNER JOIN `' . _DB_PREFIX_ . 'everblock_shortcode_lang` sl
-                    ON s.id_everblock_shortcode = sl.id_everblock_shortcode
+                FROM `' . _DB_PREFIX_ . 'everblocklight_shortcode` s
+                INNER JOIN `' . _DB_PREFIX_ . 'everblocklight_shortcode_lang` sl
+                    ON s.id_everblocklight_shortcode = sl.id_everblocklight_shortcode
                 WHERE s.shortcode = "' . pSQL($shortcode) . '"
                   AND s.id_shop = ' . (int) $shopId . '
                   AND sl.id_lang = ' . (int) $langId
             );
-            EverblockCache::cacheStore($cacheId, $content);
+            EverblocklightCache::cacheStore($cacheId, $content);
 
             return $content;
         }
 
-        return (string) EverblockCache::cacheRetrieve($cacheId);
+        return (string) EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     private static function findAllLegacy(int $idShop, int $langId): array
     {
         return (array) \Db::getInstance()->executeS(
             'SELECT s.*, sl.title, sl.content, sl.id_lang
-            FROM `' . _DB_PREFIX_ . 'everblock_shortcode` s
-            INNER JOIN `' . _DB_PREFIX_ . 'everblock_shortcode_lang` sl
-                ON s.id_everblock_shortcode = sl.id_everblock_shortcode
+            FROM `' . _DB_PREFIX_ . 'everblocklight_shortcode` s
+            INNER JOIN `' . _DB_PREFIX_ . 'everblocklight_shortcode_lang` sl
+                ON s.id_everblocklight_shortcode = sl.id_everblocklight_shortcode
                AND sl.id_lang = ' . (int) $langId . '
             WHERE s.id_shop = ' . (int) $idShop . '
             ORDER BY s.shortcode ASC'

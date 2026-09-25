@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Handler;
+namespace Everblocklight\Tools\Handler;
 
-use Everblock\Tools\Entity\Block;
-use Everblock\Tools\Entity\Shortcode;
-use Everblock\Tools\Query\GetAdminItemQuery;
-use Everblock\Tools\Repository\BlockRepository;
-use Everblock\Tools\Repository\HookRepository;
-use Everblock\Tools\Repository\ShortcodeRepository;
+use Everblocklight\Tools\Entity\Block;
+use Everblocklight\Tools\Entity\Shortcode;
+use Everblocklight\Tools\Query\GetAdminItemQuery;
+use Everblocklight\Tools\Repository\BlockRepository;
+use Everblocklight\Tools\Repository\HookRepository;
+use Everblocklight\Tools\Repository\ShortcodeRepository;
 
 final class GetAdminItemHandler
 {

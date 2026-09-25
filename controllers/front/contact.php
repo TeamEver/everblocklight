@@ -22,7 +22,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class EverblockcontactModuleFrontController extends ModuleFrontController
+class EverblocklightcontactModuleFrontController extends ModuleFrontController
 {
     public function initContent()
     {
@@ -45,7 +45,7 @@ class EverblockcontactModuleFrontController extends ModuleFrontController
 
         // Si vide ou si erreurs.
         if (sizeof($this->context->controller->errors)) {
-            return $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblock/views/templates/front/error.tpl');
+            return $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblocklight/views/templates/front/error.tpl');
         }
 
         // Hook avant traitement.
@@ -53,7 +53,7 @@ class EverblockcontactModuleFrontController extends ModuleFrontController
 
         // Si erreurs existantes.
         if (empty($formData) || sizeof($this->context->controller->errors)) {
-            $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblock/views/templates/front/error.tpl');
+            $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblocklight/views/templates/front/error.tpl');
             return $this->terminateWithResponse($response);
         }
 
@@ -80,7 +80,7 @@ class EverblockcontactModuleFrontController extends ModuleFrontController
 
         // Si le contenu est vide, pas de message a envoyer.
         if (trim(strip_tags($messageContent)) === '') {
-            return $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblock/views/templates/front/error.tpl');
+            return $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblocklight/views/templates/front/error.tpl');
         }
 
         // Infos client.
@@ -90,9 +90,9 @@ class EverblockcontactModuleFrontController extends ModuleFrontController
 
         // Pieces jointes.
         $attachments = [];
-        $maxFileSize = (int) Configuration::get('EVERBLOCK_CONTACT_MAX_UPLOAD_SIZE');
-        $allowedExtensions = $this->getConfigurationList('EVERBLOCK_CONTACT_ALLOWED_EXTENSIONS');
-        $allowedMimeTypes = $this->getConfigurationList('EVERBLOCK_CONTACT_ALLOWED_MIME_TYPES', false);
+        $maxFileSize = (int) Configuration::get('EVERBLOCKLIGHT_CONTACT_MAX_UPLOAD_SIZE');
+        $allowedExtensions = $this->getConfigurationList('EVERBLOCKLIGHT_CONTACT_ALLOWED_EXTENSIONS');
+        $allowedMimeTypes = $this->getConfigurationList('EVERBLOCKLIGHT_CONTACT_ALLOWED_MIME_TYPES', false);
         $uploadError = false;
 
         foreach ($_FILES as $fileKey => $fileData) {
@@ -110,7 +110,7 @@ class EverblockcontactModuleFrontController extends ModuleFrontController
                 $this->context->controller->errors[] = $this->translate('The uploaded file exceeds the allowed size.');
                 PrestaShopLogger::addLog(
                     sprintf(
-                        'Everblock contact: rejected "%s" because it exceeds the size limit (%d bytes > %d bytes).',
+                        'Everblocklight contact: rejected "%s" because it exceeds the size limit (%d bytes > %d bytes).',
                         $fileData['name'],
                         $fileSize,
                         $maxFileSize
@@ -126,7 +126,7 @@ class EverblockcontactModuleFrontController extends ModuleFrontController
                 $this->context->controller->errors[] = $this->translate('The uploaded file type is not allowed.');
                 PrestaShopLogger::addLog(
                     sprintf(
-                        'Everblock contact: rejected "%s" because the extension "%s" is not allowed.',
+                        'Everblocklight contact: rejected "%s" because the extension "%s" is not allowed.',
                         $fileData['name'],
                         $extension ?: 'none'
                     ),
@@ -146,7 +146,7 @@ class EverblockcontactModuleFrontController extends ModuleFrontController
                 $this->context->controller->errors[] = $this->translate('The uploaded file type is not allowed.');
                 PrestaShopLogger::addLog(
                     sprintf(
-                        'Everblock contact: rejected "%s" because the MIME type "%s" is not allowed.',
+                        'Everblocklight contact: rejected "%s" because the MIME type "%s" is not allowed.',
                         $fileData['name'],
                         $mime ?: 'unknown'
                     ),
@@ -163,7 +163,7 @@ class EverblockcontactModuleFrontController extends ModuleFrontController
         }
 
         if ($uploadError) {
-            $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblock/views/templates/front/error.tpl');
+            $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblocklight/views/templates/front/error.tpl');
             return $this->terminateWithResponse($response);
         }
 
@@ -251,7 +251,7 @@ class EverblockcontactModuleFrontController extends ModuleFrontController
             $template = 'error.tpl';
         }
 
-        return $this->terminateWithResponse($this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblock/views/templates/front/' . $template));
+        return $this->terminateWithResponse($this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblocklight/views/templates/front/' . $template));
     }
 
     protected function getConfigurationList($key, $lowercase = true)
@@ -310,6 +310,6 @@ class EverblockcontactModuleFrontController extends ModuleFrontController
 
     protected function translate(string $message, array $parameters = []): string
     {
-        return $this->context->getTranslator()->trans($message, $parameters, 'Modules.Everblock.Contact');
+        return $this->context->getTranslator()->trans($message, $parameters, 'Modules.Everblocklight.Contact');
     }
 }

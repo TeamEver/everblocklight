@@ -21,7 +21,7 @@
         <div class="modal-content text-center">
             <div class="modal-body text-center">
                 <div class="alert alert-warning">
-                    <p>{l s='An error has occurred, please try later' d='Modules.Everblock.Front'}</p>
+                    <p>{l s='An error has occurred, please try later' d='Modules.Everblocklight.Front'}</p>
                 </div>
             </div>
         </div>

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Form;
+namespace Everblocklight\Tools\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class EverblockConfigurationType extends AbstractType
+final class EverblocklightConfigurationType extends AbstractType
 {
     public static function tabs(bool $hasStores): array
     {
@@ -37,60 +37,60 @@ final class EverblockConfigurationType extends AbstractType
     {
         $fieldTabs = [
             'settings' => [
-                'EVEROPTIONS_POSITION',
-                'EVERBLOCK_LOAD_FRONT_CSS',
-                'EVERBLOCK_USE_OBF',
-                'EVERBLOCK_TINYMCE',
-                'EVERPSCSS_P_LLOREM_NUMBER',
-                'EVERPSCSS_S_LLOREM_NUMBER',
+                'EVERBLOCKLIGHT_OPTIONS_POSITION',
+                'EVERBLOCKLIGHT_LOAD_FRONT_CSS',
+                'EVERBLOCKLIGHT_USE_OBF',
+                'EVERBLOCKLIGHT_TINYMCE',
+                'EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER',
+                'EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER',
             ],
             'meta_tools' => [
-                'EVERINSTA_ACCESS_TOKEN',
+                'EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN',
             ],
             'wordpress_tools' => [
-                'EVERWP_API_URL',
-                'EVERWP_BLOG_URL',
-                'EVERWP_POST_NBR',
-                'EVERWP_POSTS_BG_IMAGE',
+                'EVERBLOCKLIGHT_WP_API_URL',
+                'EVERBLOCKLIGHT_WP_BLOG_URL',
+                'EVERBLOCKLIGHT_WP_POST_NBR',
+                'EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE',
             ],
             'google_maps' => [
-                'EVERBLOCK_GOOGLE_API_KEY',
-                'EVERBLOCK_GOOGLE_PLACE_ID',
-                'EVERBLOCK_GOOGLE_REVIEWS_LIMIT',
-                'EVERBLOCK_GOOGLE_REVIEWS_MIN_RATING',
-                'EVERBLOCK_GOOGLE_REVIEWS_SORT',
-                'EVERBLOCK_GOOGLE_REVIEWS_SHOW_RATING',
-                'EVERBLOCK_GOOGLE_REVIEWS_SHOW_AVATAR',
-                'EVERBLOCK_GOOGLE_REVIEWS_SHOW_CTA',
-                'EVERBLOCK_GOOGLE_REVIEWS_CTA_LABEL',
-                'EVERBLOCK_GOOGLE_REVIEWS_CTA_URL',
-                'EVERBLOCK_GMAP_KEY',
-                'EVERBLOCK_MARKER_ICON',
-                'EVERBLOCK_STORELOCATOR_TOGGLE',
+                'EVERBLOCKLIGHT_GOOGLE_API_KEY',
+                'EVERBLOCKLIGHT_GOOGLE_PLACE_ID',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_MIN_RATING',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SORT',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_RATING',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_AVATAR',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_CTA',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_LABEL',
+                'EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_URL',
+                'EVERBLOCKLIGHT_GMAP_KEY',
+                'EVERBLOCKLIGHT_MARKER_ICON',
+                'EVERBLOCKLIGHT_STORELOCATOR_TOGGLE',
             ],
             'tools' => [
-                'EVERPSCSS',
-                'EVERPSJS',
-                'EVERPSCSS_LINKS',
-                'EVERPSJS_LINKS',
-                'EVERPS_HEADER_SCRIPTS',
+                'EVERBLOCKLIGHT_CSS',
+                'EVERBLOCKLIGHT_JS',
+                'EVERBLOCKLIGHT_CSS_LINKS',
+                'EVERBLOCKLIGHT_JS_LINKS',
+                'EVERBLOCKLIGHT_HEADER_SCRIPTS',
             ],
             'holiday' => [],
             'cron' => [],
         ];
 
         foreach ($languages as $language) {
-            array_unshift($fieldTabs['settings'], 'EVEROPTIONS_TITLE_' . (int) $language['id_lang']);
+            array_unshift($fieldTabs['settings'], 'EVERBLOCKLIGHT_OPTIONS_TITLE_' . (int) $language['id_lang']);
         }
 
         if ($hasInstagramToken) {
-            $fieldTabs['meta_tools'][] = 'EVERINSTA_LINK';
-            $fieldTabs['meta_tools'][] = 'EVERINSTA_SHOW_CAPTION';
+            $fieldTabs['meta_tools'][] = 'EVERBLOCKLIGHT_INSTA_LINK';
+            $fieldTabs['meta_tools'][] = 'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION';
         }
 
         foreach ($stores as $store) {
             foreach ($holidays as $date) {
-                $fieldTabs['holiday'][] = 'EVERBLOCK_HOLIDAY_HOURS_' . (int) $store['id_store'] . '_' . $date;
+                $fieldTabs['holiday'][] = 'EVERBLOCKLIGHT_HOLIDAY_HOURS_' . (int) $store['id_store'] . '_' . $date;
             }
         }
 
@@ -101,7 +101,7 @@ final class EverblockConfigurationType extends AbstractType
     {
         return [
             'tools' => [
-                ['name' => 'submitEmptyCache', 'title' => 'Empty Everblock cache', 'icon' => 'cached'],
+                ['name' => 'submitEmptyCache', 'title' => 'Empty Everblocklight cache', 'icon' => 'cached'],
             ],
         ];
     }
@@ -115,7 +115,7 @@ final class EverblockConfigurationType extends AbstractType
             'google_maps' => 'Configure Google Places reviews, Google Maps keys and store locator marker options.',
             'tools' => 'Custom CSS / JS assets and cache cleanup.',
             'holiday' => 'Override holiday opening hours per store.',
-            'cron' => 'Use these secure URLs to run Everblock maintenance tasks from cron.',
+            'cron' => 'Use these secure URLs to run Everblocklight maintenance tasks from cron.',
         ];
     }
 
@@ -124,7 +124,7 @@ final class EverblockConfigurationType extends AbstractType
         foreach ($options['languages'] as $language) {
             $langId = (int) $language['id_lang'];
             $label = (string) ($language['iso_code'] ?? $langId);
-            $builder->add('EVEROPTIONS_TITLE_' . $langId, TextType::class, [
+            $builder->add('EVERBLOCKLIGHT_OPTIONS_TITLE_' . $langId, TextType::class, [
                 'label' => 'New order step title (' . $label . ')',
                 'required' => false,
                 'help' => 'If not set, new order step will not be shown.',
@@ -132,7 +132,7 @@ final class EverblockConfigurationType extends AbstractType
         }
 
         $builder
-            ->add('EVEROPTIONS_POSITION', ChoiceType::class, [
+            ->add('EVERBLOCKLIGHT_OPTIONS_POSITION', ChoiceType::class, [
                 'label' => 'New order step position',
                 'choices' => [
                     'After login' => 1,
@@ -141,76 +141,76 @@ final class EverblockConfigurationType extends AbstractType
                 ],
                 'required' => false,
                 'attr' => [
-                    'class' => 'everblock-enhanced-select',
-                    'data-everblock-placeholder' => 'Search position',
+                    'class' => 'everblocklight-enhanced-select',
+                    'data-everblocklight-placeholder' => 'Search position',
                 ],
             ]);
 
-        $this->addSwitch($builder, 'EVERBLOCK_LOAD_FRONT_CSS', 'Load everblock.css on the front office ?');
-        $this->addSwitch($builder, 'EVERBLOCK_USE_OBF', 'Enable front-office script for obfuscation ?');
-        $this->addSwitch($builder, 'EVERBLOCK_TINYMCE', 'Extends TinyMCE on blocks management ?');
+        $this->addSwitch($builder, 'EVERBLOCKLIGHT_LOAD_FRONT_CSS', 'Load everblocklight.css on the front office ?');
+        $this->addSwitch($builder, 'EVERBLOCKLIGHT_USE_OBF', 'Enable front-office script for obfuscation ?');
+        $this->addSwitch($builder, 'EVERBLOCKLIGHT_TINYMCE', 'Extends TinyMCE on blocks management ?');
 
         $builder
-            ->add('EVERPSCSS_P_LLOREM_NUMBER', TextType::class, [
+            ->add('EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER', TextType::class, [
                 'label' => 'Default number of paragraphs when [llorem] shortcode is detected',
                 'required' => false,
             ])
-            ->add('EVERPSCSS_S_LLOREM_NUMBER', TextType::class, [
+            ->add('EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER', TextType::class, [
                 'label' => 'Default number of sentences per paragraphs when [llorem] shortcode is detected',
                 'required' => false,
             ])
-            ->add('EVERINSTA_ACCESS_TOKEN', TextType::class, [
+            ->add('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN', TextType::class, [
                 'label' => 'Instagram access token',
                 'required' => false,
             ]);
 
         if ($options['has_instagram_token']) {
             $builder
-                ->add('EVERINSTA_LINK', TextType::class, [
+                ->add('EVERBLOCKLIGHT_INSTA_LINK', TextType::class, [
                     'label' => 'Instagram profile link',
                     'required' => false,
                 ]);
-            $this->addSwitch($builder, 'EVERINSTA_SHOW_CAPTION', 'Display Instagram post text');
+            $this->addSwitch($builder, 'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION', 'Display Instagram post text');
         }
 
         $builder
-            ->add('EVERWP_API_URL', TextType::class, [
+            ->add('EVERBLOCKLIGHT_WP_API_URL', TextType::class, [
                 'label' => 'WordPress API URL',
                 'required' => false,
                 'help' => 'Example: https://example.com/wp-json/wp/v2/posts',
             ])
-            ->add('EVERWP_BLOG_URL', TextType::class, [
+            ->add('EVERBLOCKLIGHT_WP_BLOG_URL', TextType::class, [
                 'label' => 'Blog URL',
                 'required' => false,
                 'help' => 'Use an absolute URL or a relative path such as /blog.',
             ])
-            ->add('EVERWP_POST_NBR', TextType::class, [
+            ->add('EVERBLOCKLIGHT_WP_POST_NBR', TextType::class, [
                 'label' => 'Number of blog posts to display',
                 'required' => false,
             ])
-            ->add('EVERWP_POSTS_BG_IMAGE', FileType::class, [
+            ->add('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE', FileType::class, [
                 'label' => 'Background image for WordPress posts',
                 'required' => false,
                 'mapped' => false,
                 'help' => 'Optional background image for the latest WordPress posts section.',
             ])
-            ->add('EVERBLOCK_GOOGLE_API_KEY', TextType::class, [
+            ->add('EVERBLOCKLIGHT_GOOGLE_API_KEY', TextType::class, [
                 'label' => 'Google Places API key',
                 'required' => false,
             ])
-            ->add('EVERBLOCK_GOOGLE_PLACE_ID', TextType::class, [
+            ->add('EVERBLOCKLIGHT_GOOGLE_PLACE_ID', TextType::class, [
                 'label' => 'Google Place ID',
                 'required' => false,
             ])
-            ->add('EVERBLOCK_GOOGLE_REVIEWS_LIMIT', TextType::class, [
+            ->add('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT', TextType::class, [
                 'label' => 'Maximum number of reviews',
                 'required' => false,
             ])
-            ->add('EVERBLOCK_GOOGLE_REVIEWS_MIN_RATING', TextType::class, [
+            ->add('EVERBLOCKLIGHT_GOOGLE_REVIEWS_MIN_RATING', TextType::class, [
                 'label' => 'Minimum rating to display',
                 'required' => false,
             ])
-            ->add('EVERBLOCK_GOOGLE_REVIEWS_SORT', ChoiceType::class, [
+            ->add('EVERBLOCKLIGHT_GOOGLE_REVIEWS_SORT', ChoiceType::class, [
                 'label' => 'Reviews sort order',
                 'choices' => [
                     'Most relevant' => 'most_relevant',
@@ -218,62 +218,62 @@ final class EverblockConfigurationType extends AbstractType
                 ],
                 'required' => false,
                 'attr' => [
-                    'class' => 'everblock-enhanced-select',
-                    'data-everblock-placeholder' => 'Search sort order',
+                    'class' => 'everblocklight-enhanced-select',
+                    'data-everblocklight-placeholder' => 'Search sort order',
                 ],
             ]);
 
-        $this->addSwitch($builder, 'EVERBLOCK_GOOGLE_REVIEWS_SHOW_RATING', 'Show overall rating');
-        $this->addSwitch($builder, 'EVERBLOCK_GOOGLE_REVIEWS_SHOW_AVATAR', 'Show reviewer photos');
-        $this->addSwitch($builder, 'EVERBLOCK_GOOGLE_REVIEWS_SHOW_CTA', 'Show call-to-action button');
+        $this->addSwitch($builder, 'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_RATING', 'Show overall rating');
+        $this->addSwitch($builder, 'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_AVATAR', 'Show reviewer photos');
+        $this->addSwitch($builder, 'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_CTA', 'Show call-to-action button');
 
         $builder
-            ->add('EVERBLOCK_GOOGLE_REVIEWS_CTA_LABEL', TextType::class, [
+            ->add('EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_LABEL', TextType::class, [
                 'label' => 'CTA label',
                 'required' => false,
             ])
-            ->add('EVERBLOCK_GOOGLE_REVIEWS_CTA_URL', TextType::class, [
+            ->add('EVERBLOCKLIGHT_GOOGLE_REVIEWS_CTA_URL', TextType::class, [
                 'label' => 'CTA link override',
                 'required' => false,
                 'help' => 'Leave empty to use the Google listing URL.',
             ])
-            ->add('EVERBLOCK_GMAP_KEY', TextType::class, [
+            ->add('EVERBLOCKLIGHT_GMAP_KEY', TextType::class, [
                 'label' => 'Google Map API key (CMS page only)',
                 'required' => false,
             ])
-            ->add('EVERBLOCK_MARKER_ICON', FileType::class, [
+            ->add('EVERBLOCKLIGHT_MARKER_ICON', FileType::class, [
                 'label' => 'Store locator marker icon',
                 'required' => false,
                 'mapped' => false,
                 'help' => 'Only SVG files are allowed.',
             ]);
 
-        $this->addSwitch($builder, 'EVERBLOCK_STORELOCATOR_TOGGLE', 'Display map toggle button');
+        $this->addSwitch($builder, 'EVERBLOCKLIGHT_STORELOCATOR_TOGGLE', 'Display map toggle button');
 
         $builder
-            ->add('EVERPSCSS', TextareaType::class, [
+            ->add('EVERBLOCKLIGHT_CSS', TextareaType::class, [
                 'label' => 'Code CSS personnalisé',
                 'required' => false,
-                'attr' => ['rows' => 10, 'class' => 'everblock-code'],
+                'attr' => ['rows' => 10, 'class' => 'everblocklight-code'],
             ])
-            ->add('EVERPSJS', TextareaType::class, [
+            ->add('EVERBLOCKLIGHT_JS', TextareaType::class, [
                 'label' => 'Javascript / jQuery personnalisé',
                 'required' => false,
-                'attr' => ['rows' => 10, 'class' => 'everblock-code'],
+                'attr' => ['rows' => 10, 'class' => 'everblocklight-code'],
             ])
-            ->add('EVERPSCSS_LINKS', TextareaType::class, [
+            ->add('EVERBLOCKLIGHT_CSS_LINKS', TextareaType::class, [
                 'label' => 'Liens CSS personnalisés',
                 'required' => false,
                 'attr' => ['rows' => 5],
                 'help' => 'Add one link per line, must be CSS.',
             ])
-            ->add('EVERPSJS_LINKS', TextareaType::class, [
+            ->add('EVERBLOCKLIGHT_JS_LINKS', TextareaType::class, [
                 'label' => 'Liens javascript personnalisés',
                 'required' => false,
                 'attr' => ['rows' => 5],
                 'help' => 'Add one link per line, must be JS.',
             ])
-            ->add('EVERPS_HEADER_SCRIPTS', TextareaType::class, [
+            ->add('EVERBLOCKLIGHT_HEADER_SCRIPTS', TextareaType::class, [
                 'label' => 'Header scripts',
                 'required' => false,
                 'attr' => ['rows' => 7],
@@ -281,7 +281,7 @@ final class EverblockConfigurationType extends AbstractType
 
         foreach ($options['stores'] as $store) {
             foreach ($options['holidays'] as $date) {
-                $builder->add('EVERBLOCK_HOLIDAY_HOURS_' . (int) $store['id_store'] . '_' . $date, TextType::class, [
+                $builder->add('EVERBLOCKLIGHT_HOLIDAY_HOURS_' . (int) $store['id_store'] . '_' . $date, TextType::class, [
                     'label' => sprintf('Holiday hours for %s on %s', $store['name'], $date),
                     'required' => false,
                 ]);
@@ -298,7 +298,7 @@ final class EverblockConfigurationType extends AbstractType
             'holidays' => [],
             'languages' => [],
             'stores' => [],
-            'translation_domain' => 'Modules.Everblock.Admin',
+            'translation_domain' => 'Modules.Everblocklight.Admin',
         ]);
     }
 

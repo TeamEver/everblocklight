@@ -18,7 +18,7 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-namespace Everblock\Tools\Service;
+namespace Everblocklight\Tools\Service;
 
 use Context;
 use Module;
@@ -51,7 +51,7 @@ class ShortcodeDocumentationProvider
         }
 
         $translator = $context->getTranslator();
-        $domain = 'Modules.Everblock.Shortcodes';
+        $domain = 'Modules.Everblocklight.Shortcodes';
 
         $docs = [
             [
@@ -521,8 +521,8 @@ class ShortcodeDocumentationProvider
                 'title' => $translator->trans('Content & layout', [], $domain),
                 'entries' => [
                     [
-                        'code' => '[everblock 3]',
-                        'description' => $translator->trans('Inject the content of another Ever Block by its ID.', [], $domain),
+                        'code' => '[everblocklight 3]',
+                        'description' => $translator->trans('Inject the content of another Ever Block Light by its ID.', [], $domain),
                         'parameters' => [
                             [
                                 'name' => 'ID',
@@ -544,7 +544,7 @@ class ShortcodeDocumentationProvider
                     ],
                     [
                         'code' => '[evercms id="1"]',
-                        'description' => $translator->trans('Alias of the CMS shortcode, kept for shops using the historical Ever Block syntax.', [], $domain),
+                        'description' => $translator->trans('Alias of the CMS shortcode, kept for shops using the historical Ever Block Light syntax.', [], $domain),
                         'parameters' => [
                             [
                                 'name' => 'id',
@@ -829,7 +829,7 @@ class ShortcodeDocumentationProvider
                 'entries' => [
                     [
                         'code' => '[evercontactform_open]',
-                        'description' => $translator->trans('Open a custom contact form handled by Ever Block.', [], $domain),
+                        'description' => $translator->trans('Open a custom contact form handled by Ever Block Light.', [], $domain),
                         'parameters' => [],
                     ],
                     [

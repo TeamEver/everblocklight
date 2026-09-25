@@ -1,6 +1,6 @@
 <?php return array(
     'root' => array(
-        'name' => 'team-ever/everblock',
+        'name' => 'team-ever/everblocklight',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
         'reference' => '0c6354669b43d079a21e601668afa335e96106eb',
@@ -10,7 +10,7 @@
         'dev' => true,
     ),
     'versions' => array(
-        'team-ever/everblock' => array(
+        'team-ever/everblocklight' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
             'reference' => '0c6354669b43d079a21e601668afa335e96106eb',

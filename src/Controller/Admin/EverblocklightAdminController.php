@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Controller\Admin;
+namespace Everblocklight\Tools\Controller\Admin;
 
-use Everblock\Tools\Command\ClearEverblockCacheCommand;
-use Everblock\Tools\Command\DeleteAdminItemCommand;
-use Everblock\Tools\Command\SaveAdminItemCommand;
-use Everblock\Tools\Entity\Block;
-use Everblock\Tools\Form\BlockType;
-use Everblock\Tools\Form\EverblockConfigurationType;
-use Everblock\Tools\Form\HookType;
-use Everblock\Tools\Form\ShortcodeType;
-use Everblock\Tools\Query\GetAdminItemQuery;
-use Everblock\Tools\Query\ListAdminItemsQuery;
-use Everblock\Tools\Repository\BlockRepository;
-use Everblock\Tools\Repository\HookRepository;
-use Everblock\Tools\Service\AdminConfigurationManager;
-use Everblock\Tools\Service\ShortcodeDocumentationProvider;
+use Everblocklight\Tools\Command\ClearEverblocklightCacheCommand;
+use Everblocklight\Tools\Command\DeleteAdminItemCommand;
+use Everblocklight\Tools\Command\SaveAdminItemCommand;
+use Everblocklight\Tools\Entity\Block;
+use Everblocklight\Tools\Form\BlockType;
+use Everblocklight\Tools\Form\EverblocklightConfigurationType;
+use Everblocklight\Tools\Form\HookType;
+use Everblocklight\Tools\Form\ShortcodeType;
+use Everblocklight\Tools\Query\GetAdminItemQuery;
+use Everblocklight\Tools\Query\ListAdminItemsQuery;
+use Everblocklight\Tools\Repository\BlockRepository;
+use Everblocklight\Tools\Repository\HookRepository;
+use Everblocklight\Tools\Service\AdminConfigurationManager;
+use Everblocklight\Tools\Service\ShortcodeDocumentationProvider;
 use Language;
 use Module;
 use PrestaShop\PrestaShop\Core\CommandBus\CommandBusInterface;
@@ -29,17 +29,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class EverblockAdminController extends FrameworkBundleAdminController
+final class EverblocklightAdminController extends FrameworkBundleAdminController
 {
     private const SECTION_CONFIG = [
         'blocks' => [
             'title' => 'HTML Blocks',
             'form' => BlockType::class,
-            'route' => 'admin_everblock_blocks',
-            'legacy' => 'AdminEverBlock',
-            'id' => 'id_everblock',
+            'route' => 'admin_everblocklight_blocks',
+            'legacy' => 'AdminEverBlockLight',
+            'id' => 'id_everblocklight',
             'columns' => [
-                'id_everblock',
+                'id_everblocklight',
                 'name',
                 'hook_name',
                 'position',
@@ -55,7 +55,7 @@ final class EverblockAdminController extends FrameworkBundleAdminController
                 'active',
             ],
             'filter_columns' => [
-                'id_everblock',
+                'id_everblocklight',
                 'name',
                 'hook_name',
                 'position',
@@ -81,7 +81,7 @@ final class EverblockAdminController extends FrameworkBundleAdminController
                 'active',
             ],
             'column_labels' => [
-                'id_everblock' => 'ID',
+                'id_everblocklight' => 'ID',
                 'name' => 'Name',
                 'hook_name' => 'Hook',
                 'position' => 'Position',
@@ -100,8 +100,8 @@ final class EverblockAdminController extends FrameworkBundleAdminController
         'hooks' => [
             'title' => 'Hooks',
             'form' => HookType::class,
-            'route' => 'admin_everblock_hooks',
-            'legacy' => 'AdminEverBlockHook',
+            'route' => 'admin_everblocklight_hooks',
+            'legacy' => 'AdminEverBlockLightHook',
             'id' => 'id_hook',
             'columns' => ['id_hook', 'name', 'title', 'description', 'active'],
             'filter_columns' => ['id_hook', 'name', 'title', 'description', 'active'],
@@ -117,13 +117,13 @@ final class EverblockAdminController extends FrameworkBundleAdminController
         'shortcodes' => [
             'title' => 'Shortcodes',
             'form' => ShortcodeType::class,
-            'route' => 'admin_everblock_shortcodes',
-            'legacy' => 'AdminEverBlockShortcode',
-            'id' => 'id_everblock_shortcode',
-            'columns' => ['id_everblock_shortcode', 'shortcode', 'title', 'content'],
-            'filter_columns' => ['id_everblock_shortcode', 'shortcode', 'title', 'content'],
+            'route' => 'admin_everblocklight_shortcodes',
+            'legacy' => 'AdminEverBlockLightShortcode',
+            'id' => 'id_everblocklight_shortcode',
+            'columns' => ['id_everblocklight_shortcode', 'shortcode', 'title', 'content'],
+            'filter_columns' => ['id_everblocklight_shortcode', 'shortcode', 'title', 'content'],
             'column_labels' => [
-                'id_everblock_shortcode' => 'ID',
+                'id_everblocklight_shortcode' => 'ID',
                 'shortcode' => 'Shortcode',
                 'title' => 'Title',
                 'content' => 'Content',
@@ -146,8 +146,8 @@ final class EverblockAdminController extends FrameworkBundleAdminController
      */
     public function configurationAction(Request $request): Response
     {
-        /** @var \Everblock $module */
-        $module = Module::getInstanceByName('everblock');
+        /** @var \Everblocklight $module */
+        $module = Module::getInstanceByName('everblocklight');
         $viewContext = $this->adminConfigurationManager->getViewContext($module);
         $formOptions = [
             'has_instagram_token' => $viewContext['has_instagram_token'],
@@ -155,14 +155,14 @@ final class EverblockAdminController extends FrameworkBundleAdminController
             'languages' => $viewContext['languages'],
             'stores' => $viewContext['stores'],
         ];
-        $form = $this->formFactory->createNamed('', EverblockConfigurationType::class, $this->adminConfigurationManager->getFormData($module), $formOptions);
+        $form = $this->formFactory->createNamed('', EverblocklightConfigurationType::class, $this->adminConfigurationManager->getFormData($module), $formOptions);
         $form->handleRequest($request);
 
-        if ($request->isMethod('POST') || $request->query->has('deleteEVERBLOCK_MARKER_ICON') || $request->query->has('deleteEVERWP_POSTS_BG_IMAGE')) {
+        if ($request->isMethod('POST') || $request->query->has('deleteEVERBLOCKLIGHT_MARKER_ICON') || $request->query->has('deleteEVERBLOCKLIGHT_WP_POSTS_BG_IMAGE')) {
             if ($request->isMethod('POST') && (!$form->isSubmitted() || !$form->isValid())) {
                 $this->addFlash('error', $this->transAdmin('The configuration form could not be validated.'));
 
-                return $this->redirectToRoute('admin_everblock_configuration');
+                return $this->redirectToRoute('admin_everblocklight_configuration');
             }
 
             $result = $this->adminConfigurationManager->processRequest($module);
@@ -173,18 +173,18 @@ final class EverblockAdminController extends FrameworkBundleAdminController
                 $this->addFlash('success', $success);
             }
 
-            return $this->redirectToRoute('admin_everblock_configuration');
+            return $this->redirectToRoute('admin_everblocklight_configuration');
         }
 
-        return $this->render('@Modules/everblock/templates/admin/configuration.html.twig', [
-            'layoutTitle' => 'Ever Block',
-            'action_buttons' => EverblockConfigurationType::actionButtons(),
-            'configuration_docs' => EverblockConfigurationType::docs(),
+        return $this->render('@Modules/everblocklight/templates/admin/configuration.html.twig', [
+            'layoutTitle' => 'Ever Block Light',
+            'action_buttons' => EverblocklightConfigurationType::actionButtons(),
+            'configuration_docs' => EverblocklightConfigurationType::docs(),
             'configuration_form' => $form->createView(),
-            'configuration_tabs' => EverblockConfigurationType::tabs($viewContext['has_stores']),
+            'configuration_tabs' => EverblocklightConfigurationType::tabs($viewContext['has_stores']),
             'cron_links' => $viewContext['cron_links'],
             'current_images' => $viewContext['current_images'],
-            'field_tabs' => EverblockConfigurationType::fieldTabs(
+            'field_tabs' => EverblocklightConfigurationType::fieldTabs(
                 $viewContext['languages'],
                 $viewContext['stores'],
                 $viewContext['holidays'],
@@ -222,8 +222,8 @@ final class EverblockAdminController extends FrameworkBundleAdminController
             }
         }
 
-        return $this->render('@Modules/everblock/templates/admin/list.html.twig', [
-            'layoutTitle' => 'Ever Block - ' . $config['title'],
+        return $this->render('@Modules/everblocklight/templates/admin/list.html.twig', [
+            'layoutTitle' => 'Ever Block Light - ' . $config['title'],
             'section' => $section,
             'config' => $config,
             'filters' => $filters,
@@ -239,10 +239,10 @@ final class EverblockAdminController extends FrameworkBundleAdminController
      */
     public function shortcodeDocumentationAction(): Response
     {
-        $module = Module::getInstanceByName('everblock');
+        $module = Module::getInstanceByName('everblocklight');
 
-        return $this->render('@Modules/everblock/templates/admin/shortcode_documentation.html.twig', [
-            'layoutTitle' => 'Ever Block - Shortcode documentation',
+        return $this->render('@Modules/everblocklight/templates/admin/shortcode_documentation.html.twig', [
+            'layoutTitle' => 'Ever Block Light - Shortcode documentation',
             'section' => 'shortcode_documentation',
             'sections' => self::SECTION_CONFIG,
             'documentation' => ShortcodeDocumentationProvider::getDocumentation($module),
@@ -283,10 +283,10 @@ final class EverblockAdminController extends FrameworkBundleAdminController
      */
     public function clearCacheAction(Request $request): RedirectResponse
     {
-        $this->commandBus->handle(new ClearEverblockCacheCommand());
+        $this->commandBus->handle(new ClearEverblocklightCacheCommand());
         $this->addFlash('success', $this->transAdmin('Cache cleared successfully.'));
 
-        return $this->redirectToRoute((string) $request->query->get('redirect_route', 'admin_everblock_configuration'));
+        return $this->redirectToRoute((string) $request->query->get('redirect_route', 'admin_everblocklight_configuration'));
     }
 
     /**
@@ -298,14 +298,14 @@ final class EverblockAdminController extends FrameworkBundleAdminController
         if ($block === null) {
             $this->addFlash('error', $this->transAdmin('The requested block could not be found.'));
 
-            return $this->redirectToRoute('admin_everblock_blocks');
+            return $this->redirectToRoute('admin_everblocklight_blocks');
         }
 
         $this->blockRepository->setActive($id, $this->shopId(), !$block->active);
         $this->clearBlockCache($id, (int) $block->id_hook);
         $this->addFlash('success', $block->active ? $this->transAdmin('Block disabled successfully.') : $this->transAdmin('Block enabled successfully.'));
 
-        return $this->redirectToRoute('admin_everblock_blocks');
+        return $this->redirectToRoute('admin_everblocklight_blocks');
     }
 
     /**
@@ -317,14 +317,14 @@ final class EverblockAdminController extends FrameworkBundleAdminController
         if ($newId <= 0) {
             $this->addFlash('error', $this->transAdmin('The block could not be duplicated.'));
 
-            return $this->redirectToRoute('admin_everblock_blocks');
+            return $this->redirectToRoute('admin_everblocklight_blocks');
         }
 
         $duplicated = $this->blockRepository->find($newId, $this->shopId());
         $this->clearBlockCache($newId, $duplicated ? (int) $duplicated->id_hook : null);
         $this->addFlash('success', $this->transAdmin('Block duplicated successfully.'));
 
-        return $this->redirectToRoute('admin_everblock_blocks_edit', ['id' => $newId]);
+        return $this->redirectToRoute('admin_everblocklight_blocks_edit', ['id' => $newId]);
     }
 
     /**
@@ -336,7 +336,7 @@ final class EverblockAdminController extends FrameworkBundleAdminController
         if (empty($ids)) {
             $this->addFlash('error', $this->transAdmin('Please select at least one block.'));
 
-            return $this->redirectToRoute('admin_everblock_blocks');
+            return $this->redirectToRoute('admin_everblocklight_blocks');
         }
 
         $count = 0;
@@ -370,7 +370,7 @@ final class EverblockAdminController extends FrameworkBundleAdminController
 
         $this->addFlash('success', $this->transAdmin('%count% block(s) processed successfully.', ['%count%' => $count]));
 
-        return $this->redirectToRoute('admin_everblock_blocks');
+        return $this->redirectToRoute('admin_everblocklight_blocks');
     }
 
     private function handleForm(Request $request, string $section, ?int $id): Response
@@ -403,8 +403,8 @@ final class EverblockAdminController extends FrameworkBundleAdminController
             return $this->redirectToRoute($config['route']);
         }
 
-        return $this->render('@Modules/everblock/templates/admin/form.html.twig', [
-            'layoutTitle' => 'Ever Block - ' . $config['title'],
+        return $this->render('@Modules/everblocklight/templates/admin/form.html.twig', [
+            'layoutTitle' => 'Ever Block Light - ' . $config['title'],
             'section' => $section,
             'config' => $config,
             'sections' => self::SECTION_CONFIG,
@@ -413,7 +413,7 @@ final class EverblockAdminController extends FrameworkBundleAdminController
             'field_tabs' => $section === 'blocks' ? BlockType::fieldTabs(Language::getLanguages(false)) : [],
             'field_descriptions' => $section === 'blocks' ? BlockType::fieldDescriptions(Language::getLanguages(false)) : [],
             'tab_help' => $section === 'blocks' ? BlockType::tabHelp() : [],
-            'tinymce_enabled' => in_array($section, ['blocks', 'shortcodes'], true) && (bool) \Configuration::get('EVERBLOCK_TINYMCE'),
+            'tinymce_enabled' => in_array($section, ['blocks', 'shortcodes'], true) && (bool) \Configuration::get('EVERBLOCKLIGHT_TINYMCE'),
             'id' => $id,
             'preview_url' => ($section === 'blocks' && $id !== null && $id > 0) ? $this->buildPreviewUrl((int) $id) : null,
         ]);
@@ -431,13 +431,13 @@ final class EverblockAdminController extends FrameworkBundleAdminController
         }
 
         $params = [
-            'id_everblock' => $blockId,
+            'id_everblocklight' => $blockId,
             'id_lang' => $this->languageId(),
             'id_shop' => $this->shopId(),
-            'token' => \Tools::getAdminTokenLite('AdminEverBlock'),
+            'token' => \Tools::getAdminTokenLite('AdminEverBlockLight'),
         ];
 
-        return (string) $context->link->getModuleLink('everblock', 'preview', $params);
+        return (string) $context->link->getModuleLink('everblocklight', 'preview', $params);
     }
 
     private function formOptions(string $section): array
@@ -607,13 +607,13 @@ final class EverblockAdminController extends FrameworkBundleAdminController
 
     private function transAdmin(string $message, array $parameters = []): string
     {
-        return $this->translator->trans($message, $parameters, 'Modules.Everblock.Admin');
+        return $this->translator->trans($message, $parameters, 'Modules.Everblocklight.Admin');
     }
 
     private function config(string $section): array
     {
         if (!isset(self::SECTION_CONFIG[$section])) {
-            throw $this->createNotFoundException(sprintf('Unknown Everblock admin section "%s".', $section));
+            throw $this->createNotFoundException(sprintf('Unknown Everblocklight admin section "%s".', $section));
         }
 
         return self::SECTION_CONFIG[$section];

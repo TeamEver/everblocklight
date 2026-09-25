@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Repository;
+namespace Everblocklight\Tools\Repository;
 
-use Everblock\Tools\Entity\Block;
+use Everblocklight\Tools\Entity\Block;
 
-final class BlockRepository extends AbstractEverblockRepository
+final class BlockRepository extends AbstractEverblocklightRepository
 {
     public function list(int $shopId, int $langId): array
     {
         return $this->connection->fetchAllAssociative(
             'SELECT b.*, bl.content, bl.custom_code, h.title AS hook_name
-            FROM ' . $this->table('everblock') . ' b
-            LEFT JOIN ' . $this->table('everblock_lang') . ' bl ON b.id_everblock = bl.id_everblock AND bl.id_lang = :langId
+            FROM ' . $this->table('everblocklight') . ' b
+            LEFT JOIN ' . $this->table('everblocklight_lang') . ' bl ON b.id_everblocklight = bl.id_everblocklight AND bl.id_lang = :langId
             LEFT JOIN ' . $this->table('hook') . ' h ON h.id_hook = b.id_hook
             WHERE b.id_shop = :shopId
-            ORDER BY h.title ASC, b.position ASC, b.id_everblock ASC',
+            ORDER BY h.title ASC, b.position ASC, b.id_everblocklight ASC',
             ['shopId' => $shopId, 'langId' => $langId]
         );
     }
 
     public function find(int $id, ?int $shopId = null, ?int $langId = null): ?Block
     {
-        $where = 'id_everblock = :id';
+        $where = 'id_everblocklight = :id';
         $params = ['id' => $id];
         if ($shopId !== null && $shopId > 0) {
             $where .= ' AND id_shop = :shopId';
@@ -31,14 +31,14 @@ final class BlockRepository extends AbstractEverblockRepository
         }
 
         $row = $this->connection->fetchAssociative(
-            'SELECT * FROM ' . $this->table('everblock') . ' WHERE ' . $where,
+            'SELECT * FROM ' . $this->table('everblocklight') . ' WHERE ' . $where,
             $params
         );
         if (!$row) {
             return null;
         }
 
-        $langRows = $this->langRows('everblock_lang', 'id_everblock', $id);
+        $langRows = $this->langRows('everblocklight_lang', 'id_everblocklight', $id);
         if ($langId !== null && $langId > 0) {
             $langRows = array_values(array_filter($langRows, static fn (array $row): bool => (int) $row['id_lang'] === $langId));
         }
@@ -52,11 +52,11 @@ final class BlockRepository extends AbstractEverblockRepository
             'SELECT b.*,
                 COALESCE(NULLIF(bl.content, \'\'), NULLIF(bld.content, \'\'), \'\') AS content,
                 COALESCE(NULLIF(bl.custom_code, \'\'), NULLIF(bld.custom_code, \'\'), \'\') AS custom_code
-            FROM ' . $this->table('everblock') . ' b
-            LEFT JOIN ' . $this->table('everblock_lang') . ' bl
-                ON b.id_everblock = bl.id_everblock AND bl.id_lang = :langId
-            LEFT JOIN ' . $this->table('everblock_lang') . ' bld
-                ON b.id_everblock = bld.id_everblock AND bld.id_lang = :langIdDefault
+            FROM ' . $this->table('everblocklight') . ' b
+            LEFT JOIN ' . $this->table('everblocklight_lang') . ' bl
+                ON b.id_everblocklight = bl.id_everblocklight AND bl.id_lang = :langId
+            LEFT JOIN ' . $this->table('everblocklight_lang') . ' bld
+                ON b.id_everblocklight = bld.id_everblocklight AND bld.id_lang = :langIdDefault
             WHERE b.id_shop = :shopId
             ORDER BY b.position ASC',
             [
@@ -73,11 +73,11 @@ final class BlockRepository extends AbstractEverblockRepository
             'SELECT b.*,
                 COALESCE(NULLIF(bl.content, \'\'), NULLIF(bld.content, \'\'), \'\') AS content,
                 COALESCE(NULLIF(bl.custom_code, \'\'), NULLIF(bld.custom_code, \'\'), \'\') AS custom_code
-            FROM ' . $this->table('everblock') . ' b
-            LEFT JOIN ' . $this->table('everblock_lang') . ' bl
-                ON b.id_everblock = bl.id_everblock AND bl.id_lang = :langId
-            LEFT JOIN ' . $this->table('everblock_lang') . ' bld
-                ON b.id_everblock = bld.id_everblock AND bld.id_lang = :langIdDefault
+            FROM ' . $this->table('everblocklight') . ' b
+            LEFT JOIN ' . $this->table('everblocklight_lang') . ' bl
+                ON b.id_everblocklight = bl.id_everblocklight AND bl.id_lang = :langId
+            LEFT JOIN ' . $this->table('everblocklight_lang') . ' bld
+                ON b.id_everblocklight = bld.id_everblocklight AND bld.id_lang = :langIdDefault
             WHERE b.id_hook = :hookId
               AND b.id_shop = :shopId
               AND b.active = 1
@@ -128,17 +128,17 @@ final class BlockRepository extends AbstractEverblockRepository
         $this->connection->beginTransaction();
         try {
             if ($block->id) {
-                $this->connection->update($this->databasePrefix . 'everblock', $data, [
-                    'id_everblock' => $block->id,
+                $this->connection->update($this->databasePrefix . 'everblocklight', $data, [
+                    'id_everblocklight' => $block->id,
                     'id_shop' => $block->id_shop,
                 ]);
                 $id = (int) $block->id;
             } else {
-                $this->connection->insert($this->databasePrefix . 'everblock', $data);
+                $this->connection->insert($this->databasePrefix . 'everblocklight', $data);
                 $id = (int) $this->connection->lastInsertId();
             }
 
-            $this->upsertLangRows('everblock_lang', 'id_everblock', $id, $languages, [
+            $this->upsertLangRows('everblocklight_lang', 'id_everblocklight', $id, $languages, [
                 'content' => $block->content,
                 'custom_code' => $block->custom_code,
             ]);
@@ -154,10 +154,10 @@ final class BlockRepository extends AbstractEverblockRepository
 
     public function setActive(int $id, int $shopId, bool $active): bool
     {
-        return $this->connection->update($this->databasePrefix . 'everblock', [
+        return $this->connection->update($this->databasePrefix . 'everblocklight', [
             'active' => $active ? 1 : 0,
         ], [
-            'id_everblock' => $id,
+            'id_everblocklight' => $id,
             'id_shop' => $shopId,
         ]) > 0;
     }
@@ -170,7 +170,7 @@ final class BlockRepository extends AbstractEverblockRepository
         }
 
         $block->id = null;
-        $block->id_everblock = null;
+        $block->id_everblocklight = null;
         $block->name = trim($block->name . ' (copy)');
         $block->position = $this->getNextPosition($shopId, (int) $block->id_hook);
 
@@ -181,7 +181,7 @@ final class BlockRepository extends AbstractEverblockRepository
     {
         return (int) $this->connection->fetchOne(
             'SELECT COALESCE(MAX(position), 0) + 1
-            FROM ' . $this->table('everblock') . '
+            FROM ' . $this->table('everblocklight') . '
             WHERE id_shop = :shopId AND id_hook = :hookId',
             ['shopId' => $shopId, 'hookId' => $hookId]
         );
@@ -191,9 +191,9 @@ final class BlockRepository extends AbstractEverblockRepository
     {
         $this->connection->beginTransaction();
         try {
-            $this->connection->delete($this->databasePrefix . 'everblock_lang', ['id_everblock' => $id]);
-            $deleted = $this->connection->delete($this->databasePrefix . 'everblock', [
-                'id_everblock' => $id,
+            $this->connection->delete($this->databasePrefix . 'everblocklight_lang', ['id_everblocklight' => $id]);
+            $deleted = $this->connection->delete($this->databasePrefix . 'everblocklight', [
+                'id_everblocklight' => $id,
                 'id_shop' => $shopId,
             ]);
             $this->connection->commit();

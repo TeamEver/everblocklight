@@ -1,6 +1,6 @@
 {
-  "name": "team-ever/everblock",
-  "description": "Ever Block",
+  "name": "team-ever/everblocklight",
+  "description": "Ever Block Light",
   "type": "prestashop-module",
   "authors": [
     {
@@ -10,7 +10,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Everblock\\Tools\\": "src/"
+      "Everblocklight\\Tools\\": "src/"
     },
     "exclude-from-classmap": []
   },

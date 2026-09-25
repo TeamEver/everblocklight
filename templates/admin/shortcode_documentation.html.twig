@@ -1,25 +1,25 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
 
 {% block content %}
-  {% include '@Modules/everblock/templates/admin/_nav.html.twig' with {section: section, sections: sections, config: {route: 'admin_everblock_shortcodes_documentation'}} %}
+  {% include '@Modules/everblocklight/templates/admin/_nav.html.twig' with {section: section, sections: sections, config: {route: 'admin_everblocklight_shortcodes_documentation'}} %}
 
-  <div class="everblock-shortcode-docs">
-    <div class="everblock-bo-page-head everblock-shortcode-docs__head">
+  <div class="everblocklight-shortcode-docs">
+    <div class="everblocklight-bo-page-head everblocklight-shortcode-docs__head">
       <div>
-        <p class="everblock-bo-kicker">{{ 'Documentation'|trans({}, 'Modules.Everblock.Admin') }}</p>
-        <h2 class="everblock-bo-title">{{ 'Shortcode documentation'|trans({}, 'Modules.Everblock.Admin') }}</h2>
-        <p class="everblock-bo-description mb-0">
-          {{ 'Copy these examples into an Ever Block, a CMS page or any content rendered by the module. Each card explains what the shortcode outputs and lists every accepted parameter.'|trans({}, 'Modules.Everblock.Admin') }}
+        <p class="everblocklight-bo-kicker">{{ 'Documentation'|trans({}, 'Modules.Everblocklight.Admin') }}</p>
+        <h2 class="everblocklight-bo-title">{{ 'Shortcode documentation'|trans({}, 'Modules.Everblocklight.Admin') }}</h2>
+        <p class="everblocklight-bo-description mb-0">
+          {{ 'Copy these examples into an Ever Block Light, a CMS page or any content rendered by the module. Each card explains what the shortcode outputs and lists every accepted parameter.'|trans({}, 'Modules.Everblocklight.Admin') }}
         </p>
       </div>
-      <div class="everblock-shortcode-docs__search">
+      <div class="everblocklight-shortcode-docs__search">
         <div class="input-group input-group-sm">
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="material-icons">search</i></span>
           </div>
-          <input class="form-control" type="search" placeholder="{{ 'Search a shortcode or parameter'|trans({}, 'Modules.Everblock.Admin') }}" data-everblock-doc-search>
+          <input class="form-control" type="search" placeholder="{{ 'Search a shortcode or parameter'|trans({}, 'Modules.Everblocklight.Admin') }}" data-everblocklight-doc-search>
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" data-everblock-doc-clear title="{{ 'Reset'|trans({}, 'Admin.Actions') }}" aria-label="{{ 'Reset'|trans({}, 'Admin.Actions') }}">
+            <button class="btn btn-outline-secondary" type="button" data-everblocklight-doc-clear title="{{ 'Reset'|trans({}, 'Admin.Actions') }}" aria-label="{{ 'Reset'|trans({}, 'Admin.Actions') }}">
               <i class="material-icons">clear</i>
             </button>
           </div>
@@ -27,45 +27,45 @@
       </div>
     </div>
 
-    <div class="everblock-shortcode-docs__empty d-none" data-everblock-doc-empty>
+    <div class="everblocklight-shortcode-docs__empty d-none" data-everblocklight-doc-empty>
       <i class="material-icons">search_off</i>
-      <span>{{ 'No shortcode matches your search.'|trans({}, 'Modules.Everblock.Admin') }}</span>
+      <span>{{ 'No shortcode matches your search.'|trans({}, 'Modules.Everblocklight.Admin') }}</span>
     </div>
 
     {% for group in documentation %}
-      <section class="everblock-shortcode-docs__group" data-everblock-doc-group>
-        <header class="everblock-shortcode-docs__group-head">
-          <div class="everblock-shortcode-docs__group-icon">
+      <section class="everblocklight-shortcode-docs__group" data-everblocklight-doc-group>
+        <header class="everblocklight-shortcode-docs__group-head">
+          <div class="everblocklight-shortcode-docs__group-icon">
             <i class="material-icons">{{ loop.index == 1 ? 'storefront' : (loop.index == 2 ? 'shopping_cart' : 'dynamic_form') }}</i>
           </div>
           <div>
             <h3>{{ group.title }}</h3>
             <p class="mb-0">
-              <span data-everblock-doc-visible-count>{{ group.entries|length }}</span> / {{ group.entries|length }}
-              {{ 'shortcode(s)'|trans({}, 'Modules.Everblock.Admin') }}
+              <span data-everblocklight-doc-visible-count>{{ group.entries|length }}</span> / {{ group.entries|length }}
+              {{ 'shortcode(s)'|trans({}, 'Modules.Everblocklight.Admin') }}
             </p>
           </div>
         </header>
 
-        <div class="everblock-shortcode-docs__grid">
+        <div class="everblocklight-shortcode-docs__grid">
           {% for entry in group.entries %}
-            <article class="everblock-shortcode-docs__item" data-everblock-doc-entry>
-              <div class="everblock-shortcode-docs__example">
+            <article class="everblocklight-shortcode-docs__item" data-everblocklight-doc-entry>
+              <div class="everblocklight-shortcode-docs__example">
                 <code>{{ entry.code }}</code>
-                <button class="btn btn-outline-secondary btn-sm everblock-icon-btn" type="button" data-everblock-copy="{{ entry.code|e('html_attr') }}" data-everblock-copied-label="{{ 'Copied'|trans({}, 'Admin.Actions')|e('html_attr') }}" title="{{ 'Copy'|trans({}, 'Admin.Actions') }}" aria-label="{{ 'Copy'|trans({}, 'Admin.Actions') }}">
+                <button class="btn btn-outline-secondary btn-sm everblocklight-icon-btn" type="button" data-everblocklight-copy="{{ entry.code|e('html_attr') }}" data-everblocklight-copied-label="{{ 'Copied'|trans({}, 'Admin.Actions')|e('html_attr') }}" title="{{ 'Copy'|trans({}, 'Admin.Actions') }}" aria-label="{{ 'Copy'|trans({}, 'Admin.Actions') }}">
                   <i class="material-icons">content_copy</i>
                   <span class="sr-only">{{ 'Copy'|trans({}, 'Admin.Actions') }}</span>
                 </button>
               </div>
-              <p class="everblock-shortcode-docs__description">{{ entry.description }}</p>
+              <p class="everblocklight-shortcode-docs__description">{{ entry.description }}</p>
               {% if entry.parameters is not empty %}
-                <div class="everblock-shortcode-docs__params">
+                <div class="everblocklight-shortcode-docs__params">
                   {% for parameter in entry.parameters %}
-                    <div class="everblock-shortcode-docs__param">
-                      <div class="everblock-shortcode-docs__param-name">
+                    <div class="everblocklight-shortcode-docs__param">
+                      <div class="everblocklight-shortcode-docs__param-name">
                         <code>{{ parameter.name }}</code>
                         {% if parameter.required %}
-                          <span class="badge badge-warning">{{ 'Required'|trans({}, 'Modules.Everblock.Admin') }}</span>
+                          <span class="badge badge-warning">{{ 'Required'|trans({}, 'Modules.Everblocklight.Admin') }}</span>
                         {% endif %}
                       </div>
                       <p>{{ parameter.description }}</p>
@@ -73,7 +73,7 @@
                   {% endfor %}
                 </div>
               {% else %}
-                <p class="everblock-shortcode-docs__no-param mb-0">{{ 'No parameter.'|trans({}, 'Modules.Everblock.Admin') }}</p>
+                <p class="everblocklight-shortcode-docs__no-param mb-0">{{ 'No parameter.'|trans({}, 'Modules.Everblocklight.Admin') }}</p>
               {% endif %}
             </article>
           {% endfor %}

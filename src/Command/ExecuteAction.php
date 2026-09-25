@@ -18,7 +18,7 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-namespace Everblock\Tools\Command;
+namespace Everblocklight\Tools\Command;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -26,8 +26,8 @@ if (!defined('_PS_VERSION_')) {
 
 use Configuration;
 use Currency;
-use Everblock\Tools\Service\EverblockCache;
-use Everblock\Tools\Service\EverblockTools;
+use Everblocklight\Tools\Service\EverblocklightCache;
+use Everblocklight\Tools\Service\EverblocklightTools;
 use PrestaShop\PrestaShop\Adapter\LegacyContext as ContextAdapter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -62,7 +62,7 @@ class ExecuteAction extends Command
             'description' => 'Installs missing module tables.',
         ],
         'clearcache' => [
-            'label' => 'Clear Everblock cache',
+            'label' => 'Clear Everblocklight cache',
             'description' => 'Flushes module cache entries without clearing the whole shop cache.',
         ],
     ];
@@ -75,7 +75,7 @@ class ExecuteAction extends Command
 
     protected function configure()
     {
-        $this->setName('everblock:tools:execute');
+        $this->setName('everblocklight:tools:execute');
         $this->setDescription('Execute action (use --list to display the available actions)');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', array_keys($this->allowedActions))));
         $this->addOption('list', null, InputOption::VALUE_NONE, 'List available actions and exit.');
@@ -116,35 +116,35 @@ class ExecuteAction extends Command
 
         switch ($action) {
             case 'refreshtokens':
-                $newToken = EverblockTools::refreshInstagramToken();
+                $newToken = EverblocklightTools::refreshInstagramToken();
                 if (!$newToken) {
                     $output->writeln('<warning>Instagram token reset failed</warning>');
 
                     return self::FAILURE;
                 }
-                EverblockCache::cacheDropByPattern('fetchInstagramImages');
+                EverblocklightCache::cacheDropByPattern('fetchInstagramImages');
                 $output->writeln('<success>Instagram token refreshed</success>');
 
                 return self::SUCCESS;
             case 'fetchinstagramimages':
                 $output->writeln('<comment>Fetching Instagram medias…</comment>');
-                $images = EverblockTools::fetchInstagramImages();
+                $images = EverblocklightTools::fetchInstagramImages();
                 $output->writeln(sprintf('<success>%d media files processed</success>', is_array($images) ? count($images) : 0));
 
                 return self::SUCCESS;
             case 'fetchwordpressposts':
-                EverblockTools::fetchWordpressPosts();
+                EverblocklightTools::fetchWordpressPosts();
                 $output->writeln('<success>WordPress posts fetched</success>');
 
                 return self::SUCCESS;
             case 'checkdatabase':
-                EverblockTools::checkAndFixDatabase();
+                EverblocklightTools::checkAndFixDatabase();
                 $output->writeln('<success>Database schema verified successfully</success>');
 
                 return self::SUCCESS;
             case 'clearcache':
-                EverblockCache::clearAllModuleCache();
-                $output->writeln('<success>Everblock cache cleared</success>');
+                EverblocklightCache::clearAllModuleCache();
+                $output->writeln('<success>Everblocklight cache cleared</success>');
 
                 return self::SUCCESS;
         }

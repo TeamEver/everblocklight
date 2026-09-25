@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Handler;
+namespace Everblocklight\Tools\Handler;
 
-use Everblock\Tools\Query\ListAdminItemsQuery;
-use Everblock\Tools\Repository\BlockRepository;
-use Everblock\Tools\Repository\HookRepository;
-use Everblock\Tools\Repository\ShortcodeRepository;
+use Everblocklight\Tools\Query\ListAdminItemsQuery;
+use Everblocklight\Tools\Repository\BlockRepository;
+use Everblocklight\Tools\Repository\HookRepository;
+use Everblocklight\Tools\Repository\ShortcodeRepository;
 
 final class ListAdminItemsHandler
 {

@@ -3,71 +3,71 @@ services:
         autowire: true
         autoconfigure: true
 
-    Everblock\Tools\Controller\Admin\EverblockAdminController:
+    Everblocklight\Tools\Controller\Admin\EverblocklightAdminController:
         public: true
         arguments:
             $translator: '@translator'
         tags:
             - { name: controller.service_arguments }
 
-    Everblock\Tools\Form\BlockType:
+    Everblocklight\Tools\Form\BlockType:
         tags: [form.type]
-    Everblock\Tools\Form\EverblockConfigurationType:
+    Everblocklight\Tools\Form\EverblocklightConfigurationType:
         tags: [form.type]
-    Everblock\Tools\Form\ShortcodeType:
+    Everblocklight\Tools\Form\ShortcodeType:
         tags: [form.type]
-    Everblock\Tools\Form\HookType:
+    Everblocklight\Tools\Form\HookType:
         tags: [form.type]
 
-    Everblock\Tools\Grid\AdminSectionGridFactory: ~
+    Everblocklight\Tools\Grid\AdminSectionGridFactory: ~
 
-    Everblock\Tools\Service\AdminConfigurationManager:
+    Everblocklight\Tools\Service\AdminConfigurationManager:
         public: true
 
-    Everblock\Tools\Repository\BlockRepository:
+    Everblocklight\Tools\Repository\BlockRepository:
         public: true
         arguments: ['@doctrine.dbal.default_connection', '%database_prefix%']
-    everblock.repository.block:
-        alias: Everblock\Tools\Repository\BlockRepository
+    everblocklight.repository.block:
+        alias: Everblocklight\Tools\Repository\BlockRepository
         public: true
 
-    Everblock\Tools\Repository\ShortcodeRepository:
+    Everblocklight\Tools\Repository\ShortcodeRepository:
         public: true
         arguments: ['@doctrine.dbal.default_connection', '%database_prefix%']
-    everblock.repository.shortcode:
-        alias: Everblock\Tools\Repository\ShortcodeRepository
+    everblocklight.repository.shortcode:
+        alias: Everblocklight\Tools\Repository\ShortcodeRepository
         public: true
 
-    Everblock\Tools\Repository\HookRepository:
+    Everblocklight\Tools\Repository\HookRepository:
         public: true
         arguments: ['@doctrine.dbal.default_connection', '%database_prefix%']
-    everblock.repository.hook:
-        alias: Everblock\Tools\Repository\HookRepository
+    everblocklight.repository.hook:
+        alias: Everblocklight\Tools\Repository\HookRepository
         public: true
 
-    Everblock\Tools\Handler\ListAdminItemsHandler:
+    Everblocklight\Tools\Handler\ListAdminItemsHandler:
         tags:
-            - { name: tactician.handler, command: Everblock\Tools\Query\ListAdminItemsQuery }
-            - { name: messenger.message_handler, handles: Everblock\Tools\Query\ListAdminItemsQuery }
-    Everblock\Tools\Handler\GetAdminItemHandler:
+            - { name: tactician.handler, command: Everblocklight\Tools\Query\ListAdminItemsQuery }
+            - { name: messenger.message_handler, handles: Everblocklight\Tools\Query\ListAdminItemsQuery }
+    Everblocklight\Tools\Handler\GetAdminItemHandler:
         tags:
-            - { name: tactician.handler, command: Everblock\Tools\Query\GetAdminItemQuery }
-            - { name: messenger.message_handler, handles: Everblock\Tools\Query\GetAdminItemQuery }
-    Everblock\Tools\Handler\SaveAdminItemHandler:
+            - { name: tactician.handler, command: Everblocklight\Tools\Query\GetAdminItemQuery }
+            - { name: messenger.message_handler, handles: Everblocklight\Tools\Query\GetAdminItemQuery }
+    Everblocklight\Tools\Handler\SaveAdminItemHandler:
         tags:
-            - { name: tactician.handler, command: Everblock\Tools\Command\SaveAdminItemCommand }
-            - { name: messenger.message_handler, handles: Everblock\Tools\Command\SaveAdminItemCommand }
-    Everblock\Tools\Handler\DeleteAdminItemHandler:
+            - { name: tactician.handler, command: Everblocklight\Tools\Command\SaveAdminItemCommand }
+            - { name: messenger.message_handler, handles: Everblocklight\Tools\Command\SaveAdminItemCommand }
+    Everblocklight\Tools\Handler\DeleteAdminItemHandler:
         tags:
-            - { name: tactician.handler, command: Everblock\Tools\Command\DeleteAdminItemCommand }
-            - { name: messenger.message_handler, handles: Everblock\Tools\Command\DeleteAdminItemCommand }
-    Everblock\Tools\Handler\ClearEverblockCacheHandler:
+            - { name: tactician.handler, command: Everblocklight\Tools\Command\DeleteAdminItemCommand }
+            - { name: messenger.message_handler, handles: Everblocklight\Tools\Command\DeleteAdminItemCommand }
+    Everblocklight\Tools\Handler\ClearEverblocklightCacheHandler:
         tags:
-            - { name: tactician.handler, command: Everblock\Tools\Command\ClearEverblockCacheCommand }
-            - { name: messenger.message_handler, handles: Everblock\Tools\Command\ClearEverblockCacheCommand }
+            - { name: tactician.handler, command: Everblocklight\Tools\Command\ClearEverblocklightCacheCommand }
+            - { name: messenger.message_handler, handles: Everblocklight\Tools\Command\ClearEverblocklightCacheCommand }
 
-    everblock.tools.execute_action:
-        class: Everblock\Tools\Command\ExecuteAction
+    everblocklight.tools.execute_action:
+        class: Everblocklight\Tools\Command\ExecuteAction
         public: true
         tags:
             - { name: console.command }

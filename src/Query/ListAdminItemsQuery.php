@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Query;
+namespace Everblocklight\Tools\Query;
 
 final class ListAdminItemsQuery
 {

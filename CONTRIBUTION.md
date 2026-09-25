@@ -1,6 +1,6 @@
 # Contribution Guidelines
 
-Thank you for considering contributing to Everblock.
+Thank you for considering contributing to Everblocklight.
 
 - Fork the repository and create your branch from `master`.
 - Ensure code style by running `php-cs-fixer`.

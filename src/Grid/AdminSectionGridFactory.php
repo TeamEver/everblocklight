@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Grid;
+namespace Everblocklight\Tools\Grid;
 
 use PrestaShop\PrestaShop\Core\Grid\Action\Bulk\BulkActionCollection;
 use PrestaShop\PrestaShop\Core\Grid\Action\Bulk\Type\SubmitBulkAction;
@@ -71,7 +71,7 @@ final class AdminSectionGridFactory
                         ->setName('Enable / disable')
                         ->setIcon('power_settings_new')
                         ->setOptions([
-                            'route' => 'admin_everblock_blocks_toggle',
+                            'route' => 'admin_everblocklight_blocks_toggle',
                             'route_param_name' => 'id',
                             'route_param_field' => $config['id'],
                         ])
@@ -81,7 +81,7 @@ final class AdminSectionGridFactory
                     ->setName('Duplicate')
                     ->setIcon('content_copy')
                     ->setOptions([
-                        'route' => 'admin_everblock_blocks_duplicate',
+                        'route' => 'admin_everblocklight_blocks_duplicate',
                         'route_param_name' => 'id',
                         'route_param_field' => $config['id'],
                     ])
@@ -100,30 +100,30 @@ final class AdminSectionGridFactory
                 ->add(
                     (new SubmitBulkAction('enable_selection'))
                         ->setName('Enable selected')
-                        ->setOptions(['submit_route' => 'admin_everblock_blocks_bulk_enable'])
+                        ->setOptions(['submit_route' => 'admin_everblocklight_blocks_bulk_enable'])
                 )
                 ->add(
                     (new SubmitBulkAction('disable_selection'))
                         ->setName('Disable selected')
-                        ->setOptions(['submit_route' => 'admin_everblock_blocks_bulk_disable'])
+                        ->setOptions(['submit_route' => 'admin_everblocklight_blocks_bulk_disable'])
                 )
                 ->add(
                     (new SubmitBulkAction('duplicate_selection'))
                         ->setName('Duplicate selected')
-                        ->setOptions(['submit_route' => 'admin_everblock_blocks_bulk_duplicate'])
+                        ->setOptions(['submit_route' => 'admin_everblocklight_blocks_bulk_duplicate'])
                 )
                 ->add(
                     (new SubmitBulkAction('delete_selection'))
                         ->setName('Delete selected')
                         ->setOptions([
-                            'submit_route' => 'admin_everblock_blocks_bulk_delete',
+                            'submit_route' => 'admin_everblocklight_blocks_bulk_delete',
                             'confirm_message' => 'Delete selected blocks?',
                         ])
                 );
         }
 
         $definition = new GridDefinition(
-            'everblock_' . $section,
+            'everblocklight_' . $section,
             (string) $config['title'],
             $columns,
             new FilterCollection(),

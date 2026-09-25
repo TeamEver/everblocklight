@@ -17,8 +17,8 @@
  */
 
 $(document).ready(function() {
-  const cssTextarea = document.getElementById('EVERPSCSS');
-  const jsTextarea = document.getElementById('EVERPSJS');
+  const cssTextarea = document.getElementById('EVERBLOCKLIGHT_CSS');
+  const jsTextarea = document.getElementById('EVERBLOCKLIGHT_JS');
 
   if (cssTextarea && typeof CodeMirror !== 'undefined') {
     CodeMirror.fromTextArea(cssTextarea, {
@@ -51,14 +51,14 @@ $(document).ready(function() {
     $wrapper
       .find('.form-group')
       .filter(function() {
-        return $(this).find('.everblock-doc').length > 0;
+        return $(this).find('.everblocklight-doc').length > 0;
       })
       .appendTo($wrapper);
   });
 
   // Transform legacy documentation cards into accessible accordions that match
   // the refreshed admin layout.
-  $('.everblock-config__card--form .everblock-doc').each(function() {
+  $('.everblocklight-config__card--form .everblocklight-doc').each(function() {
     const $card = $(this);
     const $body = $card.find('.card-body');
     const $group = $card.closest('.form-group');
@@ -75,30 +75,30 @@ $(document).ready(function() {
     }
 
     const $details = $('<details>', {
-      class: 'everblock-doc-accordion',
+      class: 'everblocklight-doc-accordion',
       open: true
     });
 
     const $summary = $('<summary>', {
-      class: 'everblock-doc-accordion__summary'
+      class: 'everblocklight-doc-accordion__summary'
     }).html(summaryHtml || $card.data('title') || 'Documentation');
 
     const $content = $('<div>', {
-      class: 'everblock-doc-accordion__content'
+      class: 'everblocklight-doc-accordion__content'
     }).append($body.contents());
 
     $details.append($summary, $content);
     $card.replaceWith($details);
 
     if ($group.length) {
-      $group.addClass('everblock-form-group--doc');
+      $group.addClass('everblocklight-form-group--doc');
     }
   });
 
   // Add a subtle pulse feedback on tab switch to give the interface more life.
   $('#module_form .nav-tabs a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
     const $target = $(e.target);
-    const $pulse = $('<span>', { class: 'everblock-tab-pulse' });
+    const $pulse = $('<span>', { class: 'everblocklight-tab-pulse' });
 
     $target.append($pulse);
 
@@ -107,26 +107,26 @@ $(document).ready(function() {
     }, 600);
   });
 
-  $('.everblock-enhanced-multiselect, .everblock-bo-symfony-form select[multiple], .everblock-configuration-form select[multiple]').each(function () {
-    enhanceEverblockMultiselect(this);
+  $('.everblocklight-enhanced-multiselect, .everblocklight-bo-symfony-form select[multiple], .everblocklight-configuration-form select[multiple]').each(function () {
+    enhanceEverblocklightMultiselect(this);
   });
 
-  $('.everblock-enhanced-select, .everblock-bo-symfony-form select:not([multiple]), .everblock-configuration-form select:not([multiple])').each(function () {
-    enhanceEverblockSelect(this);
+  $('.everblocklight-enhanced-select, .everblocklight-bo-symfony-form select:not([multiple]), .everblocklight-configuration-form select:not([multiple])').each(function () {
+    enhanceEverblocklightSelect(this);
   });
 
-  initEverblockDateTimeFields();
+  initEverblocklightDateTimeFields();
 
-  $(document).on('click', '[data-everblock-preview-open]', function (e) {
+  $(document).on('click', '[data-everblocklight-preview-open]', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
     const $btn = $(this);
-    const previewUrl = $btn.attr('data-everblock-preview-url') || $btn.data('everblockPreviewUrl');
-    const $modal = $('#everblock-preview-modal');
-    const $iframe = $('#everblock-preview-iframe');
-    const $loader = $modal.find('[data-everblock-preview-loader]');
-    const $openTab = $modal.find('#everblock-preview-open-tab');
+    const previewUrl = $btn.attr('data-everblocklight-preview-url') || $btn.data('everblocklightPreviewUrl');
+    const $modal = $('#everblocklight-preview-modal');
+    const $iframe = $('#everblocklight-preview-iframe');
+    const $loader = $modal.find('[data-everblocklight-preview-loader]');
+    const $openTab = $modal.find('#everblocklight-preview-open-tab');
 
     if (!previewUrl || !$modal.length || !$iframe.length) return;
 
@@ -152,30 +152,30 @@ $(document).ready(function() {
       $iframe.attr('src', previewUrl);
     }, 200);
 
-    $iframe.off('load.everblockPreview').on('load.everblockPreview', function () {
+    $iframe.off('load.everblocklightPreview').on('load.everblocklightPreview', function () {
       $loader.addClass('d-none');
       $iframe.css('opacity', 1);
     });
   });
 
-  $(document).on('hidden.bs.modal', '#everblock-preview-modal', function () {
-    const $iframe = $('#everblock-preview-iframe');
+  $(document).on('hidden.bs.modal', '#everblocklight-preview-modal', function () {
+    const $iframe = $('#everblocklight-preview-iframe');
     $iframe.attr('src', 'about:blank');
   });
 
-  $(document).on('click', '[data-everblock-row-href]', function (event) {
+  $(document).on('click', '[data-everblocklight-row-href]', function (event) {
     if (event.defaultPrevented) {
       return;
     }
     const $target = $(event.target);
-    if ($target.closest('[data-everblock-row-no-click]').length) {
+    if ($target.closest('[data-everblocklight-row-no-click]').length) {
       return;
     }
     if ($target.closest('a, button, input, select, textarea, label').length) {
       return;
     }
 
-    const href = $(this).attr('data-everblock-row-href');
+    const href = $(this).attr('data-everblocklight-row-href');
     if (!href) {
       return;
     }
@@ -188,33 +188,33 @@ $(document).ready(function() {
     window.location.href = href;
   });
 
-  $(document).on('keydown', '[data-everblock-row-href]', function (event) {
+  $(document).on('keydown', '[data-everblocklight-row-href]', function (event) {
     if (event.key !== 'Enter') {
       return;
     }
-    if ($(event.target).closest('[data-everblock-row-no-click]').length) {
+    if ($(event.target).closest('[data-everblocklight-row-no-click]').length) {
       return;
     }
     if ($(event.target).closest('a, button, input, select, textarea, label').length) {
       return;
     }
-    const href = $(this).attr('data-everblock-row-href');
+    const href = $(this).attr('data-everblocklight-row-href');
     if (href) {
       event.preventDefault();
       window.location.href = href;
     }
   });
 
-  initEverblockFriendlyUrlAutoFill();
+  initEverblocklightFriendlyUrlAutoFill();
 
-  $(document).on('click', '[data-everblock-copy]', function () {
+  $(document).on('click', '[data-everblocklight-copy]', function () {
     const button = this;
-    const text = button.getAttribute('data-everblock-copy') || '';
+    const text = button.getAttribute('data-everblocklight-copy') || '';
     const originalHtml = button.innerHTML;
-    const copiedLabel = button.getAttribute('data-everblock-copied-label') || 'Copied';
+    const copiedLabel = button.getAttribute('data-everblocklight-copied-label') || 'Copied';
 
     function markCopied() {
-      if (button.classList.contains('everblock-icon-btn')) {
+      if (button.classList.contains('everblocklight-icon-btn')) {
         button.innerHTML = '<i class="material-icons">check</i><span class="sr-only">' + copiedLabel + '</span>';
       } else {
         button.innerHTML = '<i class="material-icons">check</i> ' + copiedLabel;
@@ -244,19 +244,19 @@ $(document).ready(function() {
     document.body.removeChild(textarea);
   });
 
-  const $shortcodeDocSearch = $('[data-everblock-doc-search]');
+  const $shortcodeDocSearch = $('[data-everblocklight-doc-search]');
   if ($shortcodeDocSearch.length) {
-    const $emptyState = $('[data-everblock-doc-empty]');
+    const $emptyState = $('[data-everblocklight-doc-empty]');
 
     function filterShortcodeDocumentation() {
       const query = $.trim($shortcodeDocSearch.val()).toLowerCase();
       let visibleTotal = 0;
 
-      $('[data-everblock-doc-group]').each(function () {
+      $('[data-everblocklight-doc-group]').each(function () {
         const $group = $(this);
         let groupVisible = 0;
 
-        $group.find('[data-everblock-doc-entry]').each(function () {
+        $group.find('[data-everblocklight-doc-entry]').each(function () {
           const $entry = $(this);
           const matches = !query || $entry.text().toLowerCase().indexOf(query) !== -1;
 
@@ -268,42 +268,42 @@ $(document).ready(function() {
         });
 
         $group.toggle(groupVisible > 0);
-        $group.find('[data-everblock-doc-visible-count]').text(groupVisible);
+        $group.find('[data-everblocklight-doc-visible-count]').text(groupVisible);
       });
 
       $emptyState.toggleClass('d-none', visibleTotal > 0);
     }
 
     $shortcodeDocSearch.on('input', filterShortcodeDocumentation);
-    $('[data-everblock-doc-clear]').on('click', function () {
+    $('[data-everblocklight-doc-clear]').on('click', function () {
       $shortcodeDocSearch.val('').trigger('input').trigger('focus');
     });
   }
 
   $(document).on('click', function (event) {
-    if (!$(event.target).closest('.everblock-multiselect').length) {
-      $('.everblock-multiselect.is-open')
+    if (!$(event.target).closest('.everblocklight-multiselect').length) {
+      $('.everblocklight-multiselect.is-open')
         .removeClass('is-open')
-        .find('.everblock-multiselect__control')
+        .find('.everblocklight-multiselect__control')
         .attr('aria-expanded', 'false');
     }
   });
 
-  $(document).on('change', '[data-everblock-check-all]', function () {
+  $(document).on('change', '[data-everblocklight-check-all]', function () {
     const checked = this.checked;
-    $('[data-everblock-row-check]').prop('checked', checked);
+    $('[data-everblocklight-row-check]').prop('checked', checked);
   });
 
-  $(document).on('change', '[data-everblock-row-check]', function () {
-    const $rows = $('[data-everblock-row-check]');
+  $(document).on('change', '[data-everblocklight-row-check]', function () {
+    const $rows = $('[data-everblocklight-row-check]');
     const $checkedRows = $rows.filter(':checked');
-    $('[data-everblock-check-all]')
+    $('[data-everblocklight-check-all]')
       .prop('checked', $rows.length > 0 && $checkedRows.length === $rows.length)
       .prop('indeterminate', $checkedRows.length > 0 && $checkedRows.length < $rows.length);
   });
 });
 
-function everblockSlugify(value) {
+function everblocklightSlugify(value) {
   if (!value) {
     return '';
   }
@@ -320,26 +320,26 @@ function everblockSlugify(value) {
   return slug;
 }
 
-function initEverblockFriendlyUrlAutoFill() {
+function initEverblocklightFriendlyUrlAutoFill() {
   const slugFields = document.querySelectorAll('input[name*="[link_rewrite_"], input[id*="link_rewrite_"]');
   if (!slugFields.length) {
     return;
   }
 
   slugFields.forEach(function (slugField) {
-    if (slugField.dataset.everblockSlugInit === '1') {
+    if (slugField.dataset.everblocklightSlugInit === '1') {
       return;
     }
-    slugField.dataset.everblockSlugInit = '1';
-    slugField.dataset.everblockManuallyEdited = slugField.value && slugField.value.trim() !== '' ? '1' : '0';
+    slugField.dataset.everblocklightSlugInit = '1';
+    slugField.dataset.everblocklightManuallyEdited = slugField.value && slugField.value.trim() !== '' ? '1' : '0';
 
     slugField.addEventListener('input', function () {
-      slugField.dataset.everblockManuallyEdited = slugField.value && slugField.value.trim() !== '' ? '1' : '0';
+      slugField.dataset.everblocklightManuallyEdited = slugField.value && slugField.value.trim() !== '' ? '1' : '0';
     });
 
     slugField.addEventListener('blur', function () {
       if (slugField.value && slugField.value.trim() !== '') {
-        slugField.value = everblockSlugify(slugField.value);
+        slugField.value = everblocklightSlugify(slugField.value);
       }
     });
 
@@ -371,10 +371,10 @@ function initEverblockFriendlyUrlAutoFill() {
     }
 
     function syncFromName() {
-      if (slugField.dataset.everblockManuallyEdited === '1' && slugField.value.trim() !== '') {
+      if (slugField.dataset.everblocklightManuallyEdited === '1' && slugField.value.trim() !== '') {
         return;
       }
-      slugField.value = everblockSlugify(nameField.value);
+      slugField.value = everblocklightSlugify(nameField.value);
     }
 
     nameField.addEventListener('input', syncFromName);
@@ -382,40 +382,40 @@ function initEverblockFriendlyUrlAutoFill() {
   });
 }
 
-function enhanceEverblockMultiselect(select) {
+function enhanceEverblocklightMultiselect(select) {
   const $select = $(select);
 
-  if ($select.data('everblockEnhanced')) {
+  if ($select.data('everblocklightEnhanced')) {
     return;
   }
 
-  $select.data('everblockEnhanced', true);
-  $select.addClass('everblock-native-multiselect');
+  $select.data('everblocklightEnhanced', true);
+  $select.addClass('everblocklight-native-multiselect');
 
-  const placeholder = $select.data('everblock-placeholder') || 'Rechercher';
-  const id = $select.attr('id') || ('everblock-multiselect-' + Math.random().toString(36).slice(2));
+  const placeholder = $select.data('everblocklight-placeholder') || 'Rechercher';
+  const id = $select.attr('id') || ('everblocklight-multiselect-' + Math.random().toString(36).slice(2));
   const $wrapper = $('<div>', {
-    class: 'everblock-multiselect',
+    class: 'everblocklight-multiselect',
     'data-target': id
   });
   const $control = $('<button>', {
     type: 'button',
-    class: 'everblock-multiselect__control',
+    class: 'everblocklight-multiselect__control',
     'aria-expanded': 'false'
   });
-  const $summary = $('<span>', { class: 'everblock-multiselect__summary' });
-  const $chevron = $('<i>', { class: 'material-icons everblock-multiselect__chevron', text: 'expand_more' });
-  const $panel = $('<div>', { class: 'everblock-multiselect__panel' });
+  const $summary = $('<span>', { class: 'everblocklight-multiselect__summary' });
+  const $chevron = $('<i>', { class: 'material-icons everblocklight-multiselect__chevron', text: 'expand_more' });
+  const $panel = $('<div>', { class: 'everblocklight-multiselect__panel' });
   const $search = $('<input>', {
     type: 'search',
-    class: 'everblock-multiselect__search',
+    class: 'everblocklight-multiselect__search',
     placeholder: placeholder
   });
-  const $toolbar = $('<div>', { class: 'everblock-multiselect__toolbar' });
+  const $toolbar = $('<div>', { class: 'everblocklight-multiselect__toolbar' });
   const $selectVisible = $('<button>', { type: 'button', text: 'Tout sélectionner' });
   const $clear = $('<button>', { type: 'button', text: 'Effacer' });
-  const $options = $('<div>', { class: 'everblock-multiselect__options' });
-  const $chips = $('<div>', { class: 'everblock-multiselect__chips' });
+  const $options = $('<div>', { class: 'everblocklight-multiselect__options' });
+  const $chips = $('<div>', { class: 'everblocklight-multiselect__chips' });
 
   $control.append($summary, $chevron);
   $toolbar.append($selectVisible, $clear);
@@ -435,7 +435,7 @@ function enhanceEverblockMultiselect(select) {
     $options.empty();
 
     if (!select.options.length) {
-      $options.append($('<div>', { class: 'everblock-multiselect__empty', text: 'Aucune option disponible' }));
+      $options.append($('<div>', { class: 'everblocklight-multiselect__empty', text: 'Aucune option disponible' }));
       return;
     }
 
@@ -450,7 +450,7 @@ function enhanceEverblockMultiselect(select) {
         'data-value': value
       });
       const $label = $('<label>', {
-        class: 'everblock-multiselect__option',
+        class: 'everblocklight-multiselect__option',
         for: checkboxId,
         role: 'option',
         'data-search': label.toLowerCase()
@@ -478,7 +478,7 @@ function enhanceEverblockMultiselect(select) {
     $chips.empty();
     selected.slice(0, 12).forEach(function (option) {
       const value = optionValue(option);
-      const $chip = $('<span>', { class: 'everblock-multiselect__chip' });
+      const $chip = $('<span>', { class: 'everblocklight-multiselect__chip' });
       const $remove = $('<button>', {
         type: 'button',
         'aria-label': 'Retirer',
@@ -497,7 +497,7 @@ function enhanceEverblockMultiselect(select) {
 
     if (selected.length > 12) {
       $chips.append($('<span>', {
-        class: 'everblock-multiselect__chip',
+        class: 'everblocklight-multiselect__chip',
         text: '+' + (selected.length - 12)
       }));
     }
@@ -524,7 +524,7 @@ function enhanceEverblockMultiselect(select) {
     const normalized = query.toLowerCase();
     let visibleCount = 0;
 
-    $options.find('.everblock-multiselect__option').each(function () {
+    $options.find('.everblocklight-multiselect__option').each(function () {
       const matches = $(this).data('search').indexOf(normalized) !== -1;
       $(this).toggle(matches);
       if (matches) {
@@ -532,14 +532,14 @@ function enhanceEverblockMultiselect(select) {
       }
     });
 
-    $options.find('.everblock-multiselect__empty').remove();
+    $options.find('.everblocklight-multiselect__empty').remove();
     if (visibleCount === 0) {
-      $options.append($('<div>', { class: 'everblock-multiselect__empty', text: 'Aucun résultat' }));
+      $options.append($('<div>', { class: 'everblocklight-multiselect__empty', text: 'Aucun résultat' }));
     }
   }
 
   $control.on('click', function () {
-    $('.everblock-multiselect.is-open').not($wrapper).removeClass('is-open').find('.everblock-multiselect__control').attr('aria-expanded', 'false');
+    $('.everblocklight-multiselect.is-open').not($wrapper).removeClass('is-open').find('.everblocklight-multiselect__control').attr('aria-expanded', 'false');
     $wrapper.toggleClass('is-open');
     $control.attr('aria-expanded', $wrapper.hasClass('is-open') ? 'true' : 'false');
     if ($wrapper.hasClass('is-open')) {
@@ -558,7 +558,7 @@ function enhanceEverblockMultiselect(select) {
   });
 
   $selectVisible.on('click', function () {
-    $options.find('.everblock-multiselect__option:visible input[type="checkbox"]').each(function () {
+    $options.find('.everblocklight-multiselect__option:visible input[type="checkbox"]').each(function () {
       setSelected($(this).data('value'), true);
     });
   });
@@ -575,36 +575,36 @@ function enhanceEverblockMultiselect(select) {
   sync();
 }
 
-function enhanceEverblockSelect(select) {
+function enhanceEverblocklightSelect(select) {
   const $select = $(select);
 
-  if ($select.data('everblockEnhanced')) {
+  if ($select.data('everblocklightEnhanced')) {
     return;
   }
 
-  $select.data('everblockEnhanced', true);
-  $select.addClass('everblock-native-select');
+  $select.data('everblocklightEnhanced', true);
+  $select.addClass('everblocklight-native-select');
 
-  const placeholder = $select.data('everblock-placeholder') || 'Rechercher';
-  const id = $select.attr('id') || ('everblock-select-' + Math.random().toString(36).slice(2));
+  const placeholder = $select.data('everblocklight-placeholder') || 'Rechercher';
+  const id = $select.attr('id') || ('everblocklight-select-' + Math.random().toString(36).slice(2));
   const $wrapper = $('<div>', {
-    class: 'everblock-multiselect everblock-multiselect--single',
+    class: 'everblocklight-multiselect everblocklight-multiselect--single',
     'data-target': id
   });
   const $control = $('<button>', {
     type: 'button',
-    class: 'everblock-multiselect__control',
+    class: 'everblocklight-multiselect__control',
     'aria-expanded': 'false'
   });
-  const $summary = $('<span>', { class: 'everblock-multiselect__summary' });
-  const $chevron = $('<i>', { class: 'material-icons everblock-multiselect__chevron', text: 'expand_more' });
-  const $panel = $('<div>', { class: 'everblock-multiselect__panel' });
+  const $summary = $('<span>', { class: 'everblocklight-multiselect__summary' });
+  const $chevron = $('<i>', { class: 'material-icons everblocklight-multiselect__chevron', text: 'expand_more' });
+  const $panel = $('<div>', { class: 'everblocklight-multiselect__panel' });
   const $search = $('<input>', {
     type: 'search',
-    class: 'everblock-multiselect__search',
+    class: 'everblocklight-multiselect__search',
     placeholder: placeholder
   });
-  const $options = $('<div>', { class: 'everblock-multiselect__options', role: 'listbox' });
+  const $options = $('<div>', { class: 'everblocklight-multiselect__options', role: 'listbox' });
 
   $control.append($summary, $chevron);
   $panel.append($search, $options);
@@ -631,7 +631,7 @@ function enhanceEverblockSelect(select) {
       .toggleClass('has-selection', selectedLabel !== '')
       .text(selectedLabel || 'Sélectionner');
 
-    $options.find('.everblock-multiselect__option').each(function () {
+    $options.find('.everblocklight-multiselect__option').each(function () {
       $(this).toggleClass('is-selected', String($(this).data('value')) === String($select.val()));
     });
   }
@@ -640,7 +640,7 @@ function enhanceEverblockSelect(select) {
     $options.empty();
 
     if (!select.options.length) {
-      $options.append($('<div>', { class: 'everblock-multiselect__empty', text: 'Aucune option disponible' }));
+      $options.append($('<div>', { class: 'everblocklight-multiselect__empty', text: 'Aucune option disponible' }));
       return;
     }
 
@@ -649,7 +649,7 @@ function enhanceEverblockSelect(select) {
       const label = optionLabel(option);
       const $option = $('<button>', {
         type: 'button',
-        class: 'everblock-multiselect__option everblock-multiselect__option--button',
+        class: 'everblocklight-multiselect__option everblocklight-multiselect__option--button',
         'data-value': value,
         'data-search': label.toLowerCase(),
         role: 'option',
@@ -671,7 +671,7 @@ function enhanceEverblockSelect(select) {
     const normalized = query.toLowerCase();
     let visibleCount = 0;
 
-    $options.find('.everblock-multiselect__option').each(function () {
+    $options.find('.everblocklight-multiselect__option').each(function () {
       const matches = $(this).data('search').indexOf(normalized) !== -1;
       $(this).toggle(matches);
       if (matches) {
@@ -679,14 +679,14 @@ function enhanceEverblockSelect(select) {
       }
     });
 
-    $options.find('.everblock-multiselect__empty').remove();
+    $options.find('.everblocklight-multiselect__empty').remove();
     if (visibleCount === 0) {
-      $options.append($('<div>', { class: 'everblock-multiselect__empty', text: 'Aucun résultat' }));
+      $options.append($('<div>', { class: 'everblocklight-multiselect__empty', text: 'Aucun résultat' }));
     }
   }
 
   $control.on('click', function () {
-    $('.everblock-multiselect.is-open').not($wrapper).removeClass('is-open').find('.everblock-multiselect__control').attr('aria-expanded', 'false');
+    $('.everblocklight-multiselect.is-open').not($wrapper).removeClass('is-open').find('.everblocklight-multiselect__control').attr('aria-expanded', 'false');
     $wrapper.toggleClass('is-open');
     $control.attr('aria-expanded', $wrapper.hasClass('is-open') ? 'true' : 'false');
     if ($wrapper.hasClass('is-open')) {
@@ -706,8 +706,8 @@ function enhanceEverblockSelect(select) {
   sync();
 }
 
-function initEverblockDateTimeFields() {
-  $('.everblock-datetime-field').each(function () {
+function initEverblocklightDateTimeFields() {
+  $('.everblocklight-datetime-field').each(function () {
     const input = this;
     const normalized = sqlToDatetimeLocal(input.value);
 
@@ -722,8 +722,8 @@ function initEverblockDateTimeFields() {
     }
   });
 
-  $(document).on('submit', '.everblock-bo-symfony-form', function () {
-    $(this).find('.everblock-datetime-field').each(function () {
+  $(document).on('submit', '.everblocklight-bo-symfony-form', function () {
+    $(this).find('.everblocklight-datetime-field').each(function () {
       this.value = datetimeLocalToSql(this.value);
     });
   });

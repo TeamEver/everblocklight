@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Repository;
+namespace Everblocklight\Tools\Repository;
 
-final class HookRepository extends AbstractEverblockRepository
+final class HookRepository extends AbstractEverblocklightRepository
 {
     public function listDisplayHooks(): array
     {

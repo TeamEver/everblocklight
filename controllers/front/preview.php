@@ -22,11 +22,11 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Everblock\Tools\Service\EverblockPreviewBuilder;
+use Everblocklight\Tools\Service\EverblocklightPreviewBuilder;
 
-class EverblockPreviewModuleFrontController extends ModuleFrontController
+class EverblocklightPreviewModuleFrontController extends ModuleFrontController
 {
-    /** @var EverBlockClass|null */
+    /** @var EverBlockLightClass|null */
     protected $block;
 
     public function initContent()
@@ -44,25 +44,25 @@ class EverblockPreviewModuleFrontController extends ModuleFrontController
             $this->assertValidToken();
             $this->block = $this->loadBlock();
             $previewParameters = $this->collectPreviewParameters();
-            if (!$this->module instanceof Everblock) {
+            if (!$this->module instanceof Everblocklight) {
                 throw new Exception('Invalid module instance.');
             }
-            $builder = new EverblockPreviewBuilder($this->module, $this->context);
+            $builder = new EverblocklightPreviewBuilder($this->module, $this->context);
             $previewData = $builder->buildPreview($this->block, $previewParameters);
         } catch (Exception $exception) {
             $error = $exception->getMessage();
         }
 
         $this->context->smarty->assign([
-            'everblock_preview_error' => $error,
-            'everblock_preview_html' => $previewData['html'],
-            'everblock_preview_info' => $previewData['info'],
-            'everblock_preview_hook' => $previewData['hook'],
-            'everblock_preview_block' => $this->block,
-            'everblock_preview_return_url' => $this->getReturnUrl(),
+            'everblocklight_preview_error' => $error,
+            'everblocklight_preview_html' => $previewData['html'],
+            'everblocklight_preview_info' => $previewData['info'],
+            'everblocklight_preview_hook' => $previewData['hook'],
+            'everblocklight_preview_block' => $this->block,
+            'everblocklight_preview_return_url' => $this->getReturnUrl(),
         ]);
 
-        $this->setTemplate('module:everblock/views/templates/front/preview.tpl');
+        $this->setTemplate('module:everblocklight/views/templates/front/preview.tpl');
     }
 
     protected function assertValidToken(): void
@@ -83,9 +83,9 @@ class EverblockPreviewModuleFrontController extends ModuleFrontController
         }
 
         $validTokens = [
-            Tools::getAdminTokenLite('AdminEverBlock'),
-            Tools::getAdminTokenLite('AdminEverBlockConfiguration'),
-            Tools::getAdminTokenLite('AdminEverBlockHook'),
+            Tools::getAdminTokenLite('AdminEverBlockLight'),
+            Tools::getAdminTokenLite('AdminEverBlockLightConfiguration'),
+            Tools::getAdminTokenLite('AdminEverBlockLightHook'),
             Tools::getAdminTokenLite('AdminModules'),
         ];
 
@@ -94,13 +94,13 @@ class EverblockPreviewModuleFrontController extends ModuleFrontController
         }
     }
 
-    protected function loadBlock(): EverBlockClass
+    protected function loadBlock(): EverBlockLightClass
     {
-        $blockId = (int) Tools::getValue('id_everblock');
+        $blockId = (int) Tools::getValue('id_everblocklight');
         $languageId = (int) Tools::getValue('id_lang', (int) $this->context->language->id);
         $shopId = (int) Tools::getValue('id_shop', (int) $this->context->shop->id);
 
-        $block = new EverBlockClass($blockId, $languageId, $shopId);
+        $block = new EverBlockLightClass($blockId, $languageId, $shopId);
 
         if (!Validate::isLoadedObject($block)) {
             throw new Exception($this->translate('Unable to find the requested block.'));
@@ -168,11 +168,11 @@ class EverblockPreviewModuleFrontController extends ModuleFrontController
 
     protected function getReturnUrl(): string
     {
-        return $this->context->link->getAdminLink('AdminEverBlock');
+        return $this->context->link->getAdminLink('AdminEverBlockLight');
     }
 
     protected function translate(string $message, array $parameters = []): string
     {
-        return $this->context->getTranslator()->trans($message, $parameters, 'Modules.Everblock.Front');
+        return $this->context->getTranslator()->trans($message, $parameters, 'Modules.Everblocklight.Front');
     }
 }

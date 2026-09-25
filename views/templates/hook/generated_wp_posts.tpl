@@ -1,9 +1,9 @@
-{if isset($everblock_wp_posts) && $everblock_wp_posts|@count > 0}
-<section class="everblock-wp-section text-center my-5"{if $everblock_wp_background_image} style="background-image:url('{$everblock_wp_background_image|escape:'htmlall':'UTF-8'}');background-size:cover;background-position:center;background-repeat:no-repeat;"{/if}>
-  {assign var='carouselId' value='everblock-wp-posts-carousel-'|cat:mt_rand(1000,999999)}
-  <div class="everblock-wp-posts container">
+{if isset($everblocklight_wp_posts) && $everblocklight_wp_posts|@count > 0}
+<section class="everblocklight-wp-section text-center my-5"{if $everblocklight_wp_background_image} style="background-image:url('{$everblocklight_wp_background_image|escape:'htmlall':'UTF-8'}');background-size:cover;background-position:center;background-repeat:no-repeat;"{/if}>
+  {assign var='carouselId' value='everblocklight-wp-posts-carousel-'|cat:mt_rand(1000,999999)}
+  <div class="everblocklight-wp-posts container">
     <div class="row justify-content-center align-items-stretch">
-      {foreach from=$everblock_wp_posts item=post}
+      {foreach from=$everblocklight_wp_posts item=post}
         <div class="col-12 col-sm-6 col-md-4 mb-4 d-flex">
           <div class="card blog-card flex-fill border-0 shadow-sm rounded-4 h-100 overflow-hidden">
             {if $post.featured_image}
@@ -51,12 +51,12 @@
     </div>
 
     <div class="text-center mt-3">
-      <a href="{$everblock_wp_blog_url|escape:'htmlall':'UTF-8'}" title="{l s='Visit our blog' d='Modules.Everblock.Front'}" target="_blank" class="btn btn-warning text-white fw-bold text-uppercase px-4 py-2 rounded-pill">
-        {l s='Visit our blog' d='Modules.Everblock.Front'}
+      <a href="{$everblocklight_wp_blog_url|escape:'htmlall':'UTF-8'}" title="{l s='Visit our blog' d='Modules.Everblocklight.Front'}" target="_blank" class="btn btn-warning text-white fw-bold text-uppercase px-4 py-2 rounded-pill">
+        {l s='Visit our blog' d='Modules.Everblocklight.Front'}
       </a>
     </div>
   </div>
 </section>
 {else}
-<div class="everblock-wp-posts"></div>
+<div class="everblocklight-wp-posts"></div>
 {/if}

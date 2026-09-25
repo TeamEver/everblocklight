@@ -16,7 +16,7 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 $(document).ready(function(){
-    function isEverblockElementVisible($element) {
+    function isEverblocklightElementVisible($element) {
         if (!$element || !$element.length) {
             return false;
         }
@@ -27,7 +27,7 @@ $(document).ready(function(){
         return !!(node && node.offsetParent !== null);
     }
 
-    function everblockGetModalInstance($modal, options) {
+    function everblocklightGetModalInstance($modal, options) {
         if (!$modal || !$modal.length) {
             return null;
         }
@@ -45,8 +45,8 @@ $(document).ready(function(){
         return modalInstance || new bootstrap.Modal(modalElement, options || {});
     }
 
-    function everblockShowModal($modal, options) {
-        var modalInstance = everblockGetModalInstance($modal, options);
+    function everblocklightShowModal($modal, options) {
+        var modalInstance = everblocklightGetModalInstance($modal, options);
         if (modalInstance && typeof modalInstance.show === 'function') {
             modalInstance.show();
             return;
@@ -56,9 +56,9 @@ $(document).ready(function(){
         }
     }
 
-    var everblockCarouselIndex = 0;
+    var everblocklightCarouselIndex = 0;
 
-    function getEverblockItemsPerSlide($carousel) {
+    function getEverblocklightItemsPerSlide($carousel) {
         var slidesDesktop = parseInt($carousel.data('itemsDesktop'), 10);
         var slidesMobile = parseInt($carousel.data('itemsMobile'), 10);
         var slides = parseInt($carousel.data('items'), 10);
@@ -72,12 +72,12 @@ $(document).ready(function(){
         return slidesDesktop;
     }
 
-    function buildEverblockCarousel($carousel) {
-        var itemsPerSlide = getEverblockItemsPerSlide($carousel);
-        var storedItems = $carousel.data('everblockItems');
+    function buildEverblocklightCarousel($carousel) {
+        var itemsPerSlide = getEverblocklightItemsPerSlide($carousel);
+        var storedItems = $carousel.data('everblocklightItems');
         if (!storedItems) {
             storedItems = $carousel.children().detach();
-            $carousel.data('everblockItems', storedItems);
+            $carousel.data('everblocklightItems', storedItems);
         } else {
             storedItems = storedItems.detach();
         }
@@ -126,14 +126,14 @@ $(document).ready(function(){
             } else {
                 $carousel.append(storedItems);
             }
-            $carousel.data('everblockItemsPerSlide', itemsPerSlide);
+            $carousel.data('everblocklightItemsPerSlide', itemsPerSlide);
             return;
         }
 
         var carouselId = $carousel.attr('id');
         if (!carouselId) {
-            everblockCarouselIndex += 1;
-            carouselId = 'everblock-carousel-' + everblockCarouselIndex;
+            everblocklightCarouselIndex += 1;
+            carouselId = 'everblocklight-carousel-' + everblocklightCarouselIndex;
             $carousel.attr('id', carouselId);
         }
 
@@ -226,39 +226,39 @@ $(document).ready(function(){
                 }
             }
         } catch (e) {
-            console.error('Everblock carousel initialization failed', e);
+            console.error('Everblocklight carousel initialization failed', e);
         }
 
-        $carousel.data('everblockItemsPerSlide', itemsPerSlide);
+        $carousel.data('everblocklightItemsPerSlide', itemsPerSlide);
     }
 
-    function initEverblockCarousels($context, options) {
+    function initEverblocklightCarousels($context, options) {
         var $scope = $context && $context.length ? $context : $(document);
         var forceInit = options && options.force === true;
         $scope.find('.ever-bootstrap-carousel').each(function () {
             var $carousel = $(this);
-            if (!isEverblockElementVisible($carousel)) {
+            if (!isEverblocklightElementVisible($carousel)) {
                 return;
             }
-            var itemsPerSlide = getEverblockItemsPerSlide($carousel);
-            var previousItemsPerSlide = $carousel.data('everblockItemsPerSlide');
+            var itemsPerSlide = getEverblocklightItemsPerSlide($carousel);
+            var previousItemsPerSlide = $carousel.data('everblocklightItemsPerSlide');
             if (!forceInit && previousItemsPerSlide === itemsPerSlide && $carousel.find('.carousel-inner').length) {
                 return;
             }
-            buildEverblockCarousel($carousel);
+            buildEverblocklightCarousel($carousel);
         });
     }
-    initEverblockCarousels();
-    var everblockCarouselResizeTimeout = null;
+    initEverblocklightCarousels();
+    var everblocklightCarouselResizeTimeout = null;
     $(window).on('resize', function () {
-        if (everblockCarouselResizeTimeout) {
-            clearTimeout(everblockCarouselResizeTimeout);
+        if (everblocklightCarouselResizeTimeout) {
+            clearTimeout(everblocklightCarouselResizeTimeout);
         }
-        everblockCarouselResizeTimeout = setTimeout(function () {
-            initEverblockCarousels();
+        everblocklightCarouselResizeTimeout = setTimeout(function () {
+            initEverblocklightCarousels();
         }, 200);
     });
-    function padEverblockCarouselSlides($carousel) {
+    function padEverblocklightCarouselSlides($carousel) {
         var $inner = $carousel.find('.carousel-inner');
         if (!$inner.length) {
             return;
@@ -308,7 +308,7 @@ $(document).ready(function(){
         if (!$inner.length || $inner.children('.carousel-item').length <= 1) {
             return;
         }
-        padEverblockCarouselSlides($carousel);
+        padEverblocklightCarouselSlides($carousel);
         var refreshInstanceItems = function() {
             if (typeof bootstrap !== 'undefined' && typeof bootstrap.Carousel !== 'undefined') {
                 var instance = bootstrap.Carousel.getInstance($carousel[0]);
@@ -351,15 +351,15 @@ $(document).ready(function(){
         let formData = new FormData(this);
 
         $.ajax({
-            url: atob(evercontact_link),
+            url: atob(everblocklight_contact_link),
             type: 'POST',
             data: formData,
             contentType: false,
             processData: false,
             success: function(modal) {
-                $('#everblockModal').remove();
+                $('#everblocklightModal').remove();
                 $('body').append(modal);
-                everblockShowModal($('#evercontactModal'));
+                everblocklightShowModal($('#evercontactModal'));
                 $('#evercontactModal').on('hidden.bs.modal', function () {
                     $(this).remove();
                     $('.modal-backdrop').remove();
@@ -373,33 +373,33 @@ $(document).ready(function(){
     $('div[data-evermodal]').each(function() {
         let $trigger = $(this);
         let triggerId = $trigger.attr('id') || '';
-        let blockId = triggerId.indexOf('everblock-') === 0
-            ? triggerId.replace('everblock-', '')
+        let blockId = triggerId.indexOf('everblocklight-') === 0
+            ? triggerId.replace('everblocklight-', '')
             : $trigger.data('evermodal');
         let timeout = parseInt($trigger.data('evertimeout'), 10);
         blockId = parseInt(blockId, 10);
-        if (!blockId || typeof evermodal_link === 'undefined' || typeof everblock_token === 'undefined') {
+        if (!blockId || typeof everblocklight_modal_link === 'undefined' || typeof everblocklight_token === 'undefined') {
             return;
         }
         if (isNaN(timeout) || timeout < 0) {
             timeout = 0;
         }
         $.ajax({
-            url: atob(evermodal_link),
+            url: atob(everblocklight_modal_link),
             type: 'POST',
-            data: { id_everblock: blockId, token: everblock_token, everblock_origin_url: window.location.href },
+            data: { id_everblocklight: blockId, token: everblocklight_token, everblocklight_origin_url: window.location.href },
             success: function(modal) {
                 if (!modal || !$.trim(modal)) {
                     return;
                 }
-                $('#everblockModal').remove();
+                $('#everblocklightModal').remove();
                 $('body').append(modal);
-                let $modal = $('#everblockModal');
+                let $modal = $('#everblocklightModal');
                 if (!$modal.length) {
                     return;
                 }
                 setTimeout(function() {
-                    everblockShowModal($modal);
+                    everblocklightShowModal($modal);
                 }, timeout);
                 $modal.on('shown.bs.modal', function () {
                     let windowHeight = $(window).height();
@@ -427,35 +427,35 @@ $(document).ready(function(){
         });
     });
 
-    $(document).on('click', '.everblock-modal-button, [data-everclickmodal]', function(e) {
+    $(document).on('click', '.everblocklight-modal-button, [data-everclickmodal]', function(e) {
         e.preventDefault();
         let blockId = $(this).data('everclickmodal');
         let cmsId = $(this).data('evercms');
         if (!blockId && !cmsId) {
             return;
         }
-        let data = { token: everblock_token, force: 1, everblock_origin_url: window.location.href };
+        let data = { token: everblocklight_token, force: 1, everblocklight_origin_url: window.location.href };
         if (blockId) {
-            data.id_everblock = blockId;
+            data.id_everblocklight = blockId;
         }
         if (cmsId) {
             data.id_cms = cmsId;
         }
         $.ajax({
-            url: atob(evermodal_link),
+            url: atob(everblocklight_modal_link),
             type: 'POST',
             data: data,
             success: function(modal) {
                 if (!modal || !$.trim(modal)) {
                     return;
                 }
-                $('#everblockModal').remove();
+                $('#everblocklightModal').remove();
                 $('body').append(modal);
-                let $modal = $('#everblockModal');
+                let $modal = $('#everblocklightModal');
                 if (!$modal.length) {
                     return;
                 }
-                everblockShowModal($modal);
+                everblocklightShowModal($modal);
                 $modal.on('hidden.bs.modal', function () {
                     $(this).remove();
                 });
@@ -465,5 +465,5 @@ $(document).ready(function(){
             }
         });
     });
-    everblockShowModal($('.everModalAutoTrigger'));
+    everblocklightShowModal($('.everModalAutoTrigger'));
 });

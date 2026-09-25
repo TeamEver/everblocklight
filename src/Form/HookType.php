@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Form;
+namespace Everblocklight\Tools\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;

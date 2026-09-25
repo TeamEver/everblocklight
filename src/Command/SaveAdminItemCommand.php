@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Command;
+namespace Everblocklight\Tools\Command;
 
 final class SaveAdminItemCommand
 {

@@ -29,7 +29,7 @@
  * substitution nous-mêmes, et compléter la table de PrestaShop qui ne couvre que
  * les 18 boutons de sa propre barre d'outils.
  */
-var everblockMceMaterialIcons = {
+var everblocklightMceMaterialIcons = {
   // Complète la table de changeToMaterial() de PrestaShop.
   'mce-i-newdocument': 'note_add',
   'mce-i-print': 'print',
@@ -65,13 +65,13 @@ var everblockMceMaterialIcons = {
  * Injecte les règles de taille appliquées par skins/prestashop/skin.min.css aux
  * <i> Material, au cas où la feuille de style du skin ne soit pas chargée.
  */
-function everblockInjectMceIconStyles() {
-  if (document.getElementById('everblock-mce-icons')) {
+function everblocklightInjectMceIconStyles() {
+  if (document.getElementById('everblocklight-mce-icons')) {
     return;
   }
 
   var style = document.createElement('style');
-  style.id = 'everblock-mce-icons';
+  style.id = 'everblocklight-mce-icons';
   style.textContent = [
     '.mce-widget button i.material-icons { font-size: 20px; line-height: 20px; color: #6c868e; }',
     '.mce-widget button:hover i.material-icons, .mce-widget.mce-active button i.material-icons { color: #25b9d7; }',
@@ -85,18 +85,18 @@ function everblockInjectMceIconStyles() {
  * Appelée par TinyMCE (init_instance_callback) puis à chaque ouverture de menu
  * ou de popup, les icônes de ces conteneurs étant rendues à la demande.
  */
-function everblockChangeToMaterial() {
+function everblocklightChangeToMaterial() {
   if (typeof changeToMaterial === 'function') {
     // Boutons couverts nativement par PrestaShop : bold, italic, link, table…
     changeToMaterial();
   }
 
-  $.each(everblockMceMaterialIcons, function (mceClass, ligature) {
+  $.each(everblocklightMceMaterialIcons, function (mceClass, ligature) {
     $('i.' + mceClass).replaceWith('<i class="material-icons">' + ligature + '</i>');
   });
 }
 
-window.everblockChangeToMaterial = everblockChangeToMaterial;
+window.everblocklightChangeToMaterial = everblocklightChangeToMaterial;
 
 function initCustomTinyMCE() {
   if (typeof tinymce === "undefined") {
@@ -115,7 +115,7 @@ function initCustomTinyMCE() {
     tinymce.remove();
   }
 
-  everblockInjectMceIconStyles();
+  everblocklightInjectMceIconStyles();
 
   // TinyMCE est chargé, ajoutez vos configurations
 
@@ -136,7 +136,7 @@ function initCustomTinyMCE() {
     relative_urls: false,
     convert_urls: false,
     extended_valid_elements: "em[class|name|id]",
-    init_instance_callback: 'everblockChangeToMaterial',
+    init_instance_callback: 'everblocklightChangeToMaterial',
     menu: {
       edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall' },
       insert: { title: 'Insert', items: 'media image link | pagebreak' },
@@ -160,7 +160,7 @@ $(document).ready(function () {
   // Les menus et fenêtres modales sont rendus à la demande : leurs icônes
   // doivent être substituées à l'ouverture, comme le fait tinySetup().
   $('body').on('click', '.mce-btn, .mce-open, .mce-menu-item', function () {
-    everblockChangeToMaterial();
+    everblocklightChangeToMaterial();
   });
 
   initCustomTinyMCE();

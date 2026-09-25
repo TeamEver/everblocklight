@@ -15,4 +15,4 @@
  * @copyright 2019-2025 Team Ever
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *}
-{include file='module:everblock/views/templates/hook/_partials/google_reviews.tpl'}
+{include file='module:everblocklight/views/templates/hook/_partials/google_reviews.tpl'}

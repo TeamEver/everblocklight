@@ -5,6 +5,6 @@
     {/foreach}
   </div>
 {else}
-  <div class="eb-low-stock--empty">{l s='No low stock products.' d='Modules.Everblock.Front'}</div>
+  <div class="eb-low-stock--empty">{l s='No low stock products.' d='Modules.Everblocklight.Front'}</div>
 {/if}
 

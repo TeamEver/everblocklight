@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Everblock\\Tools\\' => array($baseDir . '/src'),
+    'Everblocklight\\Tools\\' => array($baseDir . '/src'),
 );

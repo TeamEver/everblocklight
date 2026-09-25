@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Entity;
+namespace Everblocklight\Tools\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Everblock\Tools\Repository\BlockRepository;
-use Everblock\Tools\Repository\RepositoryProvider;
-use Everblock\Tools\Service\EverblockCache;
+use Everblocklight\Tools\Repository\BlockRepository;
+use Everblocklight\Tools\Repository\RepositoryProvider;
+use Everblocklight\Tools\Service\EverblocklightCache;
 use Language;
 
 /**
- * @ORM\Table(name="everblock")
- * @ORM\Entity(repositoryClass="Everblock\Tools\Repository\BlockRepository")
+ * @ORM\Table(name="everblocklight")
+ * @ORM\Entity(repositoryClass="Everblocklight\Tools\Repository\BlockRepository")
  */
 class Block
 {
@@ -20,11 +20,11 @@ class Block
 
     /**
      * @ORM\Id
-     * @ORM\Column(name="id_everblock", type="integer")
+     * @ORM\Column(name="id_everblocklight", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     public ?int $id = null;
-    public ?int $id_everblock = null;
+    public ?int $id_everblocklight = null;
 
     /** @ORM\Column(name="name", type="text") */
     public string $name = '';
@@ -127,7 +127,7 @@ class Block
     public static function repository(): BlockRepository
     {
         /** @var BlockRepository $repository */
-        $repository = RepositoryProvider::get('everblock.repository.block');
+        $repository = RepositoryProvider::get('everblocklight.repository.block');
 
         return $repository;
     }
@@ -135,8 +135,8 @@ class Block
     public static function fromDatabase(array $row, array $langRows = []): self
     {
         $block = new self();
-        $block->id = isset($row['id_everblock']) ? (int) $row['id_everblock'] : null;
-        $block->id_everblock = $block->id;
+        $block->id = isset($row['id_everblocklight']) ? (int) $row['id_everblocklight'] : null;
+        $block->id_everblocklight = $block->id;
         $block->name = (string) ($row['name'] ?? '');
         $block->id_hook = (int) ($row['id_hook'] ?? 0);
         $block->only_home = (bool) ($row['only_home'] ?? false);
@@ -187,7 +187,7 @@ class Block
     {
         $previous = $this->id ? self::repository()->find((int) $this->id, $this->id_shop) : null;
         $this->id = self::repository()->save($this, Language::getLanguages(false));
-        $this->id_everblock = $this->id;
+        $this->id_everblocklight = $this->id;
 
         if ($this->id > 0) {
             $hookIds = [(int) $this->id_hook];
@@ -227,33 +227,33 @@ class Block
                 continue;
             }
 
-            EverblockCache::cacheDrop('EverBlockClass_getAllBlocks_' . $langId . '_' . $shopId);
+            EverblocklightCache::cacheDrop('EverBlockLightClass_getAllBlocks_' . $langId . '_' . $shopId);
             foreach ($hookIds as $hookId) {
-                EverblockCache::cacheDrop('EverBlockClass_getBlocks_' . $hookId . '_' . $langId . '_' . $shopId);
+                EverblocklightCache::cacheDrop('EverBlockLightClass_getBlocks_' . $hookId . '_' . $langId . '_' . $shopId);
             }
         }
 
         if ($blockId !== null && $blockId > 0) {
-            EverblockCache::refreshObjectCacheVersion('block', $blockId);
-            EverblockCache::cacheDropByPattern('everblock-block-' . $blockId . '-');
+            EverblocklightCache::refreshObjectCacheVersion('block', $blockId);
+            EverblocklightCache::cacheDropByPattern('everblocklight-block-' . $blockId . '-');
         }
 
         foreach ($hookIds as $hookId) {
-            EverblockCache::cacheDropByPattern('everblock-id_hook-' . $hookId);
+            EverblocklightCache::cacheDropByPattern('everblocklight-id_hook-' . $hookId);
         }
     }
 
     public static function getAllBlocks(int $idLang, int $idShop): array
     {
-        $cacheId = 'EverBlockClass_getAllBlocks_' . $idLang . '_' . $idShop;
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        $cacheId = 'EverBlockLightClass_getAllBlocks_' . $idLang . '_' . $idShop;
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $blocks = self::findAllForShopLegacy($idLang, $idShop);
-            EverblockCache::cacheStore($cacheId, $blocks);
+            EverblocklightCache::cacheStore($cacheId, $blocks);
 
             return $blocks;
         }
 
-        return (array) EverblockCache::cacheRetrieve($cacheId);
+        return (array) EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     public static function cleanBlocksCacheOnDate(int $idLang, int $idShop): void
@@ -264,19 +264,19 @@ class Block
 
     public static function getBlocks(int $idHook, int $idLang, int $idShop): array
     {
-        $cacheId = 'EverBlockClass_getBlocks_' . $idHook . '_' . $idLang . '_' . $idShop;
-        if (!EverblockCache::isCacheStored($cacheId)) {
+        $cacheId = 'EverBlockLightClass_getBlocks_' . $idHook . '_' . $idLang . '_' . $idShop;
+        if (!EverblocklightCache::isCacheStored($cacheId)) {
             $blocks = self::findActiveForHookLegacy($idHook, $idLang, $idShop);
             foreach ($blocks as &$block) {
                 $block['bootstrap_class'] = self::getBootstrapColClass((int) ($block['bootstrap_class'] ?? 0));
             }
             unset($block);
-            EverblockCache::cacheStore($cacheId, $blocks);
+            EverblocklightCache::cacheStore($cacheId, $blocks);
 
             return $blocks;
         }
 
-        return (array) EverblockCache::cacheRetrieve($cacheId);
+        return (array) EverblocklightCache::cacheRetrieve($cacheId);
     }
 
     private static function findAllForShopLegacy(int $idLang, int $idShop): array
@@ -287,11 +287,11 @@ class Block
             'SELECT b.*,
                 COALESCE(NULLIF(bl.content, \'\'), NULLIF(bld.content, \'\'), \'\') AS content,
                 COALESCE(NULLIF(bl.custom_code, \'\'), NULLIF(bld.custom_code, \'\'), \'\') AS custom_code
-            FROM `' . _DB_PREFIX_ . 'everblock` b
-            LEFT JOIN `' . _DB_PREFIX_ . 'everblock_lang` bl
-                ON b.id_everblock = bl.id_everblock AND bl.id_lang = ' . (int) $idLang . '
-            LEFT JOIN `' . _DB_PREFIX_ . 'everblock_lang` bld
-                ON b.id_everblock = bld.id_everblock AND bld.id_lang = ' . $idLangDefault . '
+            FROM `' . _DB_PREFIX_ . 'everblocklight` b
+            LEFT JOIN `' . _DB_PREFIX_ . 'everblocklight_lang` bl
+                ON b.id_everblocklight = bl.id_everblocklight AND bl.id_lang = ' . (int) $idLang . '
+            LEFT JOIN `' . _DB_PREFIX_ . 'everblocklight_lang` bld
+                ON b.id_everblocklight = bld.id_everblocklight AND bld.id_lang = ' . $idLangDefault . '
             WHERE b.id_shop = ' . (int) $idShop . '
             ORDER BY b.position ASC'
         );
@@ -299,28 +299,28 @@ class Block
 
     private static function findOneLegacy(int $id, ?int $idShop = null, ?int $idLang = null): ?self
     {
-        $where = 'b.id_everblock = ' . (int) $id;
+        $where = 'b.id_everblocklight = ' . (int) $id;
         if ($idShop !== null && $idShop > 0) {
             $where .= ' AND b.id_shop = ' . (int) $idShop;
         }
 
         $row = \Db::getInstance()->getRow(
             'SELECT b.*
-            FROM `' . _DB_PREFIX_ . 'everblock` b
+            FROM `' . _DB_PREFIX_ . 'everblocklight` b
             WHERE ' . $where
         );
         if (!$row) {
             return null;
         }
 
-        $langWhere = 'id_everblock = ' . (int) $id;
+        $langWhere = 'id_everblocklight = ' . (int) $id;
         if ($idLang !== null && $idLang > 0) {
             $langWhere .= ' AND id_lang = ' . (int) $idLang;
         }
 
         $langRows = (array) \Db::getInstance()->executeS(
             'SELECT *
-            FROM `' . _DB_PREFIX_ . 'everblock_lang`
+            FROM `' . _DB_PREFIX_ . 'everblocklight_lang`
             WHERE ' . $langWhere
         );
 
@@ -335,11 +335,11 @@ class Block
             'SELECT b.*,
                 COALESCE(NULLIF(bl.content, \'\'), NULLIF(bld.content, \'\'), \'\') AS content,
                 COALESCE(NULLIF(bl.custom_code, \'\'), NULLIF(bld.custom_code, \'\'), \'\') AS custom_code
-            FROM `' . _DB_PREFIX_ . 'everblock` b
-            LEFT JOIN `' . _DB_PREFIX_ . 'everblock_lang` bl
-                ON b.id_everblock = bl.id_everblock AND bl.id_lang = ' . (int) $idLang . '
-            LEFT JOIN `' . _DB_PREFIX_ . 'everblock_lang` bld
-                ON b.id_everblock = bld.id_everblock AND bld.id_lang = ' . $idLangDefault . '
+            FROM `' . _DB_PREFIX_ . 'everblocklight` b
+            LEFT JOIN `' . _DB_PREFIX_ . 'everblocklight_lang` bl
+                ON b.id_everblocklight = bl.id_everblocklight AND bl.id_lang = ' . (int) $idLang . '
+            LEFT JOIN `' . _DB_PREFIX_ . 'everblocklight_lang` bld
+                ON b.id_everblocklight = bld.id_everblocklight AND bld.id_lang = ' . $idLangDefault . '
             WHERE b.id_hook = ' . (int) $idHook . '
               AND b.id_shop = ' . (int) $idShop . '
               AND b.active = 1
@@ -349,9 +349,9 @@ class Block
 
     public static function getBootstrapColClass(int $colNumber): string
     {
-        $cacheId = 'EverBlockClass_getBootstrapColClass_' . $colNumber;
-        if (EverblockCache::isCacheStored($cacheId)) {
-            return (string) EverblockCache::cacheRetrieve($cacheId);
+        $cacheId = 'EverBlockLightClass_getBootstrapColClass_' . $colNumber;
+        if (EverblocklightCache::isCacheStored($cacheId)) {
+            return (string) EverblocklightCache::cacheRetrieve($cacheId);
         }
 
         $map = [
@@ -363,7 +363,7 @@ class Block
             6 => 'col-2 col-md-2',
         ];
         $class = $map[$colNumber] ?? 'col-12 col-md-12';
-        EverblockCache::cacheStore($cacheId, $class);
+        EverblocklightCache::cacheStore($cacheId, $class);
 
         return $class;
     }

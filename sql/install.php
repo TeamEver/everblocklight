@@ -24,8 +24,8 @@ if (!defined('_PS_VERSION_')) {
 
 $sql = [];
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'everblock` (
-        `id_everblock` int(10) unsigned NOT NULL auto_increment,
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'everblocklight` (
+        `id_everblocklight` int(10) unsigned NOT NULL auto_increment,
         `name` text NOT NULL,
         `id_hook` int(10) unsigned NOT NULL,
         `only_home` int(10) unsigned DEFAULT NULL,
@@ -55,31 +55,31 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'everblock` (
         `date_start` DATETIME DEFAULT NULL,
         `date_end` DATETIME DEFAULT NULL,
         `active` int(10) unsigned NOT NULL DEFAULT 0,
-        PRIMARY KEY (`id_everblock`, `id_shop`)
+        PRIMARY KEY (`id_everblocklight`, `id_shop`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8mb4';
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'everblock_lang` (
-    	`id_everblock` int(10) unsigned NOT NULL,
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'everblocklight_lang` (
+    	`id_everblocklight` int(10) unsigned NOT NULL,
         `id_lang` int(10) unsigned NOT NULL,
     	`content` text DEFAULT NULL,
         `custom_code` text DEFAULT NULL,
-    	PRIMARY KEY (`id_everblock`, `id_lang`)
+    	PRIMARY KEY (`id_everblocklight`, `id_lang`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8mb4';
 
 // Shortcodes
-$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'everblock_shortcode` (
-        `id_everblock_shortcode` int(10) unsigned NOT NULL auto_increment,
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'everblocklight_shortcode` (
+        `id_everblocklight_shortcode` int(10) unsigned NOT NULL auto_increment,
         `shortcode` text DEFAULT NULL,
         `id_shop` int(10) unsigned NOT NULL,
-        PRIMARY KEY (`id_everblock_shortcode`, `id_shop`)
+        PRIMARY KEY (`id_everblocklight_shortcode`, `id_shop`)
     ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4';
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'everblock_shortcode_lang` (
-        `id_everblock_shortcode` int(10) unsigned NOT NULL,
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'everblocklight_shortcode_lang` (
+        `id_everblocklight_shortcode` int(10) unsigned NOT NULL,
         `id_lang` int(10) unsigned NOT NULL,
         `title` text DEFAULT NULL,
         `content` text DEFAULT NULL,
-        PRIMARY KEY (`id_everblock_shortcode`, `id_lang`)
+        PRIMARY KEY (`id_everblocklight_shortcode`, `id_lang`)
     ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4';
 
 

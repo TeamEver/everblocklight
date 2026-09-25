@@ -1,199 +1,199 @@
-admin_everblock_configuration:
-  path: /everblock/configuration
+admin_everblocklight_configuration:
+  path: /everblocklight/configuration
   methods: [GET, POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::configurationAction'
-    _legacy_controller: AdminEverBlockConfiguration
-    _legacy_link: AdminEverBlockConfiguration
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::configurationAction'
+    _legacy_controller: AdminEverBlockLightConfiguration
+    _legacy_link: AdminEverBlockLightConfiguration
 
-admin_everblock_clear_cache:
-  path: /everblock/clear-cache
+admin_everblocklight_clear_cache:
+  path: /everblocklight/clear-cache
   methods: [POST, GET]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::clearCacheAction'
-    _legacy_controller: AdminEverBlockConfiguration
-    _legacy_link: AdminEverBlockConfiguration
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::clearCacheAction'
+    _legacy_controller: AdminEverBlockLightConfiguration
+    _legacy_link: AdminEverBlockLightConfiguration
 
-admin_everblock_blocks:
-  path: /everblock/blocks
+admin_everblocklight_blocks:
+  path: /everblocklight/blocks
   methods: [GET]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::listAction'
-    _legacy_controller: AdminEverBlock
-    _legacy_link: AdminEverBlock
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::listAction'
+    _legacy_controller: AdminEverBlockLight
+    _legacy_link: AdminEverBlockLight
     section: blocks
 
-admin_everblock_blocks_create:
-  path: /everblock/blocks/new
+admin_everblocklight_blocks_create:
+  path: /everblocklight/blocks/new
   methods: [GET, POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::createAction'
-    _legacy_controller: AdminEverBlock
-    _legacy_link: AdminEverBlock:add
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::createAction'
+    _legacy_controller: AdminEverBlockLight
+    _legacy_link: AdminEverBlockLight:add
     section: blocks
 
-admin_everblock_blocks_edit:
-  path: /everblock/blocks/{id}/edit
+admin_everblocklight_blocks_edit:
+  path: /everblocklight/blocks/{id}/edit
   methods: [GET, POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::editAction'
-    _legacy_controller: AdminEverBlock
-    _legacy_link: AdminEverBlock:update
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::editAction'
+    _legacy_controller: AdminEverBlockLight
+    _legacy_link: AdminEverBlockLight:update
     section: blocks
   requirements:
     id: \d+
 
-admin_everblock_blocks_delete:
-  path: /everblock/blocks/{id}/delete
+admin_everblocklight_blocks_delete:
+  path: /everblocklight/blocks/{id}/delete
   methods: [POST, GET]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::deleteAction'
-    _legacy_controller: AdminEverBlock
-    _legacy_link: AdminEverBlock:delete
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::deleteAction'
+    _legacy_controller: AdminEverBlockLight
+    _legacy_link: AdminEverBlockLight:delete
     section: blocks
   requirements:
     id: \d+
 
-admin_everblock_blocks_toggle:
-  path: /everblock/blocks/{id}/toggle
+admin_everblocklight_blocks_toggle:
+  path: /everblocklight/blocks/{id}/toggle
   methods: [POST, GET]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::toggleBlockAction'
-    _legacy_controller: AdminEverBlock
-    _legacy_link: AdminEverBlock:update
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::toggleBlockAction'
+    _legacy_controller: AdminEverBlockLight
+    _legacy_link: AdminEverBlockLight:update
   requirements:
     id: \d+
 
-admin_everblock_blocks_duplicate:
-  path: /everblock/blocks/{id}/duplicate
+admin_everblocklight_blocks_duplicate:
+  path: /everblocklight/blocks/{id}/duplicate
   methods: [POST, GET]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::duplicateBlockAction'
-    _legacy_controller: AdminEverBlock
-    _legacy_link: AdminEverBlock:add
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::duplicateBlockAction'
+    _legacy_controller: AdminEverBlockLight
+    _legacy_link: AdminEverBlockLight:add
   requirements:
     id: \d+
 
-admin_everblock_blocks_bulk_enable:
-  path: /everblock/blocks/bulk-enable
+admin_everblocklight_blocks_bulk_enable:
+  path: /everblocklight/blocks/bulk-enable
   methods: [POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::bulkBlockAction'
-    _legacy_controller: AdminEverBlock
-    _legacy_link: AdminEverBlock:update
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::bulkBlockAction'
+    _legacy_controller: AdminEverBlockLight
+    _legacy_link: AdminEverBlockLight:update
     bulkAction: enable
 
-admin_everblock_blocks_bulk_disable:
-  path: /everblock/blocks/bulk-disable
+admin_everblocklight_blocks_bulk_disable:
+  path: /everblocklight/blocks/bulk-disable
   methods: [POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::bulkBlockAction'
-    _legacy_controller: AdminEverBlock
-    _legacy_link: AdminEverBlock:update
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::bulkBlockAction'
+    _legacy_controller: AdminEverBlockLight
+    _legacy_link: AdminEverBlockLight:update
     bulkAction: disable
 
-admin_everblock_blocks_bulk_delete:
-  path: /everblock/blocks/bulk-delete
+admin_everblocklight_blocks_bulk_delete:
+  path: /everblocklight/blocks/bulk-delete
   methods: [POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::bulkBlockAction'
-    _legacy_controller: AdminEverBlock
-    _legacy_link: AdminEverBlock:delete
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::bulkBlockAction'
+    _legacy_controller: AdminEverBlockLight
+    _legacy_link: AdminEverBlockLight:delete
     bulkAction: delete
 
-admin_everblock_blocks_bulk_duplicate:
-  path: /everblock/blocks/bulk-duplicate
+admin_everblocklight_blocks_bulk_duplicate:
+  path: /everblocklight/blocks/bulk-duplicate
   methods: [POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::bulkBlockAction'
-    _legacy_controller: AdminEverBlock
-    _legacy_link: AdminEverBlock:add
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::bulkBlockAction'
+    _legacy_controller: AdminEverBlockLight
+    _legacy_link: AdminEverBlockLight:add
     bulkAction: duplicate
 
-admin_everblock_hooks:
-  path: /everblock/hooks
+admin_everblocklight_hooks:
+  path: /everblocklight/hooks
   methods: [GET]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::listAction'
-    _legacy_controller: AdminEverBlockHook
-    _legacy_link: AdminEverBlockHook
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::listAction'
+    _legacy_controller: AdminEverBlockLightHook
+    _legacy_link: AdminEverBlockLightHook
     section: hooks
 
-admin_everblock_hooks_create:
-  path: /everblock/hooks/new
+admin_everblocklight_hooks_create:
+  path: /everblocklight/hooks/new
   methods: [GET, POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::createAction'
-    _legacy_controller: AdminEverBlockHook
-    _legacy_link: AdminEverBlockHook:add
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::createAction'
+    _legacy_controller: AdminEverBlockLightHook
+    _legacy_link: AdminEverBlockLightHook:add
     section: hooks
 
-admin_everblock_hooks_edit:
-  path: /everblock/hooks/{id}/edit
+admin_everblocklight_hooks_edit:
+  path: /everblocklight/hooks/{id}/edit
   methods: [GET, POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::editAction'
-    _legacy_controller: AdminEverBlockHook
-    _legacy_link: AdminEverBlockHook:update
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::editAction'
+    _legacy_controller: AdminEverBlockLightHook
+    _legacy_link: AdminEverBlockLightHook:update
     section: hooks
   requirements:
     id: \d+
 
-admin_everblock_hooks_delete:
-  path: /everblock/hooks/{id}/delete
+admin_everblocklight_hooks_delete:
+  path: /everblocklight/hooks/{id}/delete
   methods: [POST, GET]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::deleteAction'
-    _legacy_controller: AdminEverBlockHook
-    _legacy_link: AdminEverBlockHook:delete
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::deleteAction'
+    _legacy_controller: AdminEverBlockLightHook
+    _legacy_link: AdminEverBlockLightHook:delete
     section: hooks
   requirements:
     id: \d+
 
-admin_everblock_shortcodes:
-  path: /everblock/shortcodes
+admin_everblocklight_shortcodes:
+  path: /everblocklight/shortcodes
   methods: [GET]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::listAction'
-    _legacy_controller: AdminEverBlockShortcode
-    _legacy_link: AdminEverBlockShortcode
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::listAction'
+    _legacy_controller: AdminEverBlockLightShortcode
+    _legacy_link: AdminEverBlockLightShortcode
     section: shortcodes
 
-admin_everblock_shortcodes_documentation:
-  path: /everblock/shortcodes/documentation
+admin_everblocklight_shortcodes_documentation:
+  path: /everblocklight/shortcodes/documentation
   methods: [GET]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::shortcodeDocumentationAction'
-    _legacy_controller: AdminEverBlockShortcodeDocumentation
-    _legacy_link: AdminEverBlockShortcodeDocumentation
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::shortcodeDocumentationAction'
+    _legacy_controller: AdminEverBlockLightShortcodeDocumentation
+    _legacy_link: AdminEverBlockLightShortcodeDocumentation
 
-admin_everblock_shortcodes_create:
-  path: /everblock/shortcodes/new
+admin_everblocklight_shortcodes_create:
+  path: /everblocklight/shortcodes/new
   methods: [GET, POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::createAction'
-    _legacy_controller: AdminEverBlockShortcode
-    _legacy_link: AdminEverBlockShortcode:add
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::createAction'
+    _legacy_controller: AdminEverBlockLightShortcode
+    _legacy_link: AdminEverBlockLightShortcode:add
     section: shortcodes
 
-admin_everblock_shortcodes_edit:
-  path: /everblock/shortcodes/{id}/edit
+admin_everblocklight_shortcodes_edit:
+  path: /everblocklight/shortcodes/{id}/edit
   methods: [GET, POST]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::editAction'
-    _legacy_controller: AdminEverBlockShortcode
-    _legacy_link: AdminEverBlockShortcode:update
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::editAction'
+    _legacy_controller: AdminEverBlockLightShortcode
+    _legacy_link: AdminEverBlockLightShortcode:update
     section: shortcodes
   requirements:
     id: \d+
 
-admin_everblock_shortcodes_delete:
-  path: /everblock/shortcodes/{id}/delete
+admin_everblocklight_shortcodes_delete:
+  path: /everblocklight/shortcodes/{id}/delete
   methods: [POST, GET]
   defaults:
-    _controller: 'Everblock\Tools\Controller\Admin\EverblockAdminController::deleteAction'
-    _legacy_controller: AdminEverBlockShortcode
-    _legacy_link: AdminEverBlockShortcode:delete
+    _controller: 'Everblocklight\Tools\Controller\Admin\EverblocklightAdminController::deleteAction'
+    _legacy_controller: AdminEverBlockLightShortcode
+    _legacy_link: AdminEverBlockLightShortcode:delete
     section: shortcodes
   requirements:
     id: \d+

@@ -21,7 +21,7 @@
         <div class="modal-content text-center">
             <div class="modal-body text-center">
                 <div class="alert alert-success">
-                    <p>{l s='Your message has been sent' d='Modules.Everblock.Front'}</p>
+                    <p>{l s='Your message has been sent' d='Modules.Everblocklight.Front'}</p>
                 </div>
             </div>
         </div>

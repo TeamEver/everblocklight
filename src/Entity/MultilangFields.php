@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Entity;
+namespace Everblocklight\Tools\Entity;
 
 /**
- * Resolution des champs multilang des entites Everblock.
+ * Resolution des champs multilang des entites Everblocklight.
  *
  * Ces entites ne sont pas des ObjectModel PrestaShop : leurs champs traduits
  * restent des tableaux indexes par id_lang, meme lorsqu'un id_lang est passe au

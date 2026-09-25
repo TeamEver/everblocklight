@@ -16,18 +16,18 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /* Visibility helpers */
-.everblock-visibility-none {
+.everblocklight-visibility-none {
     display: none !important;
 }
 
 @media (min-width: 992px) {
-    .everblock-visibility-mobile {
+    .everblocklight-visibility-mobile {
         display: none !important;
     }
 }
 
 @media (max-width: 991.98px) {
-    .everblock-visibility-desktop {
+    .everblocklight-visibility-desktop {
         display: none !important;
     }
 }
@@ -42,7 +42,7 @@
 }
 
 /* Link hover effect */
-.everblock-link-hover--text {
+.everblocklight-link-hover--text {
     text-decoration-line: underline;
     text-decoration-color: transparent;
     text-decoration-thickness: 2px;
@@ -50,19 +50,19 @@
     transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 
-.everblock-link-hover--text:hover,
-.everblock-link-hover--text:focus {
+.everblocklight-link-hover--text:hover,
+.everblocklight-link-hover--text:focus {
     text-decoration-color: currentColor;
 }
 
-.everblock-link-hover--block {
+.everblocklight-link-hover--block {
     display: inline-flex;
     transition: opacity 0.2s ease, transform 0.2s ease;
     will-change: transform;
 }
 
-.everblock-link-hover--block:hover,
-.everblock-link-hover--block:focus {
+.everblocklight-link-hover--block:hover,
+.everblocklight-link-hover--block:focus {
     opacity: 0.85;
     transform: scale(1.04);
 }
@@ -131,7 +131,7 @@
 }
 /* Média query pour les écrans de taille moyenne (tablettes) */
 @media (max-width: 768px) {
-    .everblock-overlay .overlay {
+    .everblocklight-overlay .overlay {
         top: 0;
         left: 0;
         transform: none;
@@ -143,7 +143,7 @@
 
 /* Média query pour les petits écrans (smartphones) */
 @media (max-width: 576px) {
-    .everblock-overlay .overlay {
+    .everblocklight-overlay .overlay {
         top: 0;
         width: 100%;
         text-align: center;
@@ -155,7 +155,7 @@
 }
 
 
-#everblockModal button.close {
+#everblocklightModal button.close {
     float: right;
     padding: 0;
     cursor: pointer;
@@ -164,27 +164,27 @@
     -webkit-appearance: none;
 }
 
-#everblockModal.modal {
+#everblocklightModal.modal {
     text-align: center;
 }
 
-#everblockModal .everblock-modal-dialog {
+#everblocklightModal .everblocklight-modal-dialog {
     display: inline-block;
     width: auto;
     max-width: 90vw;
     margin: 1.75rem auto;
 }
 
-#everblockModal .everblock-modal-dialog .modal-content {
+#everblocklightModal .everblocklight-modal-dialog .modal-content {
     text-align: left;
 }
 
-#everblockModal .everblock-modal-media {
+#everblocklightModal .everblocklight-modal-media {
     display: flex;
     justify-content: center;
 }
 
-#everblockModal .everblock-modal-image {
+#everblocklightModal .everblocklight-modal-image {
     display: block;
     width: auto;
     max-width: 100%;
@@ -192,11 +192,11 @@
     max-height: 80vh;
 }
 
-.everblock-modal-button--image {
+.everblocklight-modal-button--image {
     background: transparent;
 }
 
-.everblock-modal-button-image {
+.everblocklight-modal-button-image {
     display: block;
     max-width: 100%;
     height: auto;
@@ -206,12 +206,12 @@
     border-radius: 0.25rem;
     background-color: #fff;
 }
-.everblock-highlight {
+.everblocklight-highlight {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
 }
 
-.everblock-highlight:hover {
+.everblocklight-highlight:hover {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 /* Responsive width */
@@ -443,28 +443,28 @@
     margin-bottom: 1rem;
 }
 
-#everblock-storelocator {
+#everblocklight-storelocator {
     width: 100%;
     border-radius: 0.25rem;
     overflow: hidden;
     border: 1px solid #4d1e168a;
 }
 
-#everblock-storelocator-wrapper.map-hidden #pane-map {
+#everblocklight-storelocator-wrapper.map-hidden #pane-map {
     display: none !important;
 }
 
-#everblock-storelocator-wrapper.map-hidden #pane-list {
+#everblocklight-storelocator-wrapper.map-hidden #pane-list {
     flex: 0 0 100%;
     max-width: 100%;
     width: 100%;
 }
 
-#everblock-storelocator-wrapper.map-hidden .tab-content {
+#everblocklight-storelocator-wrapper.map-hidden .tab-content {
     display: block;
 }
 
-#everblock-storelocator-wrapper.map-hidden #everblock-storelist {
+#everblocklight-storelocator-wrapper.map-hidden #everblocklight-storelist {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
@@ -475,12 +475,12 @@
     padding: 0;
 }
 
-#everblock-storelocator-wrapper.map-hidden #everblock-storelist .everblock-store-item {
+#everblocklight-storelocator-wrapper.map-hidden #everblocklight-storelist .everblocklight-store-item {
     width: 100%;
     margin-top: 0;
 }
 
-#everblock-storelocator-wrapper.map-hidden #everblock-storelist .everblock-store-item .d-flex {
+#everblocklight-storelocator-wrapper.map-hidden #everblocklight-storelist .everblocklight-store-item .d-flex {
     height: 100%;
     background: #fff;
     border-radius: 0.5rem;
@@ -489,15 +489,15 @@
     gap: 1rem;
 }
 
-#everblock-storelocator-wrapper.map-hidden #storeLocatorTabs {
+#everblocklight-storelocator-wrapper.map-hidden #storeLocatorTabs {
     display: none !important;
 }
 
 @media (min-width: 768px) {
-    #everblock-storelocator {
+    #everblocklight-storelocator {
         /*    width: 50%!important;*/
     }
-    #everblock-storelocator-wrapper #pane-list {
+    #everblocklight-storelocator-wrapper #pane-list {
         opacity: 1;
     }
 }
@@ -530,27 +530,27 @@
 }
 
 /* =========================================================
-   Everblock WP Section - Blog Grid Fix Height
+   Everblocklight WP Section - Blog Grid Fix Height
    ========================================================= */
 
-.everblock-wp-section {
+.everblocklight-wp-section {
   text-align: center;
   z-index: 2;
 }
 
 /* ---- TITRE ---- */
-.everblock-wp-section .section-title {
+.everblocklight-wp-section .section-title {
   font-weight: 800;
   font-size: 1.6rem;
   position: relative;
   display: inline-block;
 }
-.everblock-wp-section .section-title span {
+.everblocklight-wp-section .section-title span {
   padding: 0 1rem;
   position: relative;
   z-index: 2;
 }
-.everblock-wp-section .section-title::after {
+.everblocklight-wp-section .section-title::after {
   content: "";
   position: absolute;
   left: 0;
@@ -562,36 +562,36 @@
 }
 
 /* ---- CARD ---- */
-.everblock-wp-section .blog-card {
+.everblocklight-wp-section .blog-card {
   background-color: #fff;
   display: flex;
   flex-direction: column;
   height: 100%;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.everblock-wp-section .blog-card:hover {
+.everblocklight-wp-section .blog-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 10px 18px rgba(0, 0, 0, 0.1);
 }
 
 /* ---- IMAGE ---- */
-.everblock-wp-section .blog-image-wrapper {
+.everblocklight-wp-section .blog-image-wrapper {
   height: 220px;
   overflow: hidden;
   flex-shrink: 0;
 }
-.everblock-wp-section .blog-image-wrapper img {
+.everblocklight-wp-section .blog-image-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
-.everblock-wp-section .blog-card:hover .blog-image-wrapper img {
+.everblocklight-wp-section .blog-card:hover .blog-image-wrapper img {
   transform: scale(1.05);
 }
 
 /* ---- BODY ---- */
-.everblock-wp-section .blog-card .card-body {
+.everblocklight-wp-section .blog-card .card-body {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -600,7 +600,7 @@
 }
 
 /* ---- TITRE ---- */
-.everblock-wp-section .blog-title::after {
+.everblocklight-wp-section .blog-title::after {
   content: "";
   position: absolute;
   left: 0;
@@ -610,12 +610,12 @@
   background-color: #f28c3a;
   transition: width 0.3s ease;
 }
-.everblock-wp-section .blog-card:hover .blog-title::after {
+.everblocklight-wp-section .blog-card:hover .blog-title::after {
   width: 60%;
 }
 
 /* ---- DIVIDER ---- */
-.everblock-wp-section .card-divider {
+.everblocklight-wp-section .card-divider {
   width: 60%;
   height: 2px;
   background: #222;
@@ -623,7 +623,7 @@
 }
 
 /* ---- EXCERPT ---- */
-.everblock-wp-section .line-clamp-5 {
+.everblocklight-wp-section .line-clamp-5 {
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
@@ -632,33 +632,33 @@
 }
 
 /* ---- BOUTON ---- */
-.everblock-wp-section .btn-warning {
+.everblocklight-wp-section .btn-warning {
   background-color: #f28c3a;
   border: 0;
 }
 
 /* Google reviews */
-.everblock-google-reviews__col {
+.everblocklight-google-reviews__col {
   display: flex;
 }
 
-.everblock-google-reviews__card {
+.everblocklight-google-reviews__card {
   flex: 1 1 auto;
 }
 
-.everblock-google-reviews__avatar {
+.everblocklight-google-reviews__avatar {
   width: 56px;
   height: 56px;
   flex: 0 0 56px;
 }
 
-.everblock-google-reviews__avatar img {
+.everblocklight-google-reviews__avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.everblock-google-reviews__text {
+.everblocklight-google-reviews__text {
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;

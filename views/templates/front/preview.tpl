@@ -19,73 +19,73 @@
 {extends file='page.tpl'}
 
 {block name='page_title'}
-    {if isset($everblock_preview_block->name) && $everblock_preview_block->name}
-        {l s='Preview for "%s"' sprintf=[$everblock_preview_block->name] d='Modules.Everblock.Front'}
+    {if isset($everblocklight_preview_block->name) && $everblocklight_preview_block->name}
+        {l s='Preview for "%s"' sprintf=[$everblocklight_preview_block->name] d='Modules.Everblocklight.Front'}
     {else}
-        {l s='Block preview' d='Modules.Everblock.Front'}
+        {l s='Block preview' d='Modules.Everblocklight.Front'}
     {/if}
 {/block}
 
 {block name='page_content'}
-    <section class="everblock-preview">
-        {if isset($everblock_preview_error) && $everblock_preview_error}
+    <section class="everblocklight-preview">
+        {if isset($everblocklight_preview_error) && $everblocklight_preview_error}
             <div class="alert alert-danger" role="alert">
-                {$everblock_preview_error|escape:'htmlall':'UTF-8'}
+                {$everblocklight_preview_error|escape:'htmlall':'UTF-8'}
             </div>
         {else}
             <div class="card mb-3">
                 <div class="card-body">
-                    <h2 class="h5 mb-3">{l s='Preview context' d='Modules.Everblock.Front'}</h2>
+                    <h2 class="h5 mb-3">{l s='Preview context' d='Modules.Everblocklight.Front'}</h2>
                     <dl class="row mb-0">
-                        {if isset($everblock_preview_hook) && $everblock_preview_hook}
-                            <dt class="col-sm-4 text-muted">{l s='Hook:' d='Modules.Everblock.Front'}</dt>
-                            <dd class="col-sm-8">{$everblock_preview_hook|escape:'htmlall':'UTF-8'}</dd>
+                        {if isset($everblocklight_preview_hook) && $everblocklight_preview_hook}
+                            <dt class="col-sm-4 text-muted">{l s='Hook:' d='Modules.Everblocklight.Front'}</dt>
+                            <dd class="col-sm-8">{$everblocklight_preview_hook|escape:'htmlall':'UTF-8'}</dd>
                         {/if}
-                        {if isset($everblock_preview_info.controller)}
-                            <dt class="col-sm-4 text-muted">{l s='Controller:' d='Modules.Everblock.Front'}</dt>
-                            <dd class="col-sm-8">{$everblock_preview_info.controller|escape:'htmlall':'UTF-8'}</dd>
+                        {if isset($everblocklight_preview_info.controller)}
+                            <dt class="col-sm-4 text-muted">{l s='Controller:' d='Modules.Everblocklight.Front'}</dt>
+                            <dd class="col-sm-8">{$everblocklight_preview_info.controller|escape:'htmlall':'UTF-8'}</dd>
                         {/if}
-                        {if isset($everblock_preview_info.page_name) && $everblock_preview_info.page_name}
-                            <dt class="col-sm-4 text-muted">{l s='Page name:' d='Modules.Everblock.Front'}</dt>
-                            <dd class="col-sm-8">{$everblock_preview_info.page_name|escape:'htmlall':'UTF-8'}</dd>
+                        {if isset($everblocklight_preview_info.page_name) && $everblocklight_preview_info.page_name}
+                            <dt class="col-sm-4 text-muted">{l s='Page name:' d='Modules.Everblocklight.Front'}</dt>
+                            <dd class="col-sm-8">{$everblocklight_preview_info.page_name|escape:'htmlall':'UTF-8'}</dd>
                         {/if}
-                        {if isset($everblock_preview_info.language->name)}
-                            <dt class="col-sm-4 text-muted">{l s='Language:' d='Modules.Everblock.Front'}</dt>
+                        {if isset($everblocklight_preview_info.language->name)}
+                            <dt class="col-sm-4 text-muted">{l s='Language:' d='Modules.Everblocklight.Front'}</dt>
                             <dd class="col-sm-8">
-                                {$everblock_preview_info.language->name|escape:'htmlall':'UTF-8'}
-                                {if isset($everblock_preview_info.language->iso_code)}
-                                    <span class="badge badge-secondary ml-2">{$everblock_preview_info.language->iso_code|escape:'htmlall':'UTF-8'}</span>
+                                {$everblocklight_preview_info.language->name|escape:'htmlall':'UTF-8'}
+                                {if isset($everblocklight_preview_info.language->iso_code)}
+                                    <span class="badge badge-secondary ml-2">{$everblocklight_preview_info.language->iso_code|escape:'htmlall':'UTF-8'}</span>
                                 {/if}
                             </dd>
                         {/if}
-                        {if isset($everblock_preview_info.currency->name)}
-                            <dt class="col-sm-4 text-muted">{l s='Currency:' d='Modules.Everblock.Front'}</dt>
+                        {if isset($everblocklight_preview_info.currency->name)}
+                            <dt class="col-sm-4 text-muted">{l s='Currency:' d='Modules.Everblocklight.Front'}</dt>
                             <dd class="col-sm-8">
-                                {$everblock_preview_info.currency->name|escape:'htmlall':'UTF-8'}
-                                {if isset($everblock_preview_info.currency->iso_code)}
-                                    <span class="badge badge-secondary ml-2">{$everblock_preview_info.currency->iso_code|escape:'htmlall':'UTF-8'}</span>
+                                {$everblocklight_preview_info.currency->name|escape:'htmlall':'UTF-8'}
+                                {if isset($everblocklight_preview_info.currency->iso_code)}
+                                    <span class="badge badge-secondary ml-2">{$everblocklight_preview_info.currency->iso_code|escape:'htmlall':'UTF-8'}</span>
                                 {/if}
                             </dd>
                         {/if}
-                        {if isset($everblock_preview_info.shop->name)}
-                            <dt class="col-sm-4 text-muted">{l s='Shop:' d='Modules.Everblock.Front'}</dt>
-                            <dd class="col-sm-8">{$everblock_preview_info.shop->name|escape:'htmlall':'UTF-8'}</dd>
+                        {if isset($everblocklight_preview_info.shop->name)}
+                            <dt class="col-sm-4 text-muted">{l s='Shop:' d='Modules.Everblocklight.Front'}</dt>
+                            <dd class="col-sm-8">{$everblocklight_preview_info.shop->name|escape:'htmlall':'UTF-8'}</dd>
                         {/if}
-                        {if isset($everblock_preview_info.ids) && $everblock_preview_info.ids}
-                            <dt class="col-sm-4 text-muted">{l s='Identifiers:' d='Modules.Everblock.Front'}</dt>
+                        {if isset($everblocklight_preview_info.ids) && $everblocklight_preview_info.ids}
+                            <dt class="col-sm-4 text-muted">{l s='Identifiers:' d='Modules.Everblocklight.Front'}</dt>
                             <dd class="col-sm-8">
                                 <ul class="list-unstyled mb-0">
-                                    {foreach from=$everblock_preview_info.ids key=identifier item=value}
+                                    {foreach from=$everblocklight_preview_info.ids key=identifier item=value}
                                         <li><strong>{$identifier|escape:'htmlall':'UTF-8'}:</strong> {$value|intval}</li>
                                     {/foreach}
                                 </ul>
                             </dd>
                         {/if}
-                        {if isset($everblock_preview_info.groups) && $everblock_preview_info.groups}
-                            <dt class="col-sm-4 text-muted">{l s='Simulated customer groups:' d='Modules.Everblock.Front'}</dt>
+                        {if isset($everblocklight_preview_info.groups) && $everblocklight_preview_info.groups}
+                            <dt class="col-sm-4 text-muted">{l s='Simulated customer groups:' d='Modules.Everblocklight.Front'}</dt>
                             <dd class="col-sm-8">
                                 <ul class="list-unstyled mb-0">
-                                    {foreach from=$everblock_preview_info.groups item=group}
+                                    {foreach from=$everblocklight_preview_info.groups item=group}
                                         <li>
                                             {$group.name|escape:'htmlall':'UTF-8'}
                                             <span class="badge badge-secondary ml-2">#{$group.id|intval}</span>
@@ -94,12 +94,12 @@
                                 </ul>
                             </dd>
                         {/if}
-                        {if isset($everblock_preview_info.customer) && isset($everblock_preview_info.customer->id) && $everblock_preview_info.customer->id}
-                            <dt class="col-sm-4 text-muted">{l s='Simulated customer:' d='Modules.Everblock.Front'}</dt>
+                        {if isset($everblocklight_preview_info.customer) && isset($everblocklight_preview_info.customer->id) && $everblocklight_preview_info.customer->id}
+                            <dt class="col-sm-4 text-muted">{l s='Simulated customer:' d='Modules.Everblocklight.Front'}</dt>
                             <dd class="col-sm-8">
-                                #{$everblock_preview_info.customer->id|intval}
-                                {if isset($everblock_preview_info.customer->firstname) || isset($everblock_preview_info.customer->lastname)}
-                                    - {$everblock_preview_info.customer->firstname|escape:'htmlall':'UTF-8'} {$everblock_preview_info.customer->lastname|escape:'htmlall':'UTF-8'}
+                                #{$everblocklight_preview_info.customer->id|intval}
+                                {if isset($everblocklight_preview_info.customer->firstname) || isset($everblocklight_preview_info.customer->lastname)}
+                                    - {$everblocklight_preview_info.customer->firstname|escape:'htmlall':'UTF-8'} {$everblocklight_preview_info.customer->lastname|escape:'htmlall':'UTF-8'}
                                 {/if}
                             </dd>
                         {/if}
@@ -109,13 +109,13 @@
 
             <div class="card">
                 <div class="card-body">
-                    <h2 class="h5 mb-3">{l s='Generated HTML' d='Modules.Everblock.Front'}</h2>
-                    {if isset($everblock_preview_html) && $everblock_preview_html}
-                        <div class="everblock-preview-render">
-                            {$everblock_preview_html nofilter}
+                    <h2 class="h5 mb-3">{l s='Generated HTML' d='Modules.Everblocklight.Front'}</h2>
+                    {if isset($everblocklight_preview_html) && $everblocklight_preview_html}
+                        <div class="everblocklight-preview-render">
+                            {$everblocklight_preview_html nofilter}
                         </div>
                     {else}
-                        <p class="text-muted mb-0">{l s='The block did not return any content for this context.' d='Modules.Everblock.Front'}</p>
+                        <p class="text-muted mb-0">{l s='The block did not return any content for this context.' d='Modules.Everblocklight.Front'}</p>
                     {/if}
                 </div>
             </div>

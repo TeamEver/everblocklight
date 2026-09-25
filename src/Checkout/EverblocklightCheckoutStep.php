@@ -18,11 +18,11 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-namespace Everblock\Tools\Checkout;
+namespace Everblocklight\Tools\Checkout;
 
 use Context;
 use Configuration;
-use Everblock;
+use Everblocklight;
 use Hook;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -30,7 +30,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class EverblockCheckoutStep extends \AbstractCheckoutStep
+class EverblocklightCheckoutStep extends \AbstractCheckoutStep
 {
     protected $module;
     protected $everdata;
@@ -38,13 +38,13 @@ class EverblockCheckoutStep extends \AbstractCheckoutStep
     public function __construct(
         Context $context,
         TranslatorInterface $translator,
-        Everblock $module
+        Everblocklight $module
     ) {
         parent::__construct($context, $translator);
         $this->context = $context;
         $this->module = $module;
         $title = Configuration::get(
-            'EVEROPTIONS_TITLE',
+            'EVERBLOCKLIGHT_OPTIONS_TITLE',
             (int) $this->context->language->id
         );
         if (!$title) {
@@ -110,7 +110,7 @@ class EverblockCheckoutStep extends \AbstractCheckoutStep
     public function render(array $extraParams = [])
     {
         $fields = Hook::exec(
-            'displayEverblockExtraOrderStep',
+            'displayEverblocklightExtraOrderStep',
             [
                 'id_customer' => $this->context->customer,
                 'id_cart' => $this->context->cart,

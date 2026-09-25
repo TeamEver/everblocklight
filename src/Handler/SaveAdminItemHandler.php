@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Handler;
+namespace Everblocklight\Tools\Handler;
 
-use Everblock\Tools\Command\SaveAdminItemCommand;
-use Everblock\Tools\Entity\Block;
-use Everblock\Tools\Entity\Shortcode;
-use Everblock\Tools\Repository\BlockRepository;
-use Everblock\Tools\Repository\HookRepository;
-use Everblock\Tools\Repository\ShortcodeRepository;
-use Everblock\Tools\Service\EverblockCache;
-use Everblock\Tools\Service\EverblockTools;
+use Everblocklight\Tools\Command\SaveAdminItemCommand;
+use Everblocklight\Tools\Entity\Block;
+use Everblocklight\Tools\Entity\Shortcode;
+use Everblocklight\Tools\Repository\BlockRepository;
+use Everblocklight\Tools\Repository\HookRepository;
+use Everblocklight\Tools\Repository\ShortcodeRepository;
+use Everblocklight\Tools\Service\EverblocklightCache;
+use Everblocklight\Tools\Service\EverblocklightTools;
 
 final class SaveAdminItemHandler
 {
@@ -48,7 +48,7 @@ final class SaveAdminItemHandler
         $block ??= new Block();
         $data = $command->data;
         $block->id = $command->id;
-        $block->id_everblock = $command->id;
+        $block->id_everblocklight = $command->id;
         $block->id_shop = $command->shopId;
         $block->name = (string) ($data['name'] ?? '');
         $block->id_hook = (int) ($data['id_hook'] ?? 0);
@@ -79,7 +79,7 @@ final class SaveAdminItemHandler
         $shortcode = $command->id ? $this->shortcodeRepository->find($command->id, $command->shopId) : new Shortcode();
         $shortcode ??= new Shortcode();
         $shortcode->id = $command->id;
-        $shortcode->id_everblock_shortcode = $command->id;
+        $shortcode->id_everblocklight_shortcode = $command->id;
         $shortcode->id_shop = $command->shopId;
         $shortcode->shortcode = (string) ($command->data['shortcode'] ?? '');
         $shortcode->title = $this->localized($command->data, 'title', $command->languages);
@@ -95,7 +95,7 @@ final class SaveAdminItemHandler
             $langId = (int) ($language['id_lang'] ?? $language['id'] ?? 0);
             if ($langId > 0) {
                 $value = (string) ($data[$field . '_' . $langId] ?? '');
-                $values[$langId] = $convertImages ? EverblockTools::convertImagesToWebP($value) : $value;
+                $values[$langId] = $convertImages ? EverblocklightTools::convertImagesToWebP($value) : $value;
             }
         }
 
@@ -138,12 +138,12 @@ final class SaveAdminItemHandler
                 if ($langId <= 0) {
                     continue;
                 }
-                EverblockCache::cacheDrop('EverblockShortcode_getAllShortcodes_' . $command->shopId . '_' . $langId);
+                EverblocklightCache::cacheDrop('EverblocklightShortcode_getAllShortcodes_' . $command->shopId . '_' . $langId);
                 foreach (array_unique(array_filter($shortcodes)) as $shortcode) {
-                    EverblockCache::cacheDrop('EverblockShortcode_getEverShortcode_' . $shortcode . '_' . $command->shopId . '_' . $langId);
+                    EverblocklightCache::cacheDrop('EverblocklightShortcode_getEverShortcode_' . $shortcode . '_' . $command->shopId . '_' . $langId);
                 }
             }
-            EverblockCache::cacheDrop('EverblockShortcode_getAllShortcodeIds_' . $command->shopId);
+            EverblocklightCache::cacheDrop('EverblocklightShortcode_getAllShortcodeIds_' . $command->shopId);
 
             return;
         }
@@ -161,7 +161,7 @@ final class SaveAdminItemHandler
             return;
         }
 
-        $module = \Module::getInstanceByName('everblock');
+        $module = \Module::getInstanceByName('everblocklight');
         if (!$module instanceof \Module || $module->isRegisteredInHook($hookName)) {
             return;
         }

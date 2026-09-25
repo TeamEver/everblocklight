@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Repository;
+namespace Everblocklight\Tools\Repository;
 
-use Everblock\Tools\Entity\Shortcode;
+use Everblocklight\Tools\Entity\Shortcode;
 
-final class ShortcodeRepository extends AbstractEverblockRepository
+final class ShortcodeRepository extends AbstractEverblocklightRepository
 {
     public function list(int $shopId, int $langId): array
     {
         return $this->connection->fetchAllAssociative(
             'SELECT s.*, sl.title, sl.content
-            FROM ' . $this->table('everblock_shortcode') . ' s
-            LEFT JOIN ' . $this->table('everblock_shortcode_lang') . ' sl
-                ON s.id_everblock_shortcode = sl.id_everblock_shortcode AND sl.id_lang = :langId
+            FROM ' . $this->table('everblocklight_shortcode') . ' s
+            LEFT JOIN ' . $this->table('everblocklight_shortcode_lang') . ' sl
+                ON s.id_everblocklight_shortcode = sl.id_everblocklight_shortcode AND sl.id_lang = :langId
             WHERE s.id_shop = :shopId
-            ORDER BY s.id_everblock_shortcode DESC',
+            ORDER BY s.id_everblocklight_shortcode DESC',
             ['shopId' => $shopId, 'langId' => $langId]
         );
     }
 
     public function find(int $id, ?int $shopId = null, ?int $langId = null): ?Shortcode
     {
-        $where = 'id_everblock_shortcode = :id';
+        $where = 'id_everblocklight_shortcode = :id';
         $params = ['id' => $id];
         if ($shopId !== null && $shopId > 0) {
             $where .= ' AND id_shop = :shopId';
@@ -31,7 +31,7 @@ final class ShortcodeRepository extends AbstractEverblockRepository
         }
 
         $row = $this->connection->fetchAssociative(
-            'SELECT * FROM ' . $this->table('everblock_shortcode') . ' WHERE ' . $where,
+            'SELECT * FROM ' . $this->table('everblocklight_shortcode') . ' WHERE ' . $where,
             $params
         );
         if (!$row) {
@@ -40,7 +40,7 @@ final class ShortcodeRepository extends AbstractEverblockRepository
 
         return Shortcode::fromDatabase(
             $row,
-            $this->langRows('everblock_shortcode_lang', 'id_everblock_shortcode', $id),
+            $this->langRows('everblocklight_shortcode_lang', 'id_everblocklight_shortcode', $id),
             $langId
         );
     }
@@ -49,9 +49,9 @@ final class ShortcodeRepository extends AbstractEverblockRepository
     {
         $rows = $this->connection->fetchAllAssociative(
             'SELECT s.*, sl.title, sl.content, sl.id_lang
-            FROM ' . $this->table('everblock_shortcode') . ' s
-            INNER JOIN ' . $this->table('everblock_shortcode_lang') . ' sl
-                ON s.id_everblock_shortcode = sl.id_everblock_shortcode AND sl.id_lang = :langId
+            FROM ' . $this->table('everblocklight_shortcode') . ' s
+            INNER JOIN ' . $this->table('everblocklight_shortcode_lang') . ' sl
+                ON s.id_everblocklight_shortcode = sl.id_everblocklight_shortcode AND sl.id_lang = :langId
             WHERE s.id_shop = :shopId
             ORDER BY s.shortcode ASC',
             ['shopId' => $shopId, 'langId' => $langId]
@@ -63,7 +63,7 @@ final class ShortcodeRepository extends AbstractEverblockRepository
     public function findIds(int $shopId): array
     {
         return $this->connection->fetchAllAssociative(
-            'SELECT id_everblock_shortcode FROM ' . $this->table('everblock_shortcode') . ' WHERE id_shop = :shopId',
+            'SELECT id_everblocklight_shortcode FROM ' . $this->table('everblocklight_shortcode') . ' WHERE id_shop = :shopId',
             ['shopId' => $shopId]
         );
     }
@@ -72,9 +72,9 @@ final class ShortcodeRepository extends AbstractEverblockRepository
     {
         $content = $this->connection->fetchOne(
             'SELECT sl.content
-            FROM ' . $this->table('everblock_shortcode') . ' s
-            INNER JOIN ' . $this->table('everblock_shortcode_lang') . ' sl
-                ON s.id_everblock_shortcode = sl.id_everblock_shortcode
+            FROM ' . $this->table('everblocklight_shortcode') . ' s
+            INNER JOIN ' . $this->table('everblocklight_shortcode_lang') . ' sl
+                ON s.id_everblocklight_shortcode = sl.id_everblocklight_shortcode
             WHERE s.shortcode = :shortcode AND s.id_shop = :shopId AND sl.id_lang = :langId',
             ['shortcode' => $shortcode, 'shopId' => $shopId, 'langId' => $langId]
         );
@@ -94,17 +94,17 @@ final class ShortcodeRepository extends AbstractEverblockRepository
         $this->connection->beginTransaction();
         try {
             if ($shortcode->id) {
-                $this->connection->update($this->databasePrefix . 'everblock_shortcode', $data, [
-                    'id_everblock_shortcode' => $shortcode->id,
+                $this->connection->update($this->databasePrefix . 'everblocklight_shortcode', $data, [
+                    'id_everblocklight_shortcode' => $shortcode->id,
                     'id_shop' => $shortcode->id_shop,
                 ]);
                 $id = (int) $shortcode->id;
             } else {
-                $this->connection->insert($this->databasePrefix . 'everblock_shortcode', $data);
+                $this->connection->insert($this->databasePrefix . 'everblocklight_shortcode', $data);
                 $id = (int) $this->connection->lastInsertId();
             }
 
-            $this->upsertLangRows('everblock_shortcode_lang', 'id_everblock_shortcode', $id, $languages, [
+            $this->upsertLangRows('everblocklight_shortcode_lang', 'id_everblocklight_shortcode', $id, $languages, [
                 'title' => $titles,
                 'content' => $contents,
             ]);
@@ -122,9 +122,9 @@ final class ShortcodeRepository extends AbstractEverblockRepository
     {
         $this->connection->beginTransaction();
         try {
-            $this->connection->delete($this->databasePrefix . 'everblock_shortcode_lang', ['id_everblock_shortcode' => $id]);
-            $deleted = $this->connection->delete($this->databasePrefix . 'everblock_shortcode', [
-                'id_everblock_shortcode' => $id,
+            $this->connection->delete($this->databasePrefix . 'everblocklight_shortcode_lang', ['id_everblocklight_shortcode' => $id]);
+            $deleted = $this->connection->delete($this->databasePrefix . 'everblocklight_shortcode', [
+                'id_everblocklight_shortcode' => $id,
                 'id_shop' => $shopId,
             ]);
             $this->connection->commit();

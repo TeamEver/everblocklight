@@ -32,7 +32,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-class EverblockcronModuleFrontController extends ModuleFrontController
+class EverblocklightcronModuleFrontController extends ModuleFrontController
 {
     private $allowedActions = [
         'refreshtokens',
@@ -42,7 +42,7 @@ class EverblockcronModuleFrontController extends ModuleFrontController
 
     public function initContent()
     {
-        if (!$this->module instanceof Everblock) {
+        if (!$this->module instanceof Everblocklight) {
             Tools::redirect('index.php');
             return;
         }
@@ -75,7 +75,7 @@ class EverblockcronModuleFrontController extends ModuleFrontController
             $application->setAutoExit(false);
 
             $input = new ArrayInput([
-                'command' => 'everblock:tools:execute',
+                'command' => 'everblocklight:tools:execute',
                 'action' => trim(Tools::getValue('action')),
             ]);
 

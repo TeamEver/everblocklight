@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Everblock\Tools\Form;
+namespace Everblocklight\Tools\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -132,8 +132,8 @@ final class BlockType extends AbstractType
                 'label' => 'Hook',
                 'choices' => $options['hook_choices'],
                 'attr' => [
-                    'class' => 'everblock-enhanced-select',
-                    'data-everblock-placeholder' => 'Search hooks',
+                    'class' => 'everblocklight-enhanced-select',
+                    'data-everblocklight-placeholder' => 'Search hooks',
                 ],
             ])
             ->add('position', IntegerType::class, ['label' => 'Position', 'required' => false])
@@ -153,8 +153,8 @@ final class BlockType extends AbstractType
                 'choices' => ['All devices' => 0, 'Only mobile devices' => 4, 'Only tablet devices' => 2, 'Only desktop devices' => 1],
                 'required' => true,
                 'attr' => [
-                    'class' => 'everblock-enhanced-select',
-                    'data-everblock-placeholder' => 'Search device mode',
+                    'class' => 'everblocklight-enhanced-select',
+                    'data-everblocklight-placeholder' => 'Search device mode',
                 ],
             ])
             ->add('bootstrap_class', ChoiceType::class, [
@@ -162,8 +162,8 @@ final class BlockType extends AbstractType
                 'choices' => ['None' => '0', '100%' => '1', '1/2' => '2', '1/3' => '3', '1/4' => '4', '1/6' => '6'],
                 'required' => false,
                 'attr' => [
-                    'class' => 'everblock-enhanced-select',
-                    'data-everblock-placeholder' => 'Search display size',
+                    'class' => 'everblocklight-enhanced-select',
+                    'data-everblocklight-placeholder' => 'Search display size',
                 ],
             ])
             ->add('background', TextType::class, [
@@ -183,8 +183,8 @@ final class BlockType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'attr' => [
-                    'class' => 'everblock-enhanced-multiselect',
-                    'data-everblock-placeholder' => 'Search categories',
+                    'class' => 'everblocklight-enhanced-multiselect',
+                    'data-everblocklight-placeholder' => 'Search categories',
                 ],
             ])
             ->add('manufacturers', ChoiceType::class, [
@@ -193,8 +193,8 @@ final class BlockType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'attr' => [
-                    'class' => 'everblock-enhanced-multiselect',
-                    'data-everblock-placeholder' => 'Search manufacturers',
+                    'class' => 'everblocklight-enhanced-multiselect',
+                    'data-everblocklight-placeholder' => 'Search manufacturers',
                 ],
             ])
             ->add('suppliers', ChoiceType::class, [
@@ -203,8 +203,8 @@ final class BlockType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'attr' => [
-                    'class' => 'everblock-enhanced-multiselect',
-                    'data-everblock-placeholder' => 'Search suppliers',
+                    'class' => 'everblocklight-enhanced-multiselect',
+                    'data-everblocklight-placeholder' => 'Search suppliers',
                 ],
             ])
             ->add('cms_categories', ChoiceType::class, [
@@ -213,8 +213,8 @@ final class BlockType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'attr' => [
-                    'class' => 'everblock-enhanced-multiselect',
-                    'data-everblock-placeholder' => 'Search CMS categories',
+                    'class' => 'everblocklight-enhanced-multiselect',
+                    'data-everblocklight-placeholder' => 'Search CMS categories',
                 ],
             ])
             ->add('groups', ChoiceType::class, [
@@ -223,8 +223,8 @@ final class BlockType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'attr' => [
-                    'class' => 'everblock-enhanced-multiselect',
-                    'data-everblock-placeholder' => 'Search groups',
+                    'class' => 'everblocklight-enhanced-multiselect',
+                    'data-everblocklight-placeholder' => 'Search groups',
                 ],
             ])
             ->add('delay', IntegerType::class, ['label' => 'Cookie lifetime in days', 'required' => false])
@@ -233,9 +233,9 @@ final class BlockType extends AbstractType
                 'label' => 'Start date',
                 'required' => false,
                 'attr' => [
-                    'class' => 'everblock-datetime-field',
+                    'class' => 'everblocklight-datetime-field',
                     'autocomplete' => 'off',
-                    'data-everblock-datetime' => '1',
+                    'data-everblocklight-datetime' => '1',
                     'placeholder' => 'YYYY-MM-DD HH:MM:SS',
                 ],
             ])
@@ -243,9 +243,9 @@ final class BlockType extends AbstractType
                 'label' => 'End date',
                 'required' => false,
                 'attr' => [
-                    'class' => 'everblock-datetime-field',
+                    'class' => 'everblocklight-datetime-field',
                     'autocomplete' => 'off',
-                    'data-everblock-datetime' => '1',
+                    'data-everblocklight-datetime' => '1',
                     'placeholder' => 'YYYY-MM-DD HH:MM:SS',
                 ],
             ]);
