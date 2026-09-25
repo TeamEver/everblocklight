@@ -21,12 +21,7 @@ final class EverblockConfigurationType extends AbstractType
             'meta_tools' => 'Meta Tools',
             'wordpress_tools' => 'WordPress Tools',
             'google_maps' => 'Google Tools',
-            'translations' => 'Translations',
-            'migration' => 'Migration des URL',
             'tools' => 'Outils',
-            'files' => 'Gestionnaire de fichiers',
-            'flags' => 'Flags',
-            'pages' => 'Pages',
         ];
 
         if ($hasStores) {
@@ -38,19 +33,16 @@ final class EverblockConfigurationType extends AbstractType
         return $tabs;
     }
 
-    public static function fieldTabs(array $languages, array $bannedFeatures, array $stores, array $holidays, bool $hasInstagramToken): array
+    public static function fieldTabs(array $languages, array $stores, array $holidays, bool $hasInstagramToken): array
     {
         $fieldTabs = [
             'settings' => [
                 'EVEROPTIONS_POSITION',
-                'EVERBLOCK_MAINTENANCE_PSSWD',
                 'EVERBLOCK_LOAD_FRONT_CSS',
                 'EVERBLOCK_USE_OBF',
                 'EVERBLOCK_TINYMCE',
-                'EVERPS_DUMMY_NBR',
                 'EVERPSCSS_P_LLOREM_NUMBER',
                 'EVERPSCSS_S_LLOREM_NUMBER',
-                'EVERPS_TAB_NB',
             ],
             'meta_tools' => [
                 'EVERINSTA_ACCESS_TOKEN',
@@ -76,15 +68,6 @@ final class EverblockConfigurationType extends AbstractType
                 'EVERBLOCK_MARKER_ICON',
                 'EVERBLOCK_STORELOCATOR_TOGGLE',
             ],
-            'translations' => [
-                'EVERBLOCK_TRANSLATION_TARGET_LANG',
-                'EVERBLOCK_TRANSLATION_IMPORT_FILE',
-                'EVERBLOCK_TRANSLATION_UPLOAD_FILE',
-            ],
-            'migration' => [
-                'EVERPS_OLD_URL',
-                'EVERPS_NEW_URL',
-            ],
             'tools' => [
                 'EVERPSCSS',
                 'EVERPSJS',
@@ -92,42 +75,17 @@ final class EverblockConfigurationType extends AbstractType
                 'EVERPSJS_LINKS',
                 'EVERPS_HEADER_SCRIPTS',
             ],
-            'files' => [
-                'TABS_FILE',
-            ],
-            'flags' => [
-                'EVERBLOCK_SOLDOUT_FLAG',
-                'EVERPS_FEATURES_AS_FLAGS',
-                'EVERPS_FLAG_NB',
-                'EVER_SOLDOUT_COLOR',
-                'EVER_SOLDOUT_TEXTCOLOR',
-            ],
-            'pages' => [
-                'EVERBLOCK_PAGES_BASE_URL',
-                'EVERBLOCK_PAGES_PER_PAGE',
-                'EVERBLOCK_FAQ_BASE_URL',
-                'EVERBLOCK_FAQ_PER_PAGE',
-            ],
             'holiday' => [],
             'cron' => [],
         ];
 
         foreach ($languages as $language) {
-            $langId = (int) $language['id_lang'];
-            array_unshift($fieldTabs['settings'], 'EVEROPTIONS_TITLE_' . $langId);
-            $fieldTabs['settings'][] = 'EVER_TAB_TITLE_' . $langId;
-            $fieldTabs['settings'][] = 'EVER_TAB_CONTENT_' . $langId;
+            array_unshift($fieldTabs['settings'], 'EVEROPTIONS_TITLE_' . (int) $language['id_lang']);
         }
 
         if ($hasInstagramToken) {
             $fieldTabs['meta_tools'][] = 'EVERINSTA_LINK';
             $fieldTabs['meta_tools'][] = 'EVERINSTA_SHOW_CAPTION';
-        }
-
-        foreach ($bannedFeatures as $featureId) {
-            $featureId = (int) $featureId;
-            $fieldTabs['flags'][] = 'EVERPS_FEATURE_COLOR_' . $featureId;
-            $fieldTabs['flags'][] = 'EVERPS_FEATURE_TEXTCOLOR_' . $featureId;
         }
 
         foreach ($stores as $store) {
@@ -142,27 +100,8 @@ final class EverblockConfigurationType extends AbstractType
     public static function actionButtons(): array
     {
         return [
-            'settings' => [
-                ['name' => 'submitCreateProduct', 'title' => 'Create fake products', 'icon' => 'auto_fix_high'],
-            ],
             'tools' => [
                 ['name' => 'submitEmptyCache', 'title' => 'Empty Everblock cache', 'icon' => 'cached'],
-                ['name' => 'submitEmptyLogs', 'title' => 'Empty logs', 'icon' => 'delete_sweep'],
-                ['name' => 'submitDropUnusedLangs', 'title' => 'Drop unused langs', 'icon' => 'translate'],
-                ['name' => 'submitSecureModuleFoldersWithApache', 'title' => 'Secure all modules folders using Apache', 'icon' => 'security'],
-                ['name' => 'submitBackupBlocks', 'title' => 'Backup all blocks', 'icon' => 'download'],
-                ['name' => 'submitRestoreBackup', 'title' => 'Restore backup', 'icon' => 'restore'],
-            ],
-            'migration' => [
-                ['name' => 'submitMigrateUrls', 'title' => 'Migrate URLS', 'icon' => 'sync_alt'],
-            ],
-            'files' => [
-                ['name' => 'submitUploadTabsFile', 'title' => 'Upload file', 'icon' => 'upload_file'],
-            ],
-            'translations' => [
-                ['name' => 'submitGenerateModuleTranslation', 'title' => 'Generate with Google Translate', 'icon' => 'g_translate'],
-                ['name' => 'submitImportModuleTranslation', 'title' => 'Import selected translation', 'icon' => 'sync'],
-                ['name' => 'submitUploadModuleTranslation', 'title' => 'Upload and import translation', 'icon' => 'upload_file'],
             ],
         ];
     }
@@ -170,16 +109,11 @@ final class EverblockConfigurationType extends AbstractType
     public static function docs(): array
     {
         return [
-            'settings' => 'Configure global behavior: checkout step title, cache, editor, product tabs and generated content defaults.',
+            'settings' => 'Configure global behavior: checkout step, front assets, editor and generated content defaults.',
             'meta_tools' => 'Configure Meta integrations, including Instagram access and display options.',
             'wordpress_tools' => 'Configure the WordPress REST endpoint and the latest posts block.',
             'google_maps' => 'Configure Google Places reviews, Google Maps keys and store locator marker options.',
-            'translations' => 'Generate, import, upload and download module translations for front office and back office strings.',
-            'migration' => 'Replace old URLs with new URLs in shop content for migration work.',
-            'tools' => 'Run maintenance tools such as cache cleanup, log cleanup, backups and restores.',
-            'files' => 'Import product tab data from an Excel file.',
-            'flags' => 'Configure product flags, feature colors and sold-out display colors.',
-            'pages' => 'Configure guide and FAQ front-office route bases and pagination.',
+            'tools' => 'Custom CSS / JS assets and cache cleanup.',
             'holiday' => 'Override holiday opening hours per store.',
             'cron' => 'Use these secure URLs to run Everblock maintenance tasks from cron.',
         ];
@@ -187,33 +121,14 @@ final class EverblockConfigurationType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $qcdBuilderTargetId = max(1, (int) $options['shop_id']);
-
         foreach ($options['languages'] as $language) {
             $langId = (int) $language['id_lang'];
             $label = (string) ($language['iso_code'] ?? $langId);
-            $builder
-                ->add('EVEROPTIONS_TITLE_' . $langId, TextType::class, [
-                    'label' => 'New order step title (' . $label . ')',
-                    'required' => false,
-                    'help' => 'If not set, new order step will not be shown.',
-                ])
-                ->add('EVER_TAB_TITLE_' . $langId, TextareaType::class, [
-                    'label' => 'Title for global catalog tab (' . $label . ')',
-                    'required' => false,
-                    'attr' => ['rows' => 2],
-                    'help' => 'Leaving empty will hide tab.',
-                ])
-                ->add('EVER_TAB_CONTENT_' . $langId, TextareaType::class, [
-                    'label' => 'Text shown on global catalog tab (' . $label . ')',
-                    'required' => false,
-                    'attr' => [
-                        'rows' => 8,
-                        'class' => 'autoload_rte',
-                        'data-everblock-qcd-target-id' => (string) $qcdBuilderTargetId,
-                    ],
-                    'help' => 'Leaving empty will hide tab.',
-                ]);
+            $builder->add('EVEROPTIONS_TITLE_' . $langId, TextType::class, [
+                'label' => 'New order step title (' . $label . ')',
+                'required' => false,
+                'help' => 'If not set, new order step will not be shown.',
+            ]);
         }
 
         $builder
@@ -229,11 +144,6 @@ final class EverblockConfigurationType extends AbstractType
                     'class' => 'everblock-enhanced-select',
                     'data-everblock-placeholder' => 'Search position',
                 ],
-            ])
-            ->add('EVERBLOCK_MAINTENANCE_PSSWD', TextType::class, [
-                'label' => 'Maintenance password',
-                'required' => false,
-                'help' => 'People with the password will be able to access the store in maintenance mode.',
             ]);
 
         $this->addSwitch($builder, 'EVERBLOCK_LOAD_FRONT_CSS', 'Load everblock.css on the front office ?');
@@ -241,20 +151,12 @@ final class EverblockConfigurationType extends AbstractType
         $this->addSwitch($builder, 'EVERBLOCK_TINYMCE', 'Extends TinyMCE on blocks management ?');
 
         $builder
-            ->add('EVERPS_DUMMY_NBR', TextType::class, [
-                'label' => 'Number of fictitious products to create during product generation',
-                'required' => false,
-            ])
             ->add('EVERPSCSS_P_LLOREM_NUMBER', TextType::class, [
                 'label' => 'Default number of paragraphs when [llorem] shortcode is detected',
                 'required' => false,
             ])
             ->add('EVERPSCSS_S_LLOREM_NUMBER', TextType::class, [
                 'label' => 'Default number of sentences per paragraphs when [llorem] shortcode is detected',
-                'required' => false,
-            ])
-            ->add('EVERPS_TAB_NB', TextType::class, [
-                'label' => 'Number of tabs for the product page',
                 'required' => false,
             ])
             ->add('EVERINSTA_ACCESS_TOKEN', TextType::class, [
@@ -344,78 +246,9 @@ final class EverblockConfigurationType extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'help' => 'Only SVG files are allowed.',
-            ])
-            ->add('EVERBLOCK_TRANSLATION_TARGET_LANG', ChoiceType::class, [
-                'label' => 'Target language',
-                'choices' => $options['translation_language_choices'],
-                'required' => true,
-                'attr' => [
-                    'class' => 'everblock-enhanced-select',
-                    'data-everblock-placeholder' => 'Search language',
-                ],
-                'help' => 'Google Translate will translate from the module English source into this language.',
-            ])
-            ->add('EVERBLOCK_TRANSLATION_IMPORT_FILE', ChoiceType::class, [
-                'label' => 'Translation file to import',
-                'choices' => $options['translation_file_choices'],
-                'required' => false,
-                'attr' => [
-                    'class' => 'everblock-enhanced-select',
-                    'data-everblock-placeholder' => 'Search translation file',
-                ],
-            ])
-            ->add('EVERBLOCK_TRANSLATION_UPLOAD_FILE', FileType::class, [
-                'label' => 'Upload a module translation file',
-                'required' => false,
-                'mapped' => false,
-                'help' => 'The file must use the PrestaShop module PHP translation format.',
             ]);
 
         $this->addSwitch($builder, 'EVERBLOCK_STORELOCATOR_TOGGLE', 'Display map toggle button');
-        $this->addSwitch($builder, 'EVERBLOCK_SOLDOUT_FLAG', 'Show Sold out flag');
-
-        $builder
-            ->add('EVERPS_FEATURES_AS_FLAGS', ChoiceType::class, [
-                'label' => 'Features as flags',
-                'choices' => $options['feature_choices'],
-                'multiple' => true,
-                'required' => false,
-                'attr' => [
-                    'class' => 'everblock-enhanced-multiselect',
-                    'data-everblock-placeholder' => 'Search features',
-                ],
-                'help' => 'The selected features will be converted into product flags.',
-            ])
-            ->add('EVERPS_FLAG_NB', TextType::class, [
-                'label' => 'Number of flags for products',
-                'required' => false,
-            ])
-            ->add('EVER_SOLDOUT_COLOR', TextType::class, [
-                'label' => 'Background color for Sold out flag',
-                'required' => false,
-                'attr' => $this->hexColorAttributes(),
-            ])
-            ->add('EVER_SOLDOUT_TEXTCOLOR', TextType::class, [
-                'label' => 'Text color for Sold out flag',
-                'required' => false,
-                'attr' => $this->hexColorAttributes(),
-            ]);
-
-        foreach ($options['banned_features'] as $featureId) {
-            $featureId = (int) $featureId;
-            $featureName = $options['feature_names'][$featureId] ?? ('#' . $featureId);
-            $builder
-                ->add('EVERPS_FEATURE_COLOR_' . $featureId, TextType::class, [
-                    'label' => 'Background color for Feature: ' . $featureName,
-                    'required' => false,
-                    'attr' => $this->hexColorAttributes(),
-                ])
-                ->add('EVERPS_FEATURE_TEXTCOLOR_' . $featureId, TextType::class, [
-                    'label' => 'Text color for Feature: ' . $featureName,
-                    'required' => false,
-                    'attr' => $this->hexColorAttributes(),
-                ]);
-        }
 
         $builder
             ->add('EVERPSCSS', TextareaType::class, [
@@ -444,37 +277,6 @@ final class EverblockConfigurationType extends AbstractType
                 'label' => 'Header scripts',
                 'required' => false,
                 'attr' => ['rows' => 7],
-            ])
-            ->add('TABS_FILE', FileType::class, [
-                'label' => 'Upload Excel tabs file',
-                'required' => false,
-                'mapped' => false,
-            ])
-            ->add('EVERBLOCK_PAGES_BASE_URL', TextType::class, [
-                'label' => 'Pages base URL',
-                'required' => false,
-                'help' => 'Leave empty to keep the default "guide" value.',
-            ])
-            ->add('EVERBLOCK_PAGES_PER_PAGE', TextType::class, [
-                'label' => 'Items per page',
-                'required' => false,
-            ])
-            ->add('EVERBLOCK_FAQ_BASE_URL', TextType::class, [
-                'label' => 'FAQ base URL',
-                'required' => false,
-                'help' => 'Leave empty to keep the default "faq" value.',
-            ])
-            ->add('EVERBLOCK_FAQ_PER_PAGE', TextType::class, [
-                'label' => 'FAQ per page',
-                'required' => false,
-            ])
-            ->add('EVERPS_OLD_URL', TextType::class, [
-                'label' => 'Migration : Old URL',
-                'required' => false,
-            ])
-            ->add('EVERPS_NEW_URL', TextType::class, [
-                'label' => 'Migration : New URL',
-                'required' => false,
             ]);
 
         foreach ($options['stores'] as $store) {
@@ -491,18 +293,12 @@ final class EverblockConfigurationType extends AbstractType
     {
         $resolver->setDefaults([
             'allow_extra_fields' => true,
-            'banned_features' => [],
             'csrf_protection' => true,
-            'feature_choices' => [],
-            'feature_names' => [],
             'has_instagram_token' => false,
             'holidays' => [],
             'languages' => [],
-            'shop_id' => 1,
             'stores' => [],
             'translation_domain' => 'Modules.Everblock.Admin',
-            'translation_file_choices' => [],
-            'translation_language_choices' => [],
         ]);
     }
 
@@ -525,12 +321,4 @@ final class EverblockConfigurationType extends AbstractType
         ]);
     }
 
-    private function hexColorAttributes(): array
-    {
-        return [
-            'type' => 'color',
-            'pattern' => '^#[0-9A-Fa-f]{6}$',
-            'placeholder' => '#000000',
-        ];
-    }
 }

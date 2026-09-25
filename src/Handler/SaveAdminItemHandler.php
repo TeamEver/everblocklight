@@ -6,13 +6,9 @@ namespace Everblock\Tools\Handler;
 
 use Everblock\Tools\Command\SaveAdminItemCommand;
 use Everblock\Tools\Entity\Block;
-use Everblock\Tools\Entity\Faq;
-use Everblock\Tools\Entity\Page;
 use Everblock\Tools\Entity\Shortcode;
 use Everblock\Tools\Repository\BlockRepository;
-use Everblock\Tools\Repository\FaqRepository;
 use Everblock\Tools\Repository\HookRepository;
-use Everblock\Tools\Repository\PageRepository;
 use Everblock\Tools\Repository\ShortcodeRepository;
 use Everblock\Tools\Service\EverblockCache;
 use Everblock\Tools\Service\EverblockTools;
@@ -22,8 +18,6 @@ final class SaveAdminItemHandler
     public function __construct(
         private BlockRepository $blockRepository,
         private ShortcodeRepository $shortcodeRepository,
-        private FaqRepository $faqRepository,
-        private PageRepository $pageRepository,
         private HookRepository $hookRepository
     ) {
     }
@@ -39,8 +33,6 @@ final class SaveAdminItemHandler
         $id = match ($command->section) {
             'blocks' => $this->saveBlock($command),
             'shortcodes' => $this->saveShortcode($command),
-            'faqs' => $this->saveFaq($command),
-            'pages' => $this->savePage($command),
             'hooks' => $this->hookRepository->save($command->id, $command->data),
             default => 0,
         };
@@ -96,52 +88,6 @@ final class SaveAdminItemHandler
         return $this->shortcodeRepository->save($shortcode, $command->languages);
     }
 
-    private function saveFaq(SaveAdminItemCommand $command): int
-    {
-        $faq = $command->id ? $this->faqRepository->find($command->id, $command->shopId) : new Faq();
-        $faq ??= new Faq();
-        $faq->id = $command->id;
-        $faq->id_everblock_faq = $command->id;
-        $faq->id_shop = $command->shopId;
-        $faq->tag_name = (string) ($command->data['tag_name'] ?? '');
-        $faq->position = (int) ($command->data['position'] ?? 0);
-        $faq->active = !empty($command->data['active']);
-        $faq->title = $this->localized($command->data, 'title', $command->languages);
-        $faq->content = $this->localized($command->data, 'content', $command->languages, true);
-
-        return $this->faqRepository->save($faq, $command->languages);
-    }
-
-    private function savePage(SaveAdminItemCommand $command): int
-    {
-        $page = $command->id ? $this->pageRepository->find($command->id, $command->shopId) : new Page();
-        $page ??= new Page();
-        $page->id = $command->id;
-        $page->id_everblock_page = $command->id;
-        $page->id_shop = $command->shopId;
-        $page->groups = json_encode(array_values(array_map('intval', (array) ($command->data['group_ids'] ?? []))));
-        $page->active = !empty($command->data['active']);
-        $page->position = (int) ($command->data['position'] ?? 0);
-        if (!empty($command->data['cover_image_name'])) {
-            $page->cover_image = (string) $command->data['cover_image_name'];
-        }
-        foreach (['name', 'title', 'meta_description', 'short_description', 'link_rewrite', 'content'] as $field) {
-            $page->{$field} = $this->localized($command->data, $field, $command->languages, in_array($field, ['short_description', 'content'], true));
-        }
-        foreach ($page->link_rewrite as $langId => $rewrite) {
-            $rewrite = trim((string) $rewrite);
-            if ($rewrite === '') {
-                $rewrite = trim((string) ($page->name[$langId] ?? ''));
-            }
-            if ($rewrite === '' && is_array($page->title) && isset($page->title[$langId])) {
-                $rewrite = trim((string) $page->title[$langId]);
-            }
-            $page->link_rewrite[$langId] = EverblockTools::linkRewrite($rewrite);
-        }
-
-        return $this->pageRepository->save($page, $command->languages);
-    }
-
     private function localized(array $data, string $field, array $languages, bool $convertImages = false): array
     {
         $values = [];
@@ -161,8 +107,6 @@ final class SaveAdminItemHandler
         return match ($command->section) {
             'blocks' => $this->blockRepository->find((int) $command->id, $command->shopId),
             'shortcodes' => $this->shortcodeRepository->find((int) $command->id, $command->shopId),
-            'faqs' => $this->faqRepository->find((int) $command->id, $command->shopId),
-            'pages' => $this->pageRepository->find((int) $command->id, $command->shopId),
             default => null,
         };
     }
@@ -204,39 +148,6 @@ final class SaveAdminItemHandler
             return;
         }
 
-        if ($command->section === 'faqs') {
-            $tags = [];
-            if ($previous instanceof Faq) {
-                $tags[] = trim($previous->tag_name);
-            }
-            $tags[] = trim((string) ($command->data['tag_name'] ?? ''));
-            foreach ($command->languages as $language) {
-                $langId = (int) ($language['id_lang'] ?? $language['id'] ?? 0);
-                if ($langId <= 0) {
-                    continue;
-                }
-                EverblockCache::cacheDrop('EverblockFaq_getAllFaq_' . $command->shopId . '_' . $langId);
-                foreach (array_unique(array_filter($tags)) as $tag) {
-                    EverblockCache::cacheDrop('EverblockFaq_getFaqByTagName_' . $command->shopId . '_' . $langId . '_' . $tag);
-                }
-            }
-            EverblockCache::cacheDrop('EverblockFaq_getFirstActiveTagName_' . $command->shopId);
-            EverblockCache::cacheDropByPattern('EverblockFaq_getByIds_' . $command->shopId . '_');
-
-            return;
-        }
-
-        if ($command->section === 'pages') {
-            foreach ($command->languages as $language) {
-                $langId = (int) ($language['id_lang'] ?? $language['id'] ?? 0);
-                if ($langId <= 0) {
-                    continue;
-                }
-                EverblockCache::cacheDrop('EverblockPage_getById_' . $id . '_' . $langId . '_' . $command->shopId);
-                EverblockCache::cacheDropByPattern('EverblockPage_getPages_' . $langId . '_' . $command->shopId . '_');
-                EverblockCache::cacheDropByPattern('EverblockPage_countPages_' . $langId . '_' . $command->shopId . '_');
-            }
-        }
     }
 
     private function registerModuleInHook(int $hookId): void

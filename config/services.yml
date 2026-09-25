@@ -16,19 +16,12 @@ services:
         tags: [form.type]
     Everblock\Tools\Form\ShortcodeType:
         tags: [form.type]
-    Everblock\Tools\Form\FaqType:
-        tags: [form.type]
-    Everblock\Tools\Form\PageType:
-        tags: [form.type]
     Everblock\Tools\Form\HookType:
         tags: [form.type]
 
     Everblock\Tools\Grid\AdminSectionGridFactory: ~
 
     Everblock\Tools\Service\AdminConfigurationManager:
-        public: true
-
-    Everblock\Tools\Service\ModuleTranslationManager:
         public: true
 
     Everblock\Tools\Repository\BlockRepository:
@@ -43,27 +36,6 @@ services:
         arguments: ['@doctrine.dbal.default_connection', '%database_prefix%']
     everblock.repository.shortcode:
         alias: Everblock\Tools\Repository\ShortcodeRepository
-        public: true
-
-    Everblock\Tools\Repository\FaqRepository:
-        public: true
-        arguments: ['@doctrine.dbal.default_connection', '%database_prefix%']
-    everblock.repository.faq:
-        alias: Everblock\Tools\Repository\FaqRepository
-        public: true
-
-    Everblock\Tools\Repository\PageRepository:
-        public: true
-        arguments: ['@doctrine.dbal.default_connection', '%database_prefix%']
-    everblock.repository.page:
-        alias: Everblock\Tools\Repository\PageRepository
-        public: true
-
-    Everblock\Tools\Repository\ProductContentRepository:
-        public: true
-        arguments: ['@doctrine.dbal.default_connection', '%database_prefix%']
-    everblock.repository.product_content:
-        alias: Everblock\Tools\Repository\ProductContentRepository
         public: true
 
     Everblock\Tools\Repository\HookRepository:
@@ -94,32 +66,8 @@ services:
             - { name: tactician.handler, command: Everblock\Tools\Command\ClearEverblockCacheCommand }
             - { name: messenger.message_handler, handles: Everblock\Tools\Command\ClearEverblockCacheCommand }
 
-    everblock.tools.import:
-        class: Everblock\Tools\Command\ImportFileCommand
-        public: true
-        tags:
-            - { name: console.command }
-
-    everblock.tools.import_tab:
-        class: Everblock\Tools\Command\ImportTabCommand
-        public: true
-        tags:
-            - { name: console.command }
-
-    everblock.tools.export:
-        class: Everblock\Tools\Command\ExportFileCommand
-        public: true
-        tags:
-            - { name: console.command }
-
     everblock.tools.execute_action:
         class: Everblock\Tools\Command\ExecuteAction
-        public: true
-        tags:
-            - { name: console.command }
-
-    everblock.tools.search_replace:
-        class: Everblock\Tools\Command\SearchReplaceCommand
         public: true
         tags:
             - { name: console.command }

@@ -46,13 +46,12 @@ class EverblockmodalModuleFrontController extends ModuleFrontController
         }
         $blockId = (int) Tools::getValue('id_everblock');
         $cmsId = (int) Tools::getValue('id_cms');
-        $productModalId = (int) Tools::getValue('id_everblock_modal');
         if (!$this->module instanceof Everblock) {
             die();
         }
         $module = $this->module;
 
-        if ($cmsId && !$blockId && !$productModalId) {
+        if ($cmsId && !$blockId) {
             $cms = new CMS($cmsId, $this->context->language->id, $this->context->shop->id);
             if (!Validate::isLoadedObject($cms) || !(bool) $cms->active) {
                 die();
@@ -64,55 +63,6 @@ class EverblockmodalModuleFrontController extends ModuleFrontController
             );
             $this->context->smarty->assign([
                 'everblock_modal' => (object) ['content' => $cmsContent],
-            ]);
-            $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblock/views/templates/front/modal.tpl');
-            die($response);
-        }
-        if ($productModalId && !$blockId && !$cmsId) {
-            $modal = new EverblockModal(
-                $productModalId,
-                $this->context->language->id,
-                $this->context->shop->id
-            );
-            if (!Validate::isLoadedObject($modal)) {
-                die();
-            }
-            $content = $modal->getContent((int) $this->context->language->id);
-            $content = $module->renderQcdBuilderTargetField(
-                'everblock_product_modal',
-                (int) $modal->id_product,
-                'content',
-                (string) $content,
-                (int) $this->context->shop->id,
-                (int) $this->context->language->id
-            );
-            $fileUrl = '';
-            $fileRenderType = '';
-            $fileExtension = '';
-            if (!empty($modal->file)) {
-                $fileUrl = $this->context->link->getBaseLink() . 'img/cms/' . $modal->file;
-                $fileExtension = Tools::strtolower(pathinfo($modal->file, PATHINFO_EXTENSION));
-                $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif', 'svg'];
-                $videoExtensions = ['mp4', 'webm', 'ogg', 'ogv'];
-                if (in_array($fileExtension, $imageExtensions, true)) {
-                    $fileRenderType = 'image';
-                } elseif (in_array($fileExtension, $videoExtensions, true)) {
-                    $fileRenderType = 'video';
-                } else {
-                    $fileRenderType = 'iframe';
-                }
-            }
-            $this->context->smarty->assign([
-                'everblock_modal' => (object) [
-                    'content' => EverblockTools::renderShortcodes(
-                        $content,
-                        $this->context,
-                        $module
-                    ),
-                    'file' => $fileUrl,
-                    'file_render_type' => $fileRenderType,
-                    'file_extension' => $fileExtension,
-                ],
             ]);
             $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblock/views/templates/front/modal.tpl');
             die($response);
@@ -144,14 +94,6 @@ class EverblockmodalModuleFrontController extends ModuleFrontController
         if ($showModal) {
             $idLang = (int) $this->context->language->id;
             $blockContent = $block->getContent($idLang);
-            $blockContent = $module->renderQcdBuilderTargetField(
-                'everblock',
-                (int) $block->id,
-                'content',
-                $blockContent,
-                (int) $this->context->shop->id,
-                (int) $this->context->language->id
-            );
             // Hooks not allowed here
             if (strpos($blockContent, '{hook h=') !== false) {
                 $pattern = '/\{hook h=[^}]*\}/';

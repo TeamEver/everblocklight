@@ -10,17 +10,13 @@ use Everblock\Tools\Command\SaveAdminItemCommand;
 use Everblock\Tools\Entity\Block;
 use Everblock\Tools\Form\BlockType;
 use Everblock\Tools\Form\EverblockConfigurationType;
-use Everblock\Tools\Form\FaqType;
 use Everblock\Tools\Form\HookType;
-use Everblock\Tools\Form\PageType;
 use Everblock\Tools\Form\ShortcodeType;
 use Everblock\Tools\Query\GetAdminItemQuery;
 use Everblock\Tools\Query\ListAdminItemsQuery;
 use Everblock\Tools\Repository\BlockRepository;
 use Everblock\Tools\Repository\HookRepository;
 use Everblock\Tools\Service\AdminConfigurationManager;
-use Everblock\Tools\Service\EverblockTools;
-use Everblock\Tools\Service\ModuleTranslationManager;
 use Everblock\Tools\Service\ShortcodeDocumentationProvider;
 use Language;
 use Module;
@@ -28,7 +24,6 @@ use PrestaShop\PrestaShop\Core\CommandBus\CommandBusInterface;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use PrestaShopBundle\Security\Annotation\AdminSecurity;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -134,66 +129,6 @@ final class EverblockAdminController extends FrameworkBundleAdminController
                 'content' => 'Content',
             ],
         ],
-        'faqs' => [
-            'title' => 'FAQ',
-            'form' => FaqType::class,
-            'route' => 'admin_everblock_faqs',
-            'legacy' => 'AdminEverBlockFaq',
-            'id' => 'id_everblock_faq',
-            'columns' => [
-                'id_everblock_faq',
-                'tag_name',
-                'title',
-                'content',
-                'position',
-                'active',
-                'linked_products',
-                'date_add',
-                'date_upd',
-            ],
-            'filter_columns' => [
-                'id_everblock_faq',
-                'tag_name',
-                'title',
-                'content',
-                'position',
-                'active',
-                'date_add',
-                'date_upd',
-            ],
-            'boolean_columns' => ['active'],
-            'column_labels' => [
-                'id_everblock_faq' => 'ID',
-                'tag_name' => 'FAQ tag',
-                'title' => 'Title',
-                'content' => 'Content',
-                'position' => 'Position',
-                'active' => 'Status',
-                'linked_products' => 'Linked products',
-                'date_add' => 'Date add',
-                'date_upd' => 'Date upd',
-            ],
-        ],
-        'pages' => [
-            'title' => 'Pages',
-            'form' => PageType::class,
-            'route' => 'admin_everblock_pages',
-            'legacy' => 'AdminEverBlockPage',
-            'id' => 'id_everblock_page',
-            'columns' => ['id_everblock_page', 'name', 'title', 'position', 'id_shop', 'active', 'date_add', 'date_upd'],
-            'filter_columns' => ['id_everblock_page', 'name', 'title', 'position', 'id_shop', 'active', 'date_add', 'date_upd'],
-            'boolean_columns' => ['active'],
-            'column_labels' => [
-                'id_everblock_page' => 'ID',
-                'name' => 'Name',
-                'title' => 'Meta title',
-                'position' => 'Position',
-                'id_shop' => 'Shop',
-                'active' => 'Status',
-                'date_add' => 'Date add',
-                'date_upd' => 'Date upd',
-            ],
-        ],
     ];
 
     public function __construct(
@@ -215,16 +150,10 @@ final class EverblockAdminController extends FrameworkBundleAdminController
         $module = Module::getInstanceByName('everblock');
         $viewContext = $this->adminConfigurationManager->getViewContext($module);
         $formOptions = [
-            'banned_features' => $viewContext['banned_features'],
-            'feature_choices' => $viewContext['feature_choices'],
-            'feature_names' => $viewContext['feature_names'],
             'has_instagram_token' => $viewContext['has_instagram_token'],
             'holidays' => $viewContext['holidays'],
             'languages' => $viewContext['languages'],
-            'shop_id' => $this->shopId(),
             'stores' => $viewContext['stores'],
-            'translation_file_choices' => $this->translationFileChoices($viewContext['translation_files']),
-            'translation_language_choices' => $this->translationLanguageChoices($viewContext['languages']),
         ];
         $form = $this->formFactory->createNamed('', EverblockConfigurationType::class, $this->adminConfigurationManager->getFormData($module), $formOptions);
         $form->handleRequest($request);
@@ -257,7 +186,6 @@ final class EverblockAdminController extends FrameworkBundleAdminController
             'current_images' => $viewContext['current_images'],
             'field_tabs' => EverblockConfigurationType::fieldTabs(
                 $viewContext['languages'],
-                $viewContext['banned_features'],
                 $viewContext['stores'],
                 $viewContext['holidays'],
                 $viewContext['has_instagram_token']
@@ -266,29 +194,7 @@ final class EverblockAdminController extends FrameworkBundleAdminController
             'module_version' => $viewContext['module_version'],
             'sections' => self::SECTION_CONFIG,
             'stats' => $viewContext['stats'],
-            'translation_files' => $viewContext['translation_files'],
         ]);
-    }
-
-    /**
-     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))")
-     */
-    public function downloadTranslationAction(string $file, ModuleTranslationManager $manager): Response
-    {
-        $module = Module::getInstanceByName('everblock');
-        $path = $manager->resolveTranslationFile($module, $file);
-        if ($path === null) {
-            throw $this->createNotFoundException('Translation file not found.');
-        }
-
-        return new Response(
-            (string) file_get_contents($path),
-            200,
-            [
-                'Content-Type' => 'application/x-php',
-                'Content-Disposition' => 'attachment; filename="' . basename($path) . '"',
-            ]
-        );
     }
 
     /**
@@ -480,12 +386,6 @@ final class EverblockAdminController extends FrameworkBundleAdminController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-            if ($section === 'pages') {
-                $uploadedName = $this->handlePageCoverUpload($form->get('cover_image')->getData());
-                if ($uploadedName !== null) {
-                    $formData['cover_image_name'] = $uploadedName;
-                }
-            }
 
             $savedId = $this->commandBus->handle(new SaveAdminItemCommand(
                 $section,
@@ -513,7 +413,7 @@ final class EverblockAdminController extends FrameworkBundleAdminController
             'field_tabs' => $section === 'blocks' ? BlockType::fieldTabs(Language::getLanguages(false)) : [],
             'field_descriptions' => $section === 'blocks' ? BlockType::fieldDescriptions(Language::getLanguages(false)) : [],
             'tab_help' => $section === 'blocks' ? BlockType::tabHelp() : [],
-            'tinymce_enabled' => in_array($section, ['blocks', 'shortcodes', 'faqs', 'pages'], true) && (bool) \Configuration::get('EVERBLOCK_TINYMCE'),
+            'tinymce_enabled' => in_array($section, ['blocks', 'shortcodes'], true) && (bool) \Configuration::get('EVERBLOCK_TINYMCE'),
             'id' => $id,
             'preview_url' => ($section === 'blocks' && $id !== null && $id > 0) ? $this->buildPreviewUrl((int) $id) : null,
         ]);
@@ -549,9 +449,6 @@ final class EverblockAdminController extends FrameworkBundleAdminController
             $options['manufacturer_choices'] = $this->manufacturerChoices();
             $options['supplier_choices'] = $this->supplierChoices();
             $options['cms_category_choices'] = $this->cmsCategoryChoices();
-            $options['group_choices'] = $this->groupChoices();
-        }
-        if ($section === 'pages') {
             $options['group_choices'] = $this->groupChoices();
         }
 
@@ -614,28 +511,6 @@ final class EverblockAdminController extends FrameworkBundleAdminController
         }
 
         return $choices;
-    }
-
-    private function handlePageCoverUpload($file): ?string
-    {
-        if (!$file instanceof UploadedFile) {
-            return null;
-        }
-
-        $extension = $file->guessExtension() ?: $file->getClientOriginalExtension() ?: 'jpg';
-        $safeName = 'everblock-page-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . strtolower($extension);
-        $destination = _PS_IMG_DIR_ . 'pages/';
-        if (!is_dir($destination)) {
-            @mkdir($destination, 0755, true);
-        }
-        $file->move($destination, $safeName);
-
-        $webpUrl = EverblockTools::convertToWebP($destination . $safeName);
-        if (!$webpUrl) {
-            return $safeName;
-        }
-
-        return basename((string) parse_url($webpUrl, PHP_URL_PATH));
     }
 
     private function extractFilters(Request $request): array
@@ -733,34 +608,6 @@ final class EverblockAdminController extends FrameworkBundleAdminController
     private function transAdmin(string $message, array $parameters = []): string
     {
         return $this->translator->trans($message, $parameters, 'Modules.Everblock.Admin');
-    }
-
-    private function translationLanguageChoices(array $languages): array
-    {
-        $choices = [];
-        foreach ($languages as $language) {
-            $isoCode = (string) ($language['iso_code'] ?? '');
-            if ($isoCode === '') {
-                continue;
-            }
-            $label = trim((string) ($language['name'] ?? $isoCode));
-            $choices[$label . ' (' . $isoCode . ')'] = $isoCode;
-        }
-
-        return $choices;
-    }
-
-    private function translationFileChoices(array $files): array
-    {
-        $choices = ['Choose a file' => ''];
-        foreach ($files as $file) {
-            if (empty($file['name'])) {
-                continue;
-            }
-            $choices[(string) $file['name']] = (string) $file['name'];
-        }
-
-        return $choices;
     }
 
     private function config(string $section): array

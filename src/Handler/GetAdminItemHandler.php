@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace Everblock\Tools\Handler;
 
 use Everblock\Tools\Entity\Block;
-use Everblock\Tools\Entity\Faq;
-use Everblock\Tools\Entity\Page;
 use Everblock\Tools\Entity\Shortcode;
 use Everblock\Tools\Query\GetAdminItemQuery;
 use Everblock\Tools\Repository\BlockRepository;
-use Everblock\Tools\Repository\FaqRepository;
 use Everblock\Tools\Repository\HookRepository;
-use Everblock\Tools\Repository\PageRepository;
 use Everblock\Tools\Repository\ShortcodeRepository;
 
 final class GetAdminItemHandler
@@ -20,8 +16,6 @@ final class GetAdminItemHandler
     public function __construct(
         private BlockRepository $blockRepository,
         private ShortcodeRepository $shortcodeRepository,
-        private FaqRepository $faqRepository,
-        private PageRepository $pageRepository,
         private HookRepository $hookRepository
     ) {
     }
@@ -36,8 +30,6 @@ final class GetAdminItemHandler
         return match ($query->section) {
             'blocks' => $this->blockData($query),
             'shortcodes' => $this->shortcodeData($query),
-            'faqs' => $this->faqData($query),
-            'pages' => $this->pageData($query),
             'hooks' => $this->hookData($query),
             default => [],
         };
@@ -87,38 +79,6 @@ final class GetAdminItemHandler
         $data = get_object_vars($shortcode);
         $this->flattenLocalized($data, 'title', is_array($shortcode->title) ? $shortcode->title : []);
         $this->flattenLocalized($data, 'content', is_array($shortcode->content) ? $shortcode->content : []);
-
-        return $data;
-    }
-
-    private function faqData(GetAdminItemQuery $query): array
-    {
-        $faq = $query->id ? $this->faqRepository->find($query->id, $query->shopId) : new Faq();
-        if (!$faq instanceof Faq) {
-            return [];
-        }
-
-        $data = get_object_vars($faq);
-        $this->normalizeBooleanFields($data, ['active']);
-        $this->flattenLocalized($data, 'title', is_array($faq->title) ? $faq->title : []);
-        $this->flattenLocalized($data, 'content', is_array($faq->content) ? $faq->content : []);
-
-        return $data;
-    }
-
-    private function pageData(GetAdminItemQuery $query): array
-    {
-        $page = $query->id ? $this->pageRepository->find($query->id, $query->shopId) : new Page();
-        if (!$page instanceof Page) {
-            return [];
-        }
-
-        $data = get_object_vars($page);
-        $this->normalizeBooleanFields($data, ['active']);
-        $data['group_ids'] = $page->getAllowedGroups();
-        foreach (['name', 'title', 'meta_description', 'short_description', 'link_rewrite', 'content'] as $field) {
-            $this->flattenLocalized($data, $field, is_array($page->{$field}) ? $page->{$field} : []);
-        }
 
         return $data;
     }

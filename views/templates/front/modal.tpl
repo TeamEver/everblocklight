@@ -34,20 +34,6 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 {$everblock_modal->content nofilter}
-                {if isset($everblock_modal->file) && $everblock_modal->file}
-                    <div class="everblock-modal-media mt-3">
-                        {if isset($everblock_modal->file_render_type) && $everblock_modal->file_render_type == 'image'}
-                            <img src="{$everblock_modal->file|escape:'htmlall':'UTF-8'}" alt="" class="everblock-modal-image" loading="lazy" />
-                        {elseif isset($everblock_modal->file_render_type) && $everblock_modal->file_render_type == 'video'}
-                            <video controls preload="metadata" class="w-100">
-                                <source src="{$everblock_modal->file|escape:'htmlall':'UTF-8'}" type="video/{$everblock_modal->file_extension|escape:'htmlall':'UTF-8'}" />
-                                {l s='Your browser does not support the video tag.' d='Modules.Everblock.Front'}
-                            </video>
-                        {else}
-                            <iframe src="{$everblock_modal->file|escape:'htmlall':'UTF-8'}" class="w-100 everblock-modal-iframe" frameborder="0" allowfullscreen></iframe>
-                        {/if}
-                    </div>
-                {/if}
             </div>
         </div>
     </div>

@@ -35,13 +35,8 @@ use Symfony\Component\Console\Output\BufferedOutput;
 class EverblockcronModuleFrontController extends ModuleFrontController
 {
     private $allowedActions = [
-        'getrandomcomment',
-        'saveblocks',
-        'restoreblocks',
-        'removeinlinecsstags',
-        'droplogs',
         'refreshtokens',
-        'securewithapache',
+        'fetchinstagramimages',
         'fetchwordpressposts',
     ];
 
@@ -82,7 +77,6 @@ class EverblockcronModuleFrontController extends ModuleFrontController
             $input = new ArrayInput([
                 'command' => 'everblock:tools:execute',
                 'action' => trim(Tools::getValue('action')),
-                'idshop id' => (int) $this->context->shop->id,
             ]);
 
             $output = new BufferedOutput();
