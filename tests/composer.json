@@ -1,0 +1,22 @@
+{
+  "name": "griiv/everblocklight-tests",
+  "description": "Outillage de tests du module everblocklight (non livr\u00e9 en production)",
+  "type": "project",
+  "license": "AFL-3.0",
+  "require": {
+    "php": ">=8.1"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.12",
+    "phpunit/phpunit": "^10.5",
+    "prestashop/php-dev-tools": "^5.0"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Everblocklight\\Tests\\": ""
+    }
+  }
+}

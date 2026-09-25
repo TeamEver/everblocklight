@@ -41,31 +41,7 @@ spl_autoload_register(static function ($className) {
 
 require_once __DIR__ . '/src/Service/EverblocklightCache.php';
 
-if (!function_exists('everblocklightRegisterLegacyAlias')) {
-    function everblocklightRegisterLegacyAlias(string $className, string $legacyAlias, string $relativePath): void
-    {
-        if (class_exists($legacyAlias, false)) {
-            return;
-        }
-
-        if (!class_exists($className, false)) {
-            $file = __DIR__ . '/' . ltrim($relativePath, '/\\');
-            if (is_file($file)) {
-                require_once $file;
-            }
-        }
-
-        if (!class_exists($className, false)) {
-            return;
-        }
-
-        class_alias($className, $legacyAlias, false);
-    }
-}
-
-everblocklightRegisterLegacyAlias(\Everblocklight\Tools\Entity\Block::class, 'EverBlockLightClass', 'src/Entity/Block.php');
-everblocklightRegisterLegacyAlias(\Everblocklight\Tools\Entity\Shortcode::class, 'EverblocklightShortcode', 'src/Entity/Shortcode.php');
-
+use Everblocklight\Tools\Entity\Block as EverblocklightBlock;
 use Everblocklight\Tools\Service\AdminConfigurationManager;
 use Everblocklight\Tools\Service\EverblocklightCache;
 use Everblocklight\Tools\Service\EverblocklightTools;
@@ -309,8 +285,6 @@ class Everblocklight extends Module
             'actionEmailAddAfterContent',
             'actionCmsPageFormBuilderModifier',
             'actionObjectCmsUpdateAfter',
-            'actionObjectEverBlockLightClassUpdateAfter',
-            'actionObjectEverBlockLightClassDeleteAfter',
         ];
     }
 
@@ -736,10 +710,6 @@ class Everblocklight extends Module
 
         $domainPart = $parts[1];
         $segments = explode('_', $domainPart);
-
-        if (empty($segments)) {
-            return null;
-        }
 
         $domainKey = $segments[0];
 
@@ -1596,26 +1566,6 @@ class Everblocklight extends Module
         }
     }
 
-    public function hookActionObjectEverBlockLightClassDeleteAfter($params)
-    {
-        $this->clearBlockObjectCacheFromHook($params);
-    }
-
-    public function hookActionObjectEverBlockLightClassUpdateAfter($params)
-    {
-        $this->clearBlockObjectCacheFromHook($params);
-    }
-
-    private function clearBlockObjectCacheFromHook(array $params): void
-    {
-        $object = $params['object'] ?? null;
-        $blockId = is_object($object) && isset($object->id) ? (int) $object->id : null;
-        $shopId = is_object($object) && isset($object->id_shop) ? (int) $object->id_shop : (int) $this->context->shop->id;
-        $hookId = is_object($object) && isset($object->id_hook) ? (int) $object->id_hook : 0;
-
-        EverBlockLightClass::clearCache($blockId, $shopId, Language::getLanguages(false), $hookId > 0 ? [$hookId] : []);
-    }
-
     public function everHook($method, $args)
     {
         $position = isset($args[0]['position']) ? (int) $args[0]['position'] : null;
@@ -1638,7 +1588,7 @@ class Everblocklight extends Module
         if (Tools::getValue('id_cms')) {
             $idObj = (int) Tools::getValue('id_cms');
         }
-        $everblocklight = EverblocklightClass::getBlocks(
+        $everblocklight = EverblocklightBlock::getBlocks(
             (int) $id_hook,
             (int) $context->language->id,
             (int) $context->shop->id

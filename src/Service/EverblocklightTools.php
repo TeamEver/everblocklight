@@ -34,8 +34,9 @@ use Db;
 use DbQuery;
 use DirectoryIterator;
 use Everblocklight;
-use EverblocklightClass;
-use EverblocklightShortcode;
+use Currency;
+use Everblocklight\Tools\Entity\Block as EverblocklightBlock;
+use Everblocklight\Tools\Entity\Shortcode as EverblocklightShortcode;
 use Exception;
 use Gender;
 use Hook;
@@ -2567,7 +2568,7 @@ class EverblocklightTools
         return (string) preg_replace_callback(
             '/\[everblocklight\s+(\d+)\]/i',
             static function (array $matches) use ($idLang, $idShop): string {
-                $everblocklight = new EverblocklightClass(
+                $everblocklight = new EverblocklightBlock(
                     (int) $matches[1],
                     $idLang,
                     $idShop
@@ -3534,7 +3535,7 @@ class EverblocklightTools
         $pattern = '/\[qcdacf\s+(\w+)\s+(\w+)\s+(\w+)\]/i';
         $modifiedTxt = preg_replace_callback($pattern, function ($matches) use ($objectType, $objectId, $context) {
             $name = $matches[1];
-            $value = qcdacf::getVar($name, $objectType, $objectId, $context->language->id);
+            $value = \qcdacf::getVar($name, $objectType, $objectId, $context->language->id);
             if ($value) {
                 return $value;
             }
@@ -4454,38 +4455,21 @@ class EverblocklightTools
         if ((bool) Configuration::get('EVERBLOCKLIGHT_USE_OBF') === false) {
             return $text;
         }
-        // Capturer uniquement <a ...obfme...>CONTENU</a>
-        $pattern = '/<a([^>]*)class=("|\')[^"\']*\bobfme\b[^"\']*\2([^>]*)>(.*?)<\/a>/is';
+        // Capturer uniquement <a ...class="... obfme ..."...>CONTENU</a>
+        $pattern = '/<a([^>]*)\bclass=("|\')([^"\']*\bobfme\b[^"\']*)\2([^>]*)>(.*?)<\/a>/is';
 
-        return preg_replace_callback($pattern, function ($m) {
+        return (string) preg_replace_callback($pattern, function ($m) {
+            $classes = trim($m[3]) . ' obflink';
+            $attributes = trim(trim($m[1]) . ' ' . trim($m[4]));
+            $innerHtml = $m[5];
 
-            $attrsBefore = trim($m[1]);
-            $quote = $m[2];
-            $attrsAfter  = trim($m[3]);
-            $innerHtml = $m[4];
+            // Extraire href puis le remplacer par data-obflink (encodé en base64)
+            preg_match('/\bhref=("|\')(.*?)\1/i', $attributes, $hrefMatch);
+            $encoded = base64_encode($hrefMatch[2] ?? '');
+            $attributes = trim((string) preg_replace('/\s*\bhref=("|\')(.*?)\1/i', '', $attributes));
 
-            $attributes = trim($attrsBefore . ' ' . $attrsAfter);
-
-            // Extraire href
-            preg_match('/href=("|\')(.*?)\1/i', $attributes, $hrefMatch);
-            $href = $hrefMatch[2] ?? '';
-            $encoded = base64_encode($href);
-
-            // Ajouter class obflink
-            $attributes = preg_replace(
-                '/class=("|\')([^"\']*)(\1)/i',
-                'class=$1$2 obflink$3',
-                $attributes
-            );
-
-            // Remplacer href par data-obflink
-            $attributes = preg_replace(
-                '/href=("|\')(.*?)\1/i',
-                'data-obflink="' . $encoded . '"',
-                $attributes
-            );
-
-            return '<span ' . $attributes . '>' . $innerHtml . '</span>';
+            return '<span class="' . $classes . '"' . ($attributes !== '' ? ' ' . $attributes : '')
+                . ' data-obflink="' . $encoded . '">' . $innerHtml . '</span>';
         }, $text);
     }
 
@@ -4532,8 +4516,7 @@ class EverblocklightTools
             '[entity_gender]' => $gender->name,
         ];
         foreach ($entityShortcodes as $key => $value) {
-            $replacement = $value ?? '';
-            $txt = str_replace($key, (string) $replacement, $txt);
+            $txt = str_replace($key, (string) $value, $txt);
         }
         return $txt;
     }

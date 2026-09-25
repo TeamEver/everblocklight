@@ -23,11 +23,12 @@ namespace Everblocklight\Tools\Service;
 use Configuration;
 use Context;
 use Controller;
+use FrontController;
 use Currency;
 use Customer;
 use Db;
 use DbQuery;
-use EverBlockLightClass;
+use Everblocklight\Tools\Entity\Block;
 use Everblocklight;
 use Exception;
 use Group;
@@ -58,7 +59,7 @@ class EverblocklightPreviewBuilder
         $this->context = $context;
     }
 
-    public function buildPreview(EverBlockLightClass $block, array $params): array
+    public function buildPreview(Block $block, array $params): array
     {
         $contextSnapshot = $this->snapshotContext($this->context);
         $globalsSnapshot = $this->snapshotGlobals();
@@ -75,6 +76,7 @@ class EverblocklightPreviewBuilder
             $this->prepareCurrency($params);
 
             $previewCustomer = $this->prepareCustomer($block, $params);
+            /** @var FrontController $controller */
             $controller = $this->prepareController($params);
             $params['controller'] = $controller->php_self;
 
@@ -219,7 +221,7 @@ class EverblocklightPreviewBuilder
         }
     }
 
-    protected function prepareCustomer(EverBlockLightClass $block, array $params): Customer
+    protected function prepareCustomer(Block $block, array $params): Customer
     {
         if (!empty($params['id_customer'])) {
             $customer = new Customer((int) $params['id_customer']);
@@ -254,10 +256,12 @@ class EverblocklightPreviewBuilder
     {
         $controllerName = isset($params['controller']) ? (string) $params['controller'] : 'index';
         $controllerClass = $this->resolveControllerClass($controllerName);
-        /** @var Controller $controller */
+        /** @var FrontController $controller */
         $controller = Controller::getController($controllerClass);
         $controller->controller_type = 'front';
-        $controller->module = $this->module;
+        if (property_exists($controller, 'module')) {
+            $controller->module = $this->module;
+        }
         $controller->php_self = $controllerName;
         $controller->page_name = isset($params['page_name']) && $params['page_name'] !== ''
             ? (string) $params['page_name']
@@ -321,7 +325,7 @@ class EverblocklightPreviewBuilder
         return $ids;
     }
 
-    protected function getBlockGroups(EverBlockLightClass $block): array
+    protected function getBlockGroups(Block $block): array
     {
         $groups = [];
         if (!empty($block->groups)) {
@@ -360,7 +364,7 @@ class EverblocklightPreviewBuilder
         return null;
     }
 
-    protected function resolveGroupIds(EverBlockLightClass $block, Customer $customer): array
+    protected function resolveGroupIds(Block $block, Customer $customer): array
     {
         $groups = $this->getBlockGroups($block);
         if (!empty($groups)) {

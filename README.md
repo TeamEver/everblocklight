@@ -72,3 +72,21 @@ Actions : `refreshtokens`, `fetchinstagramimages`, `fetchwordpressposts`, `check
 - **Pas de reprise des données d'Ever Block** : les blocs et shortcodes existants de l'original ne sont pas migrés automatiquement.
 - **Coexistence avec Ever Block** : les deux modules peuvent être installés en même temps (tables, configuration, namespace et routes distincts). En front, certains attributs génériques (`data-everclickmodal`, `data-evercms`, obfuscation `data-ob`) sont écoutés par les deux scripts : éviter d'activer les deux modules sur la même boutique en production.
 - Le fichier `views/js/everblock-loader.js` référencé par Ever Block 9.0.6 était absent de la source fournie ; Ever Block Light charge directement `views/js/everblocklight.js`.
+
+## Développement et tests
+
+L'outillage de test est isolé dans `tests/` (son propre `composer.json`, `tests/vendor/` ignoré par git) : le `vendor/` du module livré en production ne contient jamais PHPUnit ni PHPStan.
+
+```bash
+cd tests
+composer install
+vendor/bin/phpunit                      # tests unitaires + tests d'intégrité
+_PS_ROOT_DIR_=/chemin/vers/prestashop vendor/bin/phpstan analyse -c phpstan.neon
+```
+
+- `tests/Unit` : moteur de shortcodes, outils SEO (obfuscation, lazyload), horaires / jours fériés, entités, cache (les classes du cœur PrestaShop sont remplacées par des stubs, `tests/stubs`).
+- `tests/Integrity` : cohérence du module (templates référencés présents, routes ↔ actions, préfixe `EVERBLOCKLIGHT_` des clés de configuration, tables install/uninstall, absence d'identifiants Ever Block ou de fonctionnalités retirées).
+- PHPStan (niveau 3) s'exécute contre les sources réelles de PrestaShop (`_PS_ROOT_DIR_` : clone du dépôt officiel + `composer install --no-dev`).
+
+La CI GitHub Actions (`.github/workflows/ci.yml`) joue à chaque push / pull request et chaque lundi :
+lint PHP 8.1 → 8.4, syntaxe JS, PHPUnit PHP 8.1 → 8.4, PHPStan contre PrestaShop 8.2.8 et 9.1.5 (+ branche 9.2.x en informatif), puis produit l'archive `everblocklight.zip` sans l'outillage de développement.

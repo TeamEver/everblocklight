@@ -22,11 +22,13 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Everblocklight\Tools\Entity\Block as EverblocklightBlock;
+
 use Everblocklight\Tools\Service\EverblocklightPreviewBuilder;
 
 class EverblocklightPreviewModuleFrontController extends ModuleFrontController
 {
-    /** @var EverBlockLightClass|null */
+    /** @var EverblocklightBlock|null */
     protected $block;
 
     public function initContent()
@@ -94,13 +96,13 @@ class EverblocklightPreviewModuleFrontController extends ModuleFrontController
         }
     }
 
-    protected function loadBlock(): EverBlockLightClass
+    protected function loadBlock(): EverblocklightBlock
     {
         $blockId = (int) Tools::getValue('id_everblocklight');
         $languageId = (int) Tools::getValue('id_lang', (int) $this->context->language->id);
         $shopId = (int) Tools::getValue('id_shop', (int) $this->context->shop->id);
 
-        $block = new EverBlockLightClass($blockId, $languageId, $shopId);
+        $block = new EverblocklightBlock($blockId, $languageId, $shopId);
 
         if (!Validate::isLoadedObject($block)) {
             throw new Exception($this->translate('Unable to find the requested block.'));

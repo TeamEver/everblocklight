@@ -22,6 +22,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Everblocklight\Tools\Entity\Block as EverblocklightBlock;
+
 use Everblocklight\Tools\Service\EverblocklightTools;
 
 class EverblocklightmodalModuleFrontController extends ModuleFrontController
@@ -67,7 +69,7 @@ class EverblocklightmodalModuleFrontController extends ModuleFrontController
             $response = $this->context->smarty->fetch(_PS_MODULE_DIR_ . '/everblocklight/views/templates/front/modal.tpl');
             die($response);
         }
-        $block = new EverBlockLightClass(
+        $block = new EverblocklightBlock(
             $blockId,
             $this->context->language->id,
             $this->context->shop->id

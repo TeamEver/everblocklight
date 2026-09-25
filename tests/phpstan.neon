@@ -1,0 +1,27 @@
+includes:
+  - vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+
+parameters:
+  level: 3
+  paths:
+    - ../everblocklight.php
+    - ../controllers
+    - ../src
+    - ../sql
+  excludePaths:
+    - ../vendor
+    - ../tests
+  reportUnmatchedIgnoredErrors: false
+  ignoreErrors:
+    # Chargé dynamiquement par cron.php uniquement en PrestaShop 9 (app/AdminKernel.php n'est pas autoloadé)
+    - '#^Instantiated class AdminKernel not found\.$#'
+    # Module tiers optionnel (QCD ACF), appelé seulement s'il est installé
+    - '#^Call to static method getVar\(\) on an unknown class qcdacf\.$#'
+    # PS 9 : AppKernel est abstrait, cron.php instancie AdminKernel dans ce cas (choix à l'exécution)
+    - '#^Instantiated class AppKernel is abstract\.$#'
+    # Fonctions supprimées en PS 9, appelées uniquement derrière un method_exists()
+    - '#^Call to an undefined static method Tools::(encrypt|link_rewrite)\(\)\.$#'
+    # Propriétés magiques de Cookie (__get / __set)
+    - '#^Access to an undefined property Cookie::\$\w+\.$#'
+    # $this->module est typé Module par le cœur ; c'est l'instance Everblocklight qui porte encrypt()
+    - '#^Call to an undefined method Module::encrypt\(\)\.$#'
