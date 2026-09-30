@@ -28,7 +28,7 @@ Version allégée du module PrestaShop **Ever Block** (Team Ever, v9.0.6, licenc
   - **Produits** : `[product]`, `[product_image]`, `[category]`, `[manufacturer]`, `[brands]`, `[subcategories]`, `[productfeature]`, `[productfeaturevalue]`, `[last-products]`, `[recently_viewed]`, `[promo-products]`, `[best-sales]`, `[categorybestsales]`, `[brandbestsales]`, `[featurebestsales]`, `[featurevaluebestsales]`, `[products_by_tag]`, `[low_stock]`, `[random_product]`, `[linkedproducts]`, `[accessories]`, `[crosselling]`
   - **Panier / client** : `[evercart]`, `[cart_total]`, `[cart_quantity]`, `[everaddtocart]`, `[newsletter_form]`, `[entity_firstname]`, `[entity_lastname]`, `[entity_gender]`…
   - **Formulaires** : formulaire de contact (`[evercontactform_open]` … `[evercontact type="…"]` … `[evercontactform_close]`), `[nativecontact]`
-  - **Intégrations externes** : `[everinstagram]`, `[googlereviews]`, `[wordpress-posts]`, `[storelocator]`, `[evermap]`, `[everstore]`, `[qcdacf]`, `[displayQcdSvg]`
+  - **Intégrations externes** : `[googlereviews]`, `[storelocator]`, `[evermap]`, `[everstore]`, `[qcdacf]`, `[displayQcdSvg]`
 - Les shortcodes sont rendus dans toute la page front (`actionOutputHTMLBefore`) et dans les e-mails (`actionEmailAddAfterContent`).
 
 La liste détaillée des paramètres est disponible dans l'admin : *Ever Block Light > Shortcode documentation*.
@@ -38,21 +38,21 @@ Dans le contenu d'un bloc : `<a href="#" data-everclickmodal="ID_DU_BLOC">…</a
 
 ### Configuration
 - Réglages : chargement du CSS front, script d'obfuscation, TinyMCE, nombre de paragraphes/phrases pour `[llorem]`.
-- Meta (Instagram), WordPress (API REST), Google (Places / avis, Maps / store locator, icône de marqueur), horaires exceptionnels par magasin.
+- Google (Places / avis, Maps / store locator, icône de marqueur), horaires exceptionnels par magasin.
 - Outils : CSS / JS personnalisés, liens CSS / JS externes, scripts d'en-tête, vidage du cache du module.
-- Tâches cron sécurisées (URL avec jeton) : `refreshtokens`, `fetchinstagramimages`, `fetchwordpressposts`.
 
 ### Console
 ```bash
 php bin/console everblocklight:tools:execute --list
 ```
-Actions : `refreshtokens`, `fetchinstagramimages`, `fetchwordpressposts`, `checkdatabase`, `clearcache`.
+Actions : `checkdatabase`, `clearcache`.
 
 ## Fonctionnalités retirées (par rapport à Ever Block 9.0.6)
 - FAQ (admin, pages front, liaison produits, shortcodes `[everfaq]` / `[everfaq_product]`)
 - Pages / guides (admin, contrôleurs front, routes)
 - Contenus produit : onglets, flags (dont « épuisé » et caractéristiques), modales fichiers produit, onglet global, import xlsx
 - Intégrations Pretty Blocks et QCD Page Builder, jeux (roue de la fortune, etc.)
+- Meta Tools (Instagram : `[everinstagram]`, jeton, cache des médias) et WordPress Tools (`[wordpress-posts]`, API REST, image de fond), ainsi que le contrôleur cron qui ne servait qu'à ces deux intégrations
 - Outils d'administration : mise à jour automatique depuis GitHub, traduction Google, sauvegarde / restauration, génération de produits factices, purge des logs, suppression des langues, migration d'URL, recherche / remplacement en base, import / export xlsx
 - Étape supplémentaire du tunnel de commande (formulaire `[everorderform]`, affichage sur confirmation de commande, factures, bons de livraison et admin commande)
 - Mot de passe de maintenance, connexion en tant que client, « hack » Google Shopping

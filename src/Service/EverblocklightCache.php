@@ -39,7 +39,6 @@ class EverblocklightCache
         'everblocklight',
         'Everblocklight',
         'EverBlockLight',
-        'fetchInstagramImages',
         'generateLoremIpsum_',
         'getAccessoriesShortcode_',
         'getBestSalesShortcode_',

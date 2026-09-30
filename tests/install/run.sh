@@ -11,7 +11,7 @@ PS_TAG="${1:?Usage: $0 <tag prestashop/prestashop, ex. 8.2-8.1>}"
 PS_PORT="${PS_PORT:-8080}"
 MODULE_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 NAME="evbl-ci-$(echo "$PS_TAG" | tr -c 'a-zA-Z0-9' '-' | sed 's/-*$//')"
-NET="$NAME-net"; DB="$NAME-db"; PS="$NAME-ps"
+DB="$NAME-db"; PS="$NAME-ps"
 DB_PASS=admin
 WORK="$(mktemp -d)"
 FAILURES=0
@@ -28,7 +28,6 @@ expect_eq() { # libellé, attendu, obtenu
 cleanup() {
   if [ "${KEEP_CONTAINERS:-0}" != "1" ]; then
     docker rm -f "$PS" "$DB" >/dev/null 2>&1 || true
-    docker network rm "$NET" >/dev/null 2>&1 || true
   fi
   rm -rf "$WORK"
 }
@@ -36,12 +35,13 @@ trap cleanup EXIT
 
 log "Démarrage MySQL + PrestaShop ($PS_TAG)"
 cleanup; WORK="$(mktemp -d)"
-docker network create "$NET" >/dev/null
-docker run -d --name "$DB" --network "$NET" \
+# PrestaShop partage l'espace réseau du conteneur MySQL : aucun réseau Docker à créer
+# (évite « all predefined address pools have been fully subnetted » sur les postes chargés).
+docker run -d --name "$DB" -p "$PS_PORT:80" \
   -e MYSQL_ROOT_PASSWORD="$DB_PASS" -e MYSQL_DATABASE=prestashop \
   mysql:8.0 >/dev/null
-docker run -d --name "$PS" --network "$NET" -p "$PS_PORT:80" \
-  -e DB_SERVER="$DB" -e DB_PASSWD="$DB_PASS" -e DB_NAME=prestashop \
+docker run -d --name "$PS" --network "container:$DB" \
+  -e DB_SERVER=127.0.0.1 -e DB_PASSWD="$DB_PASS" -e DB_NAME=prestashop \
   -e PS_INSTALL_AUTO=1 -e PS_DOMAIN="localhost:$PS_PORT" \
   `# PS 9 : sans dossier admin/, l'installateur attend admin-dev (le rename() d'admin/ échoue sur overlayfs)` \
   -e PS_FOLDER_ADMIN=admin-dev \

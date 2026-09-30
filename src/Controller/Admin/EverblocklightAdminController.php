@@ -150,7 +150,6 @@ final class EverblocklightAdminController extends FrameworkBundleAdminController
         $module = Module::getInstanceByName('everblocklight');
         $viewContext = $this->adminConfigurationManager->getViewContext($module);
         $formOptions = [
-            'has_instagram_token' => $viewContext['has_instagram_token'],
             'holidays' => $viewContext['holidays'],
             'languages' => $viewContext['languages'],
             'stores' => $viewContext['stores'],
@@ -158,7 +157,7 @@ final class EverblocklightAdminController extends FrameworkBundleAdminController
         $form = $this->formFactory->createNamed('', EverblocklightConfigurationType::class, $this->adminConfigurationManager->getFormData($module), $formOptions);
         $form->handleRequest($request);
 
-        if ($request->isMethod('POST') || $request->query->has('deleteEVERBLOCKLIGHT_MARKER_ICON') || $request->query->has('deleteEVERBLOCKLIGHT_WP_POSTS_BG_IMAGE')) {
+        if ($request->isMethod('POST') || $request->query->has('deleteEVERBLOCKLIGHT_MARKER_ICON')) {
             if ($request->isMethod('POST') && (!$form->isSubmitted() || !$form->isValid())) {
                 $this->addFlash('error', $this->transAdmin('The configuration form could not be validated.'));
 
@@ -182,13 +181,11 @@ final class EverblocklightAdminController extends FrameworkBundleAdminController
             'configuration_docs' => EverblocklightConfigurationType::docs(),
             'configuration_form' => $form->createView(),
             'configuration_tabs' => EverblocklightConfigurationType::tabs($viewContext['has_stores']),
-            'cron_links' => $viewContext['cron_links'],
             'current_images' => $viewContext['current_images'],
             'field_tabs' => EverblocklightConfigurationType::fieldTabs(
                 $viewContext['languages'],
                 $viewContext['stores'],
-                $viewContext['holidays'],
-                $viewContext['has_instagram_token']
+                $viewContext['holidays']
             ),
             'module' => $module,
             'module_version' => $viewContext['module_version'],

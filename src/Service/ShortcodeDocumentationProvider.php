@@ -665,11 +665,6 @@ class ShortcodeDocumentationProvider
                         ],
                     ],
                     [
-                        'code' => '[wordpress-posts]',
-                        'description' => $translator->trans('Display the latest posts retrieved from a connected WordPress site.', [], $domain),
-                        'parameters' => [],
-                    ],
-                    [
                         'code' => '[googlereviews place_id="YOUR_PLACE_ID" limit="6" min_rating="4"]',
                         'description' => $translator->trans('Showcase reviews from your Google Business profile.', [], $domain),
                         'parameters' => [
@@ -714,11 +709,6 @@ class ShortcodeDocumentationProvider
                                 'required' => false,
                             ],
                         ],
-                    ],
-                    [
-                        'code' => '[everinstagram]',
-                        'description' => $translator->trans('Display the latest Instagram media fetched by the module.', [], $domain),
-                        'parameters' => [],
                     ],
                     [
                         'code' => '[llorem]',

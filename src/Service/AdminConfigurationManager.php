@@ -20,7 +20,6 @@ final class AdminConfigurationManager
             'EVERBLOCKLIGHT_LOAD_FRONT_CSS',
             'EVERBLOCKLIGHT_USE_OBF',
             'EVERBLOCKLIGHT_TINYMCE',
-            'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION',
             'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_RATING',
             'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_AVATAR',
             'EVERBLOCKLIGHT_GOOGLE_REVIEWS_SHOW_CTA',
@@ -41,29 +40,12 @@ final class AdminConfigurationManager
         $holidays = EverblocklightTools::getFrenchHolidays((int) date('Y'));
 
         $imageBaseUrl = $context->link->getBaseLink(null, null) . 'modules/' . $module->name . '/views/img/';
-        $wordpressBackground = Configuration::get('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE');
         $markerIcon = Configuration::get('EVERBLOCKLIGHT_MARKER_ICON');
 
-        $cronLinks = [];
-        $cronToken = $module->getAdminConfigurationCronToken();
-        foreach ($module->getAdminConfigurationAllowedActions() as $action) {
-            $cronLinks[$action] = $context->link->getModuleLink(
-                $module->name,
-                'cron',
-                [
-                    'action' => $action,
-                    'evertoken' => $cronToken,
-                ]
-            );
-        }
-
         return [
-            'cron_links' => $cronLinks,
             'current_images' => [
-                'EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE' => $wordpressBackground ? $imageBaseUrl . $wordpressBackground : null,
                 'EVERBLOCKLIGHT_MARKER_ICON' => $markerIcon ? $imageBaseUrl . $markerIcon : null,
             ],
-            'has_instagram_token' => (bool) Configuration::get('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN'),
             'has_stores' => !empty($stores),
             'holidays' => $holidays,
             'languages' => Language::getLanguages(false),
@@ -89,18 +71,6 @@ final class AdminConfigurationManager
                 }
                 Configuration::deleteByName('EVERBLOCKLIGHT_MARKER_ICON');
                 $success[] = $module->l('Marker icon removed.');
-            }
-        }
-
-        if (Tools::isSubmit('deleteEVERBLOCKLIGHT_WP_POSTS_BG_IMAGE')) {
-            $background = Configuration::get('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE');
-            if ($background) {
-                $path = _PS_MODULE_DIR_ . $module->name . '/views/img/' . $background;
-                if (file_exists($path)) {
-                    @unlink($path);
-                }
-                Configuration::deleteByName('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE');
-                $success[] = $module->l('WordPress background image removed.');
             }
         }
 

@@ -60,11 +60,6 @@ class Everblocklight extends Module
 
     private $postErrors = [];
     private $postSuccess = [];
-    private $allowedActions = [
-        'refreshtokens',
-        'fetchinstagramimages',
-        'fetchwordpressposts',
-    ];
     private $bypassedControllers = [
         'hookDisplayInvoiceLegalFreeText',
     ];
@@ -163,11 +158,6 @@ class Everblocklight extends Module
             ['EVERBLOCKLIGHT_TINYMCE', 1],
             ['EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER', 5],
             ['EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER', 5],
-            ['EVERBLOCKLIGHT_WP_API_URL', ''],
-            ['EVERBLOCKLIGHT_WP_BLOG_URL', '/blog'],
-            ['EVERBLOCKLIGHT_WP_POST_NBR', 3],
-            ['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE', ''],
-            ['EVERBLOCKLIGHT_INSTA_SHOW_CAPTION', 0],
             ['EVERBLOCKLIGHT_CONTACT_MAX_UPLOAD_SIZE', 2097152],
             ['EVERBLOCKLIGHT_CONTACT_ALLOWED_EXTENSIONS', json_encode(['pdf', 'jpg', 'jpeg', 'png']), true],
             ['EVERBLOCKLIGHT_CONTACT_ALLOWED_MIME_TYPES', json_encode(['application/pdf', 'image/jpeg', 'image/png']), true],
@@ -884,16 +874,6 @@ class Everblocklight extends Module
         return $this->getModuleStatistics();
     }
 
-    public function getAdminConfigurationAllowedActions(): array
-    {
-        return $this->allowedActions;
-    }
-
-    public function getAdminConfigurationCronToken(): string
-    {
-        return $this->encrypt($this->name . '/evercron');
-    }
-
     public function prepareAdminConfigurationEnvironment(): void
     {
         $this->secureModuleFolder();
@@ -960,13 +940,6 @@ class Everblocklight extends Module
             $headerScripts = '';
         }
         $configData = [
-            'EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN' => Configuration::get('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN'),
-            'EVERBLOCKLIGHT_INSTA_LINK' => Configuration::get('EVERBLOCKLIGHT_INSTA_LINK'),
-            'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION' => Configuration::get('EVERBLOCKLIGHT_INSTA_SHOW_CAPTION'),
-            'EVERBLOCKLIGHT_WP_API_URL' => Configuration::get('EVERBLOCKLIGHT_WP_API_URL'),
-            'EVERBLOCKLIGHT_WP_BLOG_URL' => Configuration::get('EVERBLOCKLIGHT_WP_BLOG_URL'),
-            'EVERBLOCKLIGHT_WP_POST_NBR' => Configuration::get('EVERBLOCKLIGHT_WP_POST_NBR'),
-            'EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE' => Configuration::get('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE'),
             'EVERBLOCKLIGHT_GOOGLE_API_KEY' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_API_KEY'),
             'EVERBLOCKLIGHT_GOOGLE_PLACE_ID' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_PLACE_ID'),
             'EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT' => Configuration::get('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT'),
@@ -1071,22 +1044,6 @@ class Everblocklight extends Module
                     'Error : The field "Extends TinyMCE" is not valid'
                 );
             }
-            if (Tools::getValue('EVERBLOCKLIGHT_WP_POST_NBR')
-                && !Validate::isUnsignedInt(Tools::getValue('EVERBLOCKLIGHT_WP_POST_NBR'))
-            ) {
-                $this->postErrors[] = $this->l(
-                    'Error : The field "Number of blog posts" is not valid'
-                );
-            }
-            $blogUrl = Tools::getValue('EVERBLOCKLIGHT_WP_BLOG_URL');
-            if (!empty($blogUrl)
-                && !Validate::isUrl($blogUrl)
-                && (strpos($blogUrl, '/') !== 0)
-            ) {
-                $this->postErrors[] = $this->l(
-                    'Error : The field "Blog URL" must be a valid URL or start with /'
-                );
-            }
             if (Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT')
                 && (!Validate::isUnsignedInt(Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT'))
                 || (int) Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT') < 1)
@@ -1184,38 +1141,6 @@ class Everblocklight extends Module
         $headerScripts = Tools::getValue('EVERBLOCKLIGHT_HEADER_SCRIPTS');
         $filePath = _PS_MODULE_DIR_ . $this->name . '/views/js/header-scripts-' . $this->context->shop->id . '.js';
         file_put_contents($filePath, $headerScripts);
-        Configuration::updateValue(
-            'EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN',
-            Tools::getValue('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN')
-        );
-        // Auto refresh Instagram token
-        if (Tools::getValue('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN')) {
-            EverblocklightTools::refreshInstagramToken();
-        }
-        Configuration::updateValue(
-            'EVERBLOCKLIGHT_INSTA_LINK',
-            Tools::getValue('EVERBLOCKLIGHT_INSTA_LINK')
-        );
-        Configuration::updateValue(
-            'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION',
-            Tools::getValue('EVERBLOCKLIGHT_INSTA_SHOW_CAPTION')
-        );
-        Configuration::updateValue(
-            'EVERBLOCKLIGHT_WP_API_URL',
-            Tools::getValue('EVERBLOCKLIGHT_WP_API_URL')
-        );
-        $blogUrl = trim((string) Tools::getValue('EVERBLOCKLIGHT_WP_BLOG_URL'));
-        if ($blogUrl === '') {
-            $blogUrl = '/blog';
-        }
-        Configuration::updateValue(
-            'EVERBLOCKLIGHT_WP_BLOG_URL',
-            $blogUrl
-        );
-        Configuration::updateValue(
-            'EVERBLOCKLIGHT_WP_POST_NBR',
-            Tools::getValue('EVERBLOCKLIGHT_WP_POST_NBR')
-        );
         $googleReviewsLimit = (int) Tools::getValue('EVERBLOCKLIGHT_GOOGLE_REVIEWS_LIMIT');
         if ($googleReviewsLimit <= 0) {
             $googleReviewsLimit = 5;
@@ -1309,39 +1234,6 @@ class Everblocklight extends Module
                 copy($tmpName, $dest);
                 @unlink($tmpName);
                 Configuration::updateValue('EVERBLOCKLIGHT_MARKER_ICON', 'store-locator-marker.svg');
-            }
-        }
-        if (isset($_FILES['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE'])
-            && isset($_FILES['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE']['tmp_name'])
-            && !empty($_FILES['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE']['tmp_name'])
-        ) {
-            $filename = $_FILES['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE']['name'];
-            $extension = Tools::strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-            if (!in_array($extension, $allowedExtensions, true)) {
-                $this->postErrors[] = $this->l('WordPress background image must be a JPG, PNG, WEBP, or GIF file.');
-            } elseif (!($tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
-                || !move_uploaded_file($_FILES['EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE']['tmp_name'], $tmpName)
-            ) {
-                $this->postErrors[] = $this->l('Error while uploading WordPress background image.');
-            } else {
-                $previous = Configuration::get('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE');
-                if ($previous) {
-                    $previousPath = _PS_MODULE_DIR_ . $this->name . '/views/img/' . $previous;
-                    if (file_exists($previousPath)) {
-                        @unlink($previousPath);
-                    }
-                }
-                $safeName = 'wp-posts-bg-' . time() . '.' . $extension;
-                $dest = _PS_MODULE_DIR_ . $this->name . '/views/img/' . $safeName;
-                copy($tmpName, $dest);
-                @unlink($tmpName);
-                $webpUrl = EverblocklightTools::convertToWebP($dest);
-                if ($webpUrl) {
-                    $webpPath = parse_url($webpUrl, PHP_URL_PATH);
-                    $safeName = $webpPath ? basename($webpPath) : basename($webpUrl);
-                }
-                Configuration::updateValue('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE', $safeName);
             }
         }
         $stores = Store::getStores((int) $this->context->language->id);

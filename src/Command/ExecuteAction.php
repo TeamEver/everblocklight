@@ -45,18 +45,6 @@ class ExecuteAction extends Command
     public const ABORTED = 3;
 
     private $allowedActions = [
-        'refreshtokens' => [
-            'label' => 'Refresh Instagram token',
-            'description' => 'Renews the Instagram token and clears the related cache.',
-        ],
-        'fetchinstagramimages' => [
-            'label' => 'Download Instagram medias',
-            'description' => 'Downloads configured Instagram media files and stores them locally.',
-        ],
-        'fetchwordpressposts' => [
-            'label' => 'Fetch WordPress posts',
-            'description' => 'Fetches the configured WordPress posts.',
-        ],
         'checkdatabase' => [
             'label' => 'Check module database',
             'description' => 'Installs missing module tables.',
@@ -115,28 +103,6 @@ class ExecuteAction extends Command
         $context->currency = new Currency((int) Configuration::get('PS_CURRENCY_DEFAULT'));
 
         switch ($action) {
-            case 'refreshtokens':
-                $newToken = EverblocklightTools::refreshInstagramToken();
-                if (!$newToken) {
-                    $output->writeln('<warning>Instagram token reset failed</warning>');
-
-                    return self::FAILURE;
-                }
-                EverblocklightCache::cacheDropByPattern('fetchInstagramImages');
-                $output->writeln('<success>Instagram token refreshed</success>');
-
-                return self::SUCCESS;
-            case 'fetchinstagramimages':
-                $output->writeln('<comment>Fetching Instagram medias…</comment>');
-                $images = EverblocklightTools::fetchInstagramImages();
-                $output->writeln(sprintf('<success>%d media files processed</success>', is_array($images) ? count($images) : 0));
-
-                return self::SUCCESS;
-            case 'fetchwordpressposts':
-                EverblocklightTools::fetchWordpressPosts();
-                $output->writeln('<success>WordPress posts fetched</success>');
-
-                return self::SUCCESS;
             case 'checkdatabase':
                 EverblocklightTools::checkAndFixDatabase();
                 $output->writeln('<success>Database schema verified successfully</success>');

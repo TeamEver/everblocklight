@@ -18,8 +18,6 @@ final class EverblocklightConfigurationType extends AbstractType
     {
         $tabs = [
             'settings' => 'Réglages',
-            'meta_tools' => 'Meta Tools',
-            'wordpress_tools' => 'WordPress Tools',
             'google_maps' => 'Google Tools',
             'tools' => 'Outils',
         ];
@@ -28,12 +26,10 @@ final class EverblocklightConfigurationType extends AbstractType
             $tabs['holiday'] = 'Holiday opening hours by store';
         }
 
-        $tabs['cron'] = 'Tâches crons';
-
         return $tabs;
     }
 
-    public static function fieldTabs(array $languages, array $stores, array $holidays, bool $hasInstagramToken): array
+    public static function fieldTabs(array $languages, array $stores, array $holidays): array
     {
         $fieldTabs = [
             'settings' => [
@@ -42,15 +38,6 @@ final class EverblocklightConfigurationType extends AbstractType
                 'EVERBLOCKLIGHT_TINYMCE',
                 'EVERBLOCKLIGHT_CSS_P_LLOREM_NUMBER',
                 'EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER',
-            ],
-            'meta_tools' => [
-                'EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN',
-            ],
-            'wordpress_tools' => [
-                'EVERBLOCKLIGHT_WP_API_URL',
-                'EVERBLOCKLIGHT_WP_BLOG_URL',
-                'EVERBLOCKLIGHT_WP_POST_NBR',
-                'EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE',
             ],
             'google_maps' => [
                 'EVERBLOCKLIGHT_GOOGLE_API_KEY',
@@ -75,13 +62,7 @@ final class EverblocklightConfigurationType extends AbstractType
                 'EVERBLOCKLIGHT_HEADER_SCRIPTS',
             ],
             'holiday' => [],
-            'cron' => [],
         ];
-
-        if ($hasInstagramToken) {
-            $fieldTabs['meta_tools'][] = 'EVERBLOCKLIGHT_INSTA_LINK';
-            $fieldTabs['meta_tools'][] = 'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION';
-        }
 
         foreach ($stores as $store) {
             foreach ($holidays as $date) {
@@ -105,12 +86,9 @@ final class EverblocklightConfigurationType extends AbstractType
     {
         return [
             'settings' => 'Configure global behavior: front assets, editor and generated content defaults.',
-            'meta_tools' => 'Configure Meta integrations, including Instagram access and display options.',
-            'wordpress_tools' => 'Configure the WordPress REST endpoint and the latest posts block.',
             'google_maps' => 'Configure Google Places reviews, Google Maps keys and store locator marker options.',
             'tools' => 'Custom CSS / JS assets and cache cleanup.',
             'holiday' => 'Override holiday opening hours per store.',
-            'cron' => 'Use these secure URLs to run Everblocklight maintenance tasks from cron.',
         ];
     }
 
@@ -128,41 +106,6 @@ final class EverblocklightConfigurationType extends AbstractType
             ->add('EVERBLOCKLIGHT_CSS_S_LLOREM_NUMBER', TextType::class, [
                 'label' => 'Default number of sentences per paragraphs when [llorem] shortcode is detected',
                 'required' => false,
-            ])
-            ->add('EVERBLOCKLIGHT_INSTA_ACCESS_TOKEN', TextType::class, [
-                'label' => 'Instagram access token',
-                'required' => false,
-            ]);
-
-        if ($options['has_instagram_token']) {
-            $builder
-                ->add('EVERBLOCKLIGHT_INSTA_LINK', TextType::class, [
-                    'label' => 'Instagram profile link',
-                    'required' => false,
-                ]);
-            $this->addSwitch($builder, 'EVERBLOCKLIGHT_INSTA_SHOW_CAPTION', 'Display Instagram post text');
-        }
-
-        $builder
-            ->add('EVERBLOCKLIGHT_WP_API_URL', TextType::class, [
-                'label' => 'WordPress API URL',
-                'required' => false,
-                'help' => 'Example: https://example.com/wp-json/wp/v2/posts',
-            ])
-            ->add('EVERBLOCKLIGHT_WP_BLOG_URL', TextType::class, [
-                'label' => 'Blog URL',
-                'required' => false,
-                'help' => 'Use an absolute URL or a relative path such as /blog.',
-            ])
-            ->add('EVERBLOCKLIGHT_WP_POST_NBR', TextType::class, [
-                'label' => 'Number of blog posts to display',
-                'required' => false,
-            ])
-            ->add('EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE', FileType::class, [
-                'label' => 'Background image for WordPress posts',
-                'required' => false,
-                'mapped' => false,
-                'help' => 'Optional background image for the latest WordPress posts section.',
             ])
             ->add('EVERBLOCKLIGHT_GOOGLE_API_KEY', TextType::class, [
                 'label' => 'Google Places API key',
@@ -264,7 +207,6 @@ final class EverblocklightConfigurationType extends AbstractType
         $resolver->setDefaults([
             'allow_extra_fields' => true,
             'csrf_protection' => true,
-            'has_instagram_token' => false,
             'holidays' => [],
             'languages' => [],
             'stores' => [],

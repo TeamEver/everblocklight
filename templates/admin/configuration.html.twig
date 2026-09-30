@@ -75,19 +75,6 @@
                     </div>
                   </div>
 
-                  {% if tab_key == 'wordpress_tools' and current_images.EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE %}
-                    <div class="alert alert-info d-flex align-items-center justify-content-between">
-                      <span>
-                        {{ 'Current WordPress background image'|trans({}, 'Modules.Everblocklight.Admin') }}
-                        <a href="{{ current_images.EVERBLOCKLIGHT_WP_POSTS_BG_IMAGE }}" target="_blank" rel="noopener noreferrer">{{ 'View image'|trans({}, 'Modules.Everblocklight.Admin') }}</a>
-                      </span>
-                      <a class="btn btn-outline-danger btn-sm" href="{{ path('admin_everblocklight_configuration', {deleteEVERBLOCKLIGHT_WP_POSTS_BG_IMAGE: 1}) }}">
-                        <i class="material-icons">delete</i>
-                        {{ 'Delete'|trans({}, 'Admin.Actions') }}
-                      </a>
-                    </div>
-                  {% endif %}
-
                   {% if tab_key == 'google_maps' and current_images.EVERBLOCKLIGHT_MARKER_ICON %}
                     <div class="alert alert-info d-flex align-items-center justify-content-between">
                       <span>
@@ -106,19 +93,6 @@
                       {{ form_row(configuration_form[field_name]) }}
                     {% endif %}
                   {% endfor %}
-
-                  {% if tab_key == 'cron' %}
-                    <div class="list-group">
-                      {% for action, link in cron_links %}
-                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{{ link }}" target="_blank" rel="noopener noreferrer">
-                          <span>{{ 'Cron for'|trans({}, 'Modules.Everblocklight.Admin') }} {{ action }}</span>
-                          <i class="material-icons">open_in_new</i>
-                        </a>
-                      {% else %}
-                        <p class="text-muted">{{ 'No cron action is available.'|trans({}, 'Modules.Everblocklight.Admin') }}</p>
-                      {% endfor %}
-                    </div>
-                  {% endif %}
 
                   {% if action_buttons[tab_key] is defined %}
                     <div class="d-flex flex-wrap gap-2 mt-3">

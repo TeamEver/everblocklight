@@ -135,7 +135,7 @@ final class ModuleIntegrityTest extends TestCase
 
     public function testNoReferenceToRemovedFeatures(): void
     {
-        $forbidden = '/\b(EverblockFaq|everblock_faq|prettyblocks|qcdpagebuilder|EVERBLOCKLIGHT_OPTIONS_|everorderform|CheckoutStep|everlogin)\b/i';
+        $forbidden = '/\b(EverblockFaq|everblock_faq|prettyblocks|qcdpagebuilder|EVERBLOCKLIGHT_OPTIONS_|everorderform|CheckoutStep|everlogin|everinstagram|wordpress-posts|EVERBLOCKLIGHT_INSTA_|EVERBLOCKLIGHT_WP_|fetchWordpressPosts|fetchInstagramImages|evercron)\b/i';
         $hits = [];
         foreach (self::sources(['php', 'tpl', 'twig', 'js', 'yml']) as $path => $content) {
             if (str_starts_with($path, 'translations/')) {
