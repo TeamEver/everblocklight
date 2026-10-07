@@ -89,6 +89,11 @@ class Context
     public $language;
     public $shop;
 
+    public function getTranslator(): TranslatorStub
+    {
+        return new TranslatorStub();
+    }
+
     private static ?Context $instance = null;
 
     public static function getContext(): Context
@@ -103,5 +108,40 @@ class Context
     public static function reset(): void
     {
         self::$instance = null;
+    }
+}
+
+class Module
+{
+}
+
+class Hook
+{
+    /** @var array<string, array<int, callable>> */
+    public static array $listeners = [];
+
+    /**
+     * Les paramètres passés par référence (ex. 'docs' => &$docs) restent liés, comme dans le cœur.
+     */
+    public static function exec($hookName, $hookArgs = [], $idModule = null, $arrayReturn = false)
+    {
+        foreach (self::$listeners[$hookName] ?? [] as $listener) {
+            $listener($hookArgs);
+        }
+
+        return '';
+    }
+
+    public static function reset(): void
+    {
+        self::$listeners = [];
+    }
+}
+
+class TranslatorStub
+{
+    public function trans($id, array $parameters = [], $domain = null, $locale = null): string
+    {
+        return strtr((string) $id, $parameters);
     }
 }

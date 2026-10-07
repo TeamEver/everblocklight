@@ -15,6 +15,7 @@ abstract class TestCase extends BaseTestCase
         \Configuration::reset();
         \Cache::reset();
         \Context::reset();
+        \Hook::reset();
     }
 
     /**

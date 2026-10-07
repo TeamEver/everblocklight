@@ -259,6 +259,8 @@ class Everblocklight extends Module
             ['displayAfterLocatorStore', 'display after store content on store locator', 'This hook triggers after store content on store locator'],
             ['displayBeforeProductMiniature', 'display before product miniature', 'This hook triggers before product miniature is rendered'],
             ['displayAfterProductMiniature', 'display after product miniature', 'This hook triggers after product miniature is rendered'],
+            ['actionBeforeEverblocklightShortcodeDocumentation', 'Before Ever Block Light shortcode documentation', 'Lets modules add shortcode documentation groups displayed before the module ones (params: translator, domain, &docs)'],
+            ['actionAfterEverblocklightShortcodeDocumentation', 'After Ever Block Light shortcode documentation', 'Lets modules add or alter shortcode documentation groups after the module ones (params: translator, domain, &docs)'],
         ];
     }
 

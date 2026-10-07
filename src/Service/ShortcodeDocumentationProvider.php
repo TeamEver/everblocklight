@@ -41,7 +41,7 @@ class ShortcodeDocumentationProvider
      *
      * @return array<int, array<string, mixed>>
      */
-        public static function getDocumentation(Module $module): array
+    public static function getDocumentation(Module $module): array
     {
         $context = Context::getContext();
         $idLang = (int) $context->language->id;
@@ -53,6 +53,7 @@ class ShortcodeDocumentationProvider
         $translator = $context->getTranslator();
         $domain = 'Modules.Everblocklight.Shortcodes';
 
+        // Groupes ajoutés par d'autres modules, affichés avant ceux d'Ever Block Light
         $docs = [];
 
         \Hook::exec('actionBeforeEverblocklightShortcodeDocumentation', [
@@ -673,11 +674,6 @@ class ShortcodeDocumentationProvider
                         ],
                     ],
                     [
-                        'code' => '[wordpress-posts]',
-                        'description' => $translator->trans('Display the latest posts retrieved from a connected WordPress site.', [], $domain),
-                        'parameters' => [],
-                    ],
-                    [
                         'code' => '[googlereviews place_id="YOUR_PLACE_ID" limit="6" min_rating="4"]',
                         'description' => $translator->trans('Showcase reviews from your Google Business profile.', [], $domain),
                         'parameters' => [
@@ -722,11 +718,6 @@ class ShortcodeDocumentationProvider
                                 'required' => false,
                             ],
                         ],
-                    ],
-                    [
-                        'code' => '[everinstagram]',
-                        'description' => $translator->trans('Display the latest Instagram media fetched by the module.', [], $domain),
-                        'parameters' => [],
                     ],
                     [
                         'code' => '[llorem]',
@@ -879,15 +870,17 @@ class ShortcodeDocumentationProvider
                 ],
             ],
         ];
-        $docs = array_merge($docsCore, $docs);
+        $docs = array_merge($docs, $docsCore);
 
-        static::$cache[$idLang] = $docs;
-
+        // Derniers ajouts / modifications par d'autres modules (groupes affichés après ceux du module)
         \Hook::exec('actionAfterEverblocklightShortcodeDocumentation', [
             'translator' => $translator,
             'domain' => $domain,
             'docs' => &$docs,
         ]);
+
+        // Mise en cache après les deux hooks : les appels suivants renvoient la même documentation
+        static::$cache[$idLang] = $docs;
 
         return $docs;
     }
