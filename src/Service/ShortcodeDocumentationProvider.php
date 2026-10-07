@@ -41,7 +41,7 @@ class ShortcodeDocumentationProvider
      *
      * @return array<int, array<string, mixed>>
      */
-    public static function getDocumentation(Module $module): array
+        public static function getDocumentation(Module $module): array
     {
         $context = Context::getContext();
         $idLang = (int) $context->language->id;
@@ -53,7 +53,15 @@ class ShortcodeDocumentationProvider
         $translator = $context->getTranslator();
         $domain = 'Modules.Everblocklight.Shortcodes';
 
-        $docs = [
+        $docs = [];
+
+        \Hook::exec('actionBeforeEverblocklightShortcodeDocumentation', [
+            'translator' => $translator,
+            'domain' => $domain,
+            'docs' => &$docs,
+        ]);
+
+        $docsCore = [
             [
                 'title' => $translator->trans('Catalog & merchandising', [], $domain),
                 'entries' => [
@@ -665,6 +673,11 @@ class ShortcodeDocumentationProvider
                         ],
                     ],
                     [
+                        'code' => '[wordpress-posts]',
+                        'description' => $translator->trans('Display the latest posts retrieved from a connected WordPress site.', [], $domain),
+                        'parameters' => [],
+                    ],
+                    [
                         'code' => '[googlereviews place_id="YOUR_PLACE_ID" limit="6" min_rating="4"]',
                         'description' => $translator->trans('Showcase reviews from your Google Business profile.', [], $domain),
                         'parameters' => [
@@ -709,6 +722,11 @@ class ShortcodeDocumentationProvider
                                 'required' => false,
                             ],
                         ],
+                    ],
+                    [
+                        'code' => '[everinstagram]',
+                        'description' => $translator->trans('Display the latest Instagram media fetched by the module.', [], $domain),
+                        'parameters' => [],
                     ],
                     [
                         'code' => '[llorem]',
@@ -861,8 +879,15 @@ class ShortcodeDocumentationProvider
                 ],
             ],
         ];
+        $docs = array_merge($docsCore, $docs);
 
         static::$cache[$idLang] = $docs;
+
+        \Hook::exec('actionAfterEverblocklightShortcodeDocumentation', [
+            'translator' => $translator,
+            'domain' => $domain,
+            'docs' => &$docs,
+        ]);
 
         return $docs;
     }
