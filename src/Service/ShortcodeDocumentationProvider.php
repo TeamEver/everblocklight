@@ -53,7 +53,16 @@ class ShortcodeDocumentationProvider
         $translator = $context->getTranslator();
         $domain = 'Modules.Everblocklight.Shortcodes';
 
-        $docs = [
+        // Groupes ajoutés par d'autres modules, affichés avant ceux d'Ever Block Light
+        $docs = [];
+
+        \Hook::exec('actionBeforeEverblocklightShortcodeDocumentation', [
+            'translator' => $translator,
+            'domain' => $domain,
+            'docs' => &$docs,
+        ]);
+
+        $docsCore = [
             [
                 'title' => $translator->trans('Catalog & merchandising', [], $domain),
                 'entries' => [
@@ -861,7 +870,16 @@ class ShortcodeDocumentationProvider
                 ],
             ],
         ];
+        $docs = array_merge($docs, $docsCore);
 
+        // Derniers ajouts / modifications par d'autres modules (groupes affichés après ceux du module)
+        \Hook::exec('actionAfterEverblocklightShortcodeDocumentation', [
+            'translator' => $translator,
+            'domain' => $domain,
+            'docs' => &$docs,
+        ]);
+
+        // Mise en cache après les deux hooks : les appels suivants renvoient la même documentation
         static::$cache[$idLang] = $docs;
 
         return $docs;
